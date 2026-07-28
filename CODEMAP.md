@@ -11,7 +11,7 @@
 ## Stats
 
 - Files indexed: 196
-- Total lines: 17626
+- Total lines: 17625
 - Total exports: 632
 - Entry points (★): `app/core/index.ts`, `resources/app.ts`, `routes/web.ts`, `server.ts`
 
@@ -64,7 +64,7 @@
 - `studentAttendance.ts` (94L) — studentAttendancePage, listAttendanceByJournal, listAttendanceByStudent, saveAttendance, removeAttendance
 - `students.ts` (109L) — studentsPage, listStudents, studentsByClass, studentData, addStudent, editStudent, removeStudent
 - `subjects.ts` (84L) — subjectsPage, listSubjects, subjectData, addSubject, editSubject, removeSubject
-- `teacherConfirmations.ts` (123L) — teacherConfirmationsPage, confirmPage, listTeacherConfirmations, teacherConfirmationData, submitTeacherConfirmation, outsideConfirmationsData
+- `teacherConfirmations.ts` (122L) — teacherConfirmationsPage, confirmPage, listTeacherConfirmations, teacherConfirmationData, submitTeacherConfirmation, outsideConfirmationsData
 - `teachers.ts` (121L) — teachersPage, listTeachers, teacherData, teacherByUser, addTeacher, editTeacher, removeTeacher, assignTeacherSubjects
 - `teacherSchedule.ts` (42L) — teacherSchedulePage, listTodaySchedules, todayScheduleDetail
 - `users.ts` (221L) — dashboardPage, usersPage, profilePage, changeProfile, addUser, editUser, removeUsers
