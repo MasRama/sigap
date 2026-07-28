@@ -152,7 +152,7 @@ Semua id `TEXT PRIMARY KEY` UUID, timestamp `INTEGER`, FK `ON DELETE CASCADE`.
 
 ---
 
-## 6. Backend Handlers — `[commit-id]`
+## 6. Backend Handlers — `cb53160`
 
 > Setiap resource memiliki **1 page handler** (Inertia) + **N data handler** (JSON). Contoh `students.ts`: `studentsPage` (res.inertia) + `listStudents`, `addStudent`, `editStudent`, `removeStudents` (json).
 
