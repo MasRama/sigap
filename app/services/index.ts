@@ -9,3 +9,5 @@ export { createCacheStore, assetCache, templateCache } from './CacheStore';
 export type { CacheStoreOptions, CacheStats, CacheStore } from './CacheStore';
 export { default as Migrator } from './Migrator';
 export { default as Seeder } from './Seeder';
+export * from './Geolocation';
+export * from './CameraUpload';

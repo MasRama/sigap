@@ -143,12 +143,12 @@ Semua id `TEXT PRIMARY KEY` UUID, timestamp `INTEGER`, FK `ON DELETE CASCADE`.
 
 ---
 
-## 5. Backend Services
+## 5. Backend Services — `[commit-id]`
 
-- [ ] **5.1** `app/services/Geolocation.ts` — helper Haversine distance, inside/outside radius.
-- [ ] **5.2** `app/services/CameraUpload.ts` — (opsional) wrapper untuk menyimpan foto konfirmasi ke `Storage`.
-- [ ] **5.3** Update `app/services/Storage.ts` jika diperlukan path baru untuk `confirmations/`.
-- [ ] **5.4** Update `app/services/Logger.ts` labels: `ganti nara references jika ada.
+- [x] **5.1** `app/services/Geolocation.ts` — helper Haversine distance, inside/outside radius.
+- [x] **5.2** `app/services/CameraUpload.ts` — (opsional) wrapper untuk menyimpan foto konfirmasi ke `Storage`.
+- [x] **5.3** Update `app/services/Storage.ts` jika diperlukan path baru untuk `confirmations/`.
+- [x] **5.4** Update `app/services/Logger.ts` labels: `ganti nara references jika ada.
 
 ---
 
