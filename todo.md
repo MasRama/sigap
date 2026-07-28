@@ -351,56 +351,56 @@ Semua id `TEXT PRIMARY KEY` UUID, timestamp `INTEGER`, FK `ON DELETE CASCADE`.
 
 ---
 
-## 10. Frontend Pages (Complete Rewrite)
+## 10. Frontend Pages (Complete Rewrite) — `8ffb01a`
 
 > Semua file di `resources/Pages/` adalah **Inertia pages**. Setiap page menerima initial props, lalu memuat list/detail lewat `api(() => axios.get('/xxx/data'))` (bukan langsung dari page props). Setelah mutasi, panggil `router.visit('/xxx', { preserveScroll: true })` untuk reload data.
 
 ### Public
-- [ ] **10.1** `resources/Pages/landing.svelte` — hero SIGAP, fitur: anti-kecurangan kamera+lokasi, jurnal, nilai, pantau ortu, laporan kepala sekolah.
-- [ ] **10.2** `resources/Pages/auth/login.svelte` — clean sky login, no register link.
+- [x] **10.1** `resources/Pages/landing.svelte` — hero SIGAP, fitur: anti-kecurangan kamera+lokasi, jurnal, nilai, pantau ortu, laporan kepala sekolah.
+- [x] **10.2** `resources/Pages/auth/login.svelte` — clean sky login, no register link.
 
 ### Dashboard (per role)
-- [ ] **10.3** `resources/Pages/dashboard.svelte` — render kartu ringkasan sesuai role.
-- [ ] **10.4** `resources/Pages/teacher/schedule.svelte` — jadwal hari ini, status waktu, tombol konfirmasi.
-- [ ] **10.5** `resources/Pages/teacher/confirm.svelte` — UI kamera + ambil lokasi + submit.
-- [ ] **10.6** `resources/Pages/teacher/journal.svelte` — form materi + checklist kehadiran siswa per kelas.
-- [ ] **10.7** `resources/Pages/teacher/grades.svelte` — pilih kelas, mapel, jenis penilaian, isi nilai semua siswa.
-- [ ] **10.8** `resources/Pages/parent/dashboard.svelte` — ringkasan anak: kehadiran %, rata-rata nilai.
-- [ ] **10.9** `resources/Pages/parent/attendance.svelte` — riwayat kehadiran harian anak.
-- [ ] **10.10** `resources/Pages/parent/grades.svelte` — nilai per mapel anak.
-- [ ] **10.11** `resources/Pages/headmaster/dashboard.svelte` — tren kehadiran sekolah, perbandingan nilai antar kelas.
-- [ ] **10.12** `resources/Pages/headmaster/reports.svelte` — daftar guru yang konfirmasi dari luar sekolah.
+- [x] **10.3** `resources/Pages/dashboard.svelte` — render kartu ringkasan sesuai role.
+- [x] **10.4** `resources/Pages/teacher/schedule.svelte` — jadwal hari ini, status waktu, tombol konfirmasi.
+- [x] **10.5** `resources/Pages/teacher/confirm.svelte` — UI kamera + ambil lokasi + submit.
+- [x] **10.6** `resources/Pages/teacher/journal.svelte` — form materi + checklist kehadiran siswa per kelas.
+- [x] **10.7** `resources/Pages/teacher/grades.svelte` — pilih kelas, mapel, jenis penilaian, isi nilai semua siswa.
+- [x] **10.8** `resources/Pages/parent/dashboard.svelte` — ringkasan anak: kehadiran %, rata-rata nilai.
+- [x] **10.9** `resources/Pages/parent/attendance.svelte` — riwayat kehadiran harian anak.
+- [x] **10.10** `resources/Pages/parent/grades.svelte` — nilai per mapel anak.
+- [x] **10.11** `resources/Pages/headmaster/dashboard.svelte` — tren kehadiran sekolah, perbandingan nilai antar kelas.
+- [x] **10.12** `resources/Pages/headmaster/reports.svelte` — daftar guru yang konfirmasi dari luar sekolah.
 
 ### Master Data (admin)
-- [ ] **10.13** `resources/Pages/academicYears.svelte`.
-- [ ] **10.14** `resources/Pages/classes.svelte`.
-- [ ] **10.15** `resources/Pages/subjects.svelte`.
-- [ ] **10.16** `resources/Pages/students.svelte`.
-- [ ] **10.17** `resources/Pages/teachers.svelte`.
-- [ ] **10.18** `resources/Pages/parents.svelte`.
-- [ ] **10.19** `resources/Pages/schedules.svelte`.
-- [ ] **10.20** `resources/Pages/schoolLocations.svelte`.
+- [x] **10.13** `resources/Pages/academicYears.svelte`.
+- [x] **10.14** `resources/Pages/classes.svelte`.
+- [x] **10.15** `resources/Pages/subjects.svelte`.
+- [x] **10.16** `resources/Pages/students.svelte`.
+- [x] **10.17** `resources/Pages/teachers.svelte`.
+- [x] **10.18** `resources/Pages/parents.svelte`.
+- [x] **10.19** `resources/Pages/schedules.svelte`.
+- [x] **10.20** `resources/Pages/schoolLocations.svelte`.
 
 ---
 
-## 11. Camera & Geolocation Flow (Anti-Kecurangan)
+## 11. Camera & Geolocation Flow (Anti-Kecurangan) — `8ffb01a`
 
-- [ ] **11.1** Komponen kamera mengakses `navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } })`.
-- [ ] **11.2** Capture frame dari `<video>` ke `<canvas>`, convert ke `Blob`/`File`, kirim ke backend via `api(() => axios.post('/teacher/confirm', formData))` (multipart).
-- [ ] **11.3** Tidak boleh ada input file upload untuk foto selfie.
-- [ ] **11.4** `navigator.geolocation.getCurrentPosition()` di frontend, kirim `latitude` + `longitude`.
-- [ ] **11.5** Backend hitung jarak ke `school_locations` aktif pakai Haversine.
-- [ ] **11.6** Jika jarak > radius: tetap sukses, set `is_inside_school = false`, simpan `distance_meters`.
-- [ ] **11.7** Validasi waktu: konfirmasi hanya boleh saat `start_time <= now <= end_time`.
-- [ ] **11.8** Satu konfirmasi per schedule; journal baru bisa dibuka setelah konfirmasi berhasil.
+- [x] **11.1** Komponen kamera mengakses `navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } })`.
+- [x] **11.2** Capture frame dari `<video>` ke `<canvas>`, convert ke `Blob`/`File`, kirim ke backend via `api(() => axios.post('/teacher/confirm', formData))` (multipart).
+- [x] **11.3** Tidak boleh ada input file upload untuk foto selfie.
+- [x] **11.4** `navigator.geolocation.getCurrentPosition()` di frontend, kirim `latitude` + `longitude`.
+- [x] **11.5** Backend hitung jarak ke `school_locations` aktif pakai Haversine.
+- [x] **11.6** Jika jarak > radius: tetap sukses, set `is_inside_school = false`, simpan `distance_meters`.
+- [x] **11.7** Validasi waktu: konfirmasi hanya boleh saat `start_time <= now <= end_time`.
+- [x] **11.8** Satu konfirmasi per schedule; journal baru bisa dibuka setelah konfirmasi berhasil.
 
 ---
 
-## 12. RBAC & Seeds
+## 12. RBAC & Seeds — `9e54efa`
 
-- [ ] **12.1** Update `seeds/01_permissions.ts` — permission SIGAP baru.
-- [ ] **12.2** Update `seeds/02_roles.ts` — roles: `admin`, `headmaster`, `teacher`, `parent`.
-- [ ] **12.3** Update `seeds/03_admin.ts` — admin default `admin@sigap.id` / `admin123`.
+- [x] **12.1** Update `seeds/01_permissions.ts` — permission SIGAP baru.
+- [x] **12.2** Update `seeds/02_roles.ts` — roles: `admin`, `headmaster`, `teacher`, `parent`.
+- [x] **12.3** Update `seeds/03_admin.ts` — admin default `admin@sigap.id` / `admin123`.
 - [ ] **12.4** (Opsional) `seeds/04_demo.ts` — data demo: 1 tahun ajaran, 2 kelas, 3 mapel, 10 siswa, 2 guru, 1 orang tua.
 
 ---
