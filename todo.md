@@ -143,7 +143,7 @@ Semua id `TEXT PRIMARY KEY` UUID, timestamp `INTEGER`, FK `ON DELETE CASCADE`.
 
 ---
 
-## 5. Backend Services — `[commit-id]`
+## 5. Backend Services — `52923aa`
 
 - [x] **5.1** `app/services/Geolocation.ts` — helper Haversine distance, inside/outside radius.
 - [x] **5.2** `app/services/CameraUpload.ts` — (opsional) wrapper untuk menyimpan foto konfirmasi ke `Storage`.
