@@ -45,7 +45,7 @@
 {/snippet}
 
 <Sidebar group="classes" />
-<div class="min-h-[100dvh] bg-background text-foreground font-body antialiased pt-20 lg:pt-8 lg:pl-64 px-6 sm:px-10 lg:px-16 pb-16">
+<div class="min-h-[100dvh] bg-background text-foreground font-body antialiased pt-20 lg:pt-8 lg:pl-80 px-6 sm:px-10 lg:pr-16 pb-16">
   <div class="flex items-center justify-between mb-8">
     <h1 class="font-heading font-semibold tracking-tight text-2xl">Kelas</h1>
     {#if permissions.canCreate}<Button onclick={openCreate}>Tambah Kelas</Button>{/if}
