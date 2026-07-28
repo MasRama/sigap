@@ -2,7 +2,7 @@
   import { router } from '@inertiajs/svelte';
   import axios from 'axios';
   import { api } from '$lib/api';
-  import Header from '../Components/Header.svelte';
+  import Sidebar from '../Components/Sidebar.svelte';
   import DataTable from '../Components/DataTable.svelte';
   import Button from '../Components/Button.svelte';
   import Input from '../Components/Input.svelte';
@@ -37,7 +37,7 @@
     if (result.success) { isDeleteOpen = false; router.visit('/teachers', { preserveScroll: true }); }
   }
 
-  const columns = [{ key: 'employee_id', label: 'Employee ID' }, { key: 'user_id', label: 'User' }, { key: 'phone', label: 'Phone' }];
+  const columns = [{ key: 'employee_id', label: 'NIP' }, { key: 'user_id', label: 'Pengguna' }, { key: 'phone', label: 'Telepon' }];
 </script>
 
 {#snippet rowActions(item: Teacher)}
@@ -45,30 +45,30 @@
   {#if permissions.canDelete}<Button variant="ghost" size="icon" onclick={() => confirmDelete(item)}><Trash2 class="w-4 h-4 text-destructive" /></Button>{/if}
 {/snippet}
 
-<Header group="teachers" />
-<div class="min-h-[100dvh] bg-background text-foreground font-body antialiased pt-28 px-6 sm:px-10 lg:px-16 pb-16">
+<Sidebar group="teachers" />
+<div class="min-h-[100dvh] bg-background text-foreground font-body antialiased pt-20 lg:pt-8 lg:pl-64 px-6 sm:px-10 lg:px-16 pb-16">
   <div class="flex items-center justify-between mb-8">
-    <h1 class="font-heading font-semibold tracking-tight text-2xl">Teachers</h1>
-    {#if permissions.canCreate}<Button onclick={openCreate}>Add Teacher</Button>{/if}
+    <h1 class="font-heading font-semibold tracking-tight text-2xl">Guru</h1>
+    {#if permissions.canCreate}<Button onclick={openCreate}>Tambah Guru</Button>{/if}
   </div>
   <DataTable {columns} rows={teachers} rowAction={rowActions} />
   {#if meta}<Pagination {meta} />{/if}
 </div>
 
-<Modal bind:open={isOpen} title={selected ? 'Edit Teacher' : 'Add Teacher'}>
+<Modal bind:open={isOpen} title={selected ? 'Edit Guru' : 'Tambah Guru'}>
   <form class="flex flex-col gap-4" onsubmit={(e) => { e.preventDefault(); submit(); }}>
-    <div><Label for="user">User</Label>
+    <div><Label for="user">Pengguna</Label>
       <select id="user" bind:value={form.user_id} class="h-10 w-full rounded-sm border border-border bg-background px-3 text-sm">
         {#each users as u}<option value={u.id}>{u.name}</option>{/each}
       </select>
     </div>
-    <div><Label for="employee_id">Employee ID</Label><Input id="employee_id" bind:value={form.employee_id} /></div>
-    <div><Label for="phone">Phone</Label><Input id="phone" bind:value={form.phone} /></div>
+    <div><Label for="employee_id">NIP</Label><Input id="employee_id" bind:value={form.employee_id} /></div>
+    <div><Label for="phone">Telepon</Label><Input id="phone" bind:value={form.phone} /></div>
     <div class="flex justify-end gap-2">
-      <Button variant="outline" onclick={() => isOpen = false}>Cancel</Button>
-      <Button type="submit">{selected ? 'Update' : 'Create'}</Button>
+      <Button variant="outline" onclick={() => isOpen = false}>Batal</Button>
+      <Button type="submit">{selected ? 'Perbarui' : 'Buat'}</Button>
     </div>
   </form>
 </Modal>
 
-<ConfirmDialog bind:open={isDeleteOpen} title="Delete Teacher" onConfirm={remove} destructive />
+<ConfirmDialog bind:open={isDeleteOpen} title="Hapus Guru" onConfirm={remove} destructive />

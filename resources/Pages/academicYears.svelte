@@ -2,7 +2,7 @@
   import { page as inertiaPage, inertia, router } from '@inertiajs/svelte';
   import axios from 'axios';
   import { api } from '$lib/api';
-  import Header from '../Components/Header.svelte';
+  import Sidebar from '../Components/Sidebar.svelte';
   import DataTable from '../Components/DataTable.svelte';
   import Button from '../Components/Button.svelte';
   import Input from '../Components/Input.svelte';
@@ -65,47 +65,47 @@
   }
 
   const columns = [
-    { key: 'name', label: 'Name' },
-    { key: 'start_at', label: 'Start' },
-    { key: 'end_at', label: 'End' },
-    { key: 'is_active', label: 'Active' },
+    { key: 'name', label: 'Nama' },
+    { key: 'start_at', label: 'Mulai' },
+    { key: 'end_at', label: 'Selesai' },
+    { key: 'is_active', label: 'Aktif' },
   ];
 </script>
 
 {#snippet rowActions(year: AcademicYear)}
   {#if permissions.canEdit}
     <Button variant="ghost" size="icon" onclick={() => openEdit(year)}><Pencil class="w-4 h-4" /></Button>
-    <Button variant="ghost" onclick={() => setActive(year.id)}>Set active</Button>
+    <Button variant="ghost" onclick={() => setActive(year.id)}>Aktifkan</Button>
   {/if}
   {#if permissions.canDelete}
     <Button variant="ghost" size="icon" onclick={() => confirmDelete(year)}><Trash2 class="w-4 h-4 text-destructive" /></Button>
   {/if}
 {/snippet}
 
-<Header group="academic-years" />
+<Sidebar group="academic-years" />
 
-<div class="min-h-[100dvh] bg-background text-foreground font-body antialiased pt-28 px-6 sm:px-10 lg:px-16 pb-16">
+<div class="min-h-[100dvh] bg-background text-foreground font-body antialiased pt-20 lg:pt-8 lg:pl-64 px-6 sm:px-10 lg:px-16 pb-16">
   <div class="flex items-center justify-between mb-8">
-    <h1 class="font-heading font-semibold tracking-tight text-2xl">Academic Years</h1>
+    <h1 class="font-heading font-semibold tracking-tight text-2xl">Tahun Ajaran</h1>
     {#if permissions.canCreate}
-      <Button onclick={openCreate}>Add Year</Button>
+      <Button onclick={openCreate}>Tambah Tahun</Button>
     {/if}
   </div>
 
   <DataTable {columns} rows={years} rowAction={rowActions} />
 </div>
 
-<Modal bind:open={isOpen} title={selected ? 'Edit Academic Year' : 'Add Academic Year'}>
+<Modal bind:open={isOpen} title={selected ? 'Edit Tahun Ajaran' : 'Tambah Tahun Ajaran'}>
   <form class="flex flex-col gap-4" onsubmit={(e) => { e.preventDefault(); submit(); }}>
-    <div><Label for="name">Name</Label><Input id="name" bind:value={form.name} required /></div>
-    <div><Label for="start_at">Start (timestamp)</Label><Input id="start_at" type="number" bind:value={form.start_at} required /></div>
-    <div><Label for="end_at">End (timestamp)</Label><Input id="end_at" type="number" bind:value={form.end_at} required /></div>
-    <div class="flex items-center gap-2"><Switch bind:checked={form.is_active} /><Label>Active</Label></div>
+    <div><Label for="name">Nama</Label><Input id="name" bind:value={form.name} required /></div>
+    <div><Label for="start_at">Mulai (timestamp)</Label><Input id="start_at" type="number" bind:value={form.start_at} required /></div>
+    <div><Label for="end_at">Selesai (timestamp)</Label><Input id="end_at" type="number" bind:value={form.end_at} required /></div>
+    <div class="flex items-center gap-2"><Switch bind:checked={form.is_active} /><Label>Aktif</Label></div>
     <div class="flex justify-end gap-2">
-      <Button variant="outline" onclick={() => isOpen = false}>Cancel</Button>
-      <Button type="submit">{selected ? 'Update' : 'Create'}</Button>
+      <Button variant="outline" onclick={() => isOpen = false}>Batal</Button>
+      <Button type="submit">{selected ? 'Perbarui' : 'Buat'}</Button>
     </div>
   </form>
 </Modal>
 
-<ConfirmDialog bind:open={isDeleteOpen} title="Delete Academic Year" onConfirm={remove} destructive />
+<ConfirmDialog bind:open={isDeleteOpen} title="Hapus Tahun Ajaran" onConfirm={remove} destructive />

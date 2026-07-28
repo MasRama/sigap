@@ -1,7 +1,7 @@
 <script lang="ts">
   import { fly } from 'svelte/transition';
   import { page as inertiaPage, router } from '@inertiajs/svelte';
-  import Header from '../Components/Header.svelte';
+  import Sidebar from '../Components/Sidebar.svelte';
   import UserModal from '../Components/UserModal.svelte';
   import Pagination from '../Components/Pagination.svelte';
   import axios from 'axios';
@@ -72,7 +72,7 @@
   async function handleSubmit(event: CustomEvent<UserForm>): Promise<void> {
     const formData = event.detail;
     if (!formData.name || !formData.email) {
-      Toast('Name and email are required', 'error');
+      Toast('Nama dan email wajib diisi', 'error');
       return;
     }
 
@@ -98,7 +98,7 @@
   }
 
   async function deleteUser(id: string): Promise<void> {
-    if (!confirm('Delete this user? This cannot be undone.')) {
+    if (!confirm('Hapus pengguna ini? Ini tidak dapat dibatalkan.')) {
       return;
     }
 
@@ -114,22 +114,22 @@
   }
 </script>
 
-<Header group="users" />
+<Sidebar group="users" />
 
-<div class="min-h-[100dvh] bg-background text-foreground font-body antialiased selection:bg-primary/20 selection:text-primary">
+<div class="min-h-[100dvh] bg-background text-foreground font-body antialiased selection:bg-primary/20 selection:text-primary lg:pl-64">
 
-  <section class="px-6 sm:px-10 lg:px-16 pt-28 pb-16">
+  <section class="px-6 sm:px-10 lg:px-16 pt-20 lg:pt-8 pb-16">
     <div class="max-w-[1400px] mx-auto">
 
       <!-- Header row -->
       <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12" in:fly={{ y: 20, duration: 800 }}>
         <div>
-          <p class="font-heading text-xs uppercase tracking-[0.25em] text-muted-foreground mb-4">Management</p>
+          <p class="font-heading text-xs uppercase tracking-[0.25em] text-muted-foreground mb-4">Manajemen</p>
           <h1 class="font-heading font-semibold tracking-[-0.03em] leading-[1] text-[clamp(2.5rem,6vw,4.5rem)] text-foreground">
-            Users.
+            Pengguna.
           </h1>
           <p class="mt-5 text-lg text-muted-foreground leading-relaxed max-w-[52ch]">
-            Every person who has a seat at the table. Add, edit, or remove them here.
+            Setiap orang yang memiliki tempat di sistem. Tambah, edit, atau hapus di sini.
           </p>
         </div>
 
@@ -141,7 +141,7 @@
           {#if permissions.canCreate}
             <Button onclick={openCreateUser} disabled={isSubmitting} size="lg">
               <Plus class="w-4 h-4" />
-              Add user
+              Tambah pengguna
             </Button>
           {/if}
         </div>
@@ -154,9 +154,9 @@
             <table class="w-full caption-bottom text-sm">
               <thead>
                 <tr class="border-b border-border">
-                  <th class="h-12 px-5 text-start font-heading text-[11px] uppercase tracking-[0.25em] text-muted-foreground font-medium whitespace-nowrap">User</th>
-                  <th class="h-12 px-5 text-start font-heading text-[11px] uppercase tracking-[0.25em] text-muted-foreground font-medium whitespace-nowrap">Roles</th>
-                  <th class="h-12 px-5 text-end font-heading text-[11px] uppercase tracking-[0.25em] text-muted-foreground font-medium whitespace-nowrap">Actions</th>
+                  <th class="h-12 px-5 text-start font-heading text-[11px] uppercase tracking-[0.25em] text-muted-foreground font-medium whitespace-nowrap">Pengguna</th>
+                  <th class="h-12 px-5 text-start font-heading text-[11px] uppercase tracking-[0.25em] text-muted-foreground font-medium whitespace-nowrap">Peran</th>
+                  <th class="h-12 px-5 text-end font-heading text-[11px] uppercase tracking-[0.25em] text-muted-foreground font-medium whitespace-nowrap">Aksi</th>
                 </tr>
               </thead>
               <tbody>
@@ -181,7 +181,7 @@
                           </span>
                         {/each}
                         {#if !userItem.roles?.length}
-                          <span class="text-xs text-muted-foreground">No roles</span>
+                          <span class="text-xs text-muted-foreground">Tidak ada peran</span>
                         {/if}
                       </div>
                     </td>
@@ -218,12 +218,12 @@
           <div class="w-14 h-14 rounded-full bg-muted border border-border flex items-center justify-center mb-6">
             <Users class="h-6 w-6 text-muted-foreground" />
           </div>
-          <h3 class="font-heading font-semibold text-xl tracking-tight text-foreground mb-2">No users yet</h3>
-          <p class="text-sm text-muted-foreground max-w-xs mb-8">Start by adding your first person to the system.</p>
+          <h3 class="font-heading font-semibold text-xl tracking-tight text-foreground mb-2">Belum ada pengguna</h3>
+          <p class="text-sm text-muted-foreground max-w-xs mb-8">Mulai dengan menambahkan orang pertama ke sistem.</p>
           {#if permissions.canCreate}
             <Button onclick={openCreateUser} size="lg">
               <Plus class="w-4 h-4" />
-              Add first user
+              Tambah pengguna pertama
             </Button>
           {/if}
         </div>

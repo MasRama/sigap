@@ -1,7 +1,7 @@
 <script lang="ts">
   import { fly } from 'svelte/transition';
   import { page as inertiaPage, router } from '@inertiajs/svelte';
-  import Header from '../Components/Header.svelte';
+  import Sidebar from '../Components/Sidebar.svelte';
   import RoleModal from '../Components/RoleModal.svelte';
   import axios from 'axios';
   import { api } from '$lib/api';
@@ -69,7 +69,7 @@
   async function handleSubmit(event: CustomEvent<RoleForm>): Promise<void> {
     const formData = event.detail;
     if (!formData.name || !formData.slug) {
-      Toast('Name and slug are required', 'error');
+      Toast('Nama dan slug wajib diisi', 'error');
       return;
     }
 
@@ -99,10 +99,10 @@
 
   async function deleteRole(role: Role): Promise<void> {
     if (role.slug === 'admin') {
-      Toast('The admin role cannot be deleted', 'error');
+      Toast('Peran admin tidak dapat dihapus', 'error');
       return;
     }
-    if (!confirm(`Delete role "${role.name}"? This cannot be undone.`)) {
+    if (!confirm(`Hapus peran "${role.name}"? Ini tidak dapat dibatalkan.`)) {
       return;
     }
 
@@ -126,22 +126,22 @@
   });
 </script>
 
-<Header group="roles" />
+<Sidebar group="roles" />
 
-<div class="min-h-[100dvh] bg-background text-foreground font-body antialiased selection:bg-primary/20 selection:text-primary">
+<div class="min-h-[100dvh] bg-background text-foreground font-body antialiased selection:bg-primary/20 selection:text-primary lg:pl-64">
 
-  <section class="px-6 sm:px-10 lg:px-16 pt-28 pb-16">
+  <section class="px-6 sm:px-10 lg:px-16 pt-20 lg:pt-8 pb-16">
     <div class="max-w-[1400px] mx-auto">
 
       <!-- Header row -->
       <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12" in:fly={{ y: 20, duration: 800 }}>
         <div>
-          <p class="font-heading text-xs uppercase tracking-[0.25em] text-muted-foreground mb-4">Management</p>
+          <p class="font-heading text-xs uppercase tracking-[0.25em] text-muted-foreground mb-4">Manajemen</p>
           <h1 class="font-heading font-semibold tracking-[-0.03em] leading-[1] text-[clamp(2.5rem,6vw,4.5rem)] text-foreground">
-            Roles.
+            Peran.
           </h1>
           <p class="mt-5 text-lg text-muted-foreground leading-relaxed max-w-[52ch]">
-            The shape of what people can do. Define a role, assign permissions, hand it out.
+            Bentuk dari apa yang bisa dilakukan orang. Buat peran, atur izin, bagikan.
           </p>
         </div>
 
@@ -153,7 +153,7 @@
           {#if permissions.canCreate}
             <Button onclick={openCreateRole} disabled={isSubmitting} size="lg">
               <Plus class="w-4 h-4" />
-              Add role
+              Tambah peran
             </Button>
           {/if}
         </div>
@@ -169,11 +169,11 @@
             <table class="w-full caption-bottom text-sm">
               <thead>
                 <tr class="border-b border-border">
-                  <th class="h-12 px-5 text-start font-heading text-[11px] uppercase tracking-[0.25em] text-muted-foreground font-medium whitespace-nowrap">Role</th>
+                  <th class="h-12 px-5 text-start font-heading text-[11px] uppercase tracking-[0.25em] text-muted-foreground font-medium whitespace-nowrap">Peran</th>
                   <th class="h-12 px-5 text-start font-heading text-[11px] uppercase tracking-[0.25em] text-muted-foreground font-medium whitespace-nowrap">Slug</th>
-                  <th class="h-12 px-5 text-start font-heading text-[11px] uppercase tracking-[0.25em] text-muted-foreground font-medium whitespace-nowrap">Permissions</th>
-                  <th class="h-12 px-5 text-start font-heading text-[11px] uppercase tracking-[0.25em] text-muted-foreground font-medium whitespace-nowrap">Users</th>
-                  <th class="h-12 px-5 text-end font-heading text-[11px] uppercase tracking-[0.25em] text-muted-foreground font-medium whitespace-nowrap">Actions</th>
+                  <th class="h-12 px-5 text-start font-heading text-[11px] uppercase tracking-[0.25em] text-muted-foreground font-medium whitespace-nowrap">Izin</th>
+                  <th class="h-12 px-5 text-start font-heading text-[11px] uppercase tracking-[0.25em] text-muted-foreground font-medium whitespace-nowrap">Pengguna</th>
+                  <th class="h-12 px-5 text-end font-heading text-[11px] uppercase tracking-[0.25em] text-muted-foreground font-medium whitespace-nowrap">Aksi</th>
                 </tr>
               </thead>
               <tbody>
@@ -202,7 +202,7 @@
                     <td class="p-5 align-middle whitespace-nowrap">
                       <div class="flex items-center gap-2">
                         <span class="text-sm font-heading font-semibold text-foreground">{getPermissionCount(role)}</span>
-                        <span class="text-xs text-muted-foreground">permissions</span>
+                        <span class="text-xs text-muted-foreground">izin</span>
                       </div>
                       {#if role.permissions && role.permissions.length > 0}
                         <div class="flex flex-wrap gap-1 mt-1.5">
@@ -256,12 +256,12 @@
           <div class="w-14 h-14 rounded-full bg-muted border border-border flex items-center justify-center mb-6">
             <Shield class="h-6 w-6 text-muted-foreground" />
           </div>
-          <h3 class="font-heading font-semibold text-xl tracking-tight text-foreground mb-2">No roles yet</h3>
-          <p class="text-sm text-muted-foreground max-w-xs mb-8">Create your first role to start managing permissions.</p>
+          <h3 class="font-heading font-semibold text-xl tracking-tight text-foreground mb-2">Belum ada peran</h3>
+          <p class="text-sm text-muted-foreground max-w-xs mb-8">Buat peran pertama Anda untuk mulai mengelola izin.</p>
           {#if permissions.canCreate}
             <Button onclick={openCreateRole} size="lg">
               <Plus class="w-4 h-4" />
-              Create first role
+              Buat peran pertama
             </Button>
           {/if}
         </div>
