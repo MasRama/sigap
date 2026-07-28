@@ -35,17 +35,20 @@
       <div
         {...api.getContentProps()}
         class={cn(
-          "w-full max-w-lg rounded-sm border border-border bg-background p-6 text-foreground shadow-lg outline-none",
+          "w-full max-w-lg rounded-lg border border-border bg-card text-foreground shadow-lg outline-none",
           className
         )}
       >
         {#if title}
-          <h2 {...api.getTitleProps()} class="font-heading text-lg font-semibold tracking-tight">{title}</h2>
+          <div class="border-b border-border px-6 py-4">
+            <p class="font-mono-accent text-[10px] uppercase tracking-[0.25em] text-muted-foreground mb-1">Form</p>
+            <h2 {...api.getTitleProps()} class="font-heading text-lg font-semibold tracking-tight">{title}</h2>
+            {#if description}
+              <p {...api.getDescriptionProps()} class="mt-1.5 text-sm text-muted-foreground font-body leading-relaxed">{description}</p>
+            {/if}
+          </div>
         {/if}
-        {#if description}
-          <p {...api.getDescriptionProps()} class="mt-1 text-sm text-muted-foreground font-body">{description}</p>
-        {/if}
-        <div class="mt-4">{@render children?.()}</div>
+        <div class="px-6 py-5">{@render children?.()}</div>
         {#if footer}
           <div class="mt-6 flex justify-end gap-2">{@render footer?.()}</div>
         {/if}
