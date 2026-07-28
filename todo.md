@@ -318,7 +318,7 @@ Semua id `TEXT PRIMARY KEY` UUID, timestamp `INTEGER`, FK `ON DELETE CASCADE`.
 
 ---
 
-## 8. Frontend Foundation (Complete Rewrite) — `[commit-id]`
+## 8. Frontend Foundation (Complete Rewrite) — `6a3879d`
 
 - [x] **8.1** `resources/app.ts` — inisialisasi Inertia + axios CSRF + toast.
 - [x] **8.2** `resources/index.css` — update dengan theme config, font baru, no Inter.
