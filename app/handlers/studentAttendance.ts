@@ -11,14 +11,16 @@ const canView = (userId: string): boolean => isAdmin(userId) || hasPermission(us
 const canManage = (userId: string): boolean => isAdmin(userId) || hasPermission(userId, 'attendance.create');
 
 export const studentAttendancePage = (req: NaraRequest, res: NaraResponse) => {
-  const userId = req.user?.id;
+  if (!req.user) return res.redirect('/login');
+  const userId = req.user.id;
   const permissions = {
-    canView: userId ? canView(userId) : false,
-    canCreate: userId ? canManage(userId) : false,
-    canEdit: userId ? isAdmin(userId) || hasPermission(userId, 'attendance.edit') : false,
-    canDelete: userId ? isAdmin(userId) || hasPermission(userId, 'attendance.delete') : false,
+    canView: canView(userId),
+    canCreate: canManage(userId),
+    canEdit: isAdmin(userId) || hasPermission(userId, 'attendance.edit'),
+    canDelete: isAdmin(userId) || hasPermission(userId, 'attendance.delete'),
   };
-  return res.inertia('studentAttendance', { permissions });
+  const records = canView(userId) ? [] : findAttendanceByStudent('');
+  return res.inertia('studentAttendance', { permissions, records });
 };
 
 export const listAttendanceByJournal = (req: NaraRequest, res: NaraResponse) => {

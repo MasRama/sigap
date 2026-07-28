@@ -63,16 +63,15 @@
     <div class="w-full max-w-[480px]" in:fly={{ y: 30, duration: 1000, delay: 100 }}>
 
       <p in:fade={{ duration: 700 }} class="font-heading text-xs uppercase tracking-[0.25em] text-white/50 mb-6">
-        A foundation for building with AI
+        SIGAP — School management
       </p>
 
       <h1 class="font-heading font-semibold tracking-[-0.03em] leading-[0.95] text-[clamp(3rem,8vw,6rem)] text-white" in:fly={{ y: 28, duration: 1000, delay: 150 }}>
-        Sign in<br />
-        <span class="italic font-medium text-primary leading-[1.05] pb-1">quietly.</span>
+        Sign in
       </h1>
 
       <p in:fly={{ y: 22, duration: 1000, delay: 300 }} class="mt-6 text-lg text-white/60 leading-relaxed max-w-[44ch] mx-auto">
-        Your sessions, your code, your machine. Pick up the thread.
+        Admin-created accounts only.
       </p>
 
       {#if error}
@@ -113,10 +112,6 @@
               <ArrowRight class="w-4 h-4" />
             {/if}
           </Button>
-          <a href="/register" use:inertia class="text-sm text-white/50 hover:text-white transition-colors inline-flex items-center gap-1.5 group">
-            No account?
-            <span class="text-white underline underline-offset-4 decoration-white/30">Begin</span>
-          </a>
         </div>
       </form>
     </div>
@@ -125,6 +120,6 @@
   <!-- ───────────── FOOTER (on image) ───────────── -->
   <footer class="absolute bottom-0 inset-x-0 z-10 px-6 sm:px-10 lg:px-16 py-6 flex justify-between items-center text-xs text-white/40">
     <span>&copy; {new Date().getFullYear()} SIGAP</span>
-    <span class="font-heading uppercase tracking-[0.2em]">A foundation for building with AI</span>
+    <span class="font-heading uppercase tracking-[0.2em]">Trust-first school management</span>
   </footer>
 </div>

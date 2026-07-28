@@ -1,0 +1,74 @@
+<script lang="ts">
+  import { router } from '@inertiajs/svelte';
+  import axios from 'axios';
+  import { api } from '$lib/api';
+  import Header from '../Components/Header.svelte';
+  import DataTable from '../Components/DataTable.svelte';
+  import Button from '../Components/Button.svelte';
+  import Input from '../Components/Input.svelte';
+  import Label from '../Components/Label.svelte';
+  import Modal from '../Components/Modal.svelte';
+  import ConfirmDialog from '../Components/ConfirmDialog.svelte';
+  import Pagination from '../Components/Pagination.svelte';
+  import type { Parent, ParentForm, User, PaginationMeta } from '../types';
+  import { createEmptyParentForm, parentToForm } from '../types';
+  import { Pencil, Trash2 } from '@lucide/svelte';
+
+  let { permissions, parents = [], users = [], meta }: { permissions: { canCreate?: boolean; canEdit?: boolean; canDelete?: boolean }; parents?: Parent[]; users?: User[]; meta?: PaginationMeta } = $props();
+
+  let isOpen = $state(false);
+  let isDeleteOpen = $state(false);
+  let form: ParentForm = $state(createEmptyParentForm());
+  let selected: Parent | null = $state(null);
+
+  function openCreate(): void { form = createEmptyParentForm(); selected = null; isOpen = true; }
+  function openEdit(item: Parent): void { selected = item; form = parentToForm(item); isOpen = true; }
+  function confirmDelete(item: Parent): void { selected = item; isDeleteOpen = true; }
+
+  async function submit(): Promise<void> {
+    const result = selected
+      ? await api(() => axios.put(`/parents/${selected!.id}`, form))
+      : await api(() => axios.post('/parents', form));
+    if (result.success) { isOpen = false; router.visit('/parents', { preserveScroll: true }); }
+  }
+  async function remove(): Promise<void> {
+    if (!selected) return;
+    const result = await api(() => axios.delete(`/parents/${selected!.id}`));
+    if (result.success) { isDeleteOpen = false; router.visit('/parents', { preserveScroll: true }); }
+  }
+
+  const columns = [{ key: 'user_id', label: 'User' }, { key: 'phone', label: 'Phone' }, { key: 'address', label: 'Address' }];
+</script>
+
+{#snippet rowActions(item: Parent)}
+  {#if permissions.canEdit}<Button variant="ghost" size="icon" onclick={() => openEdit(item)}><Pencil class="w-4 h-4" /></Button>{/if}
+  {#if permissions.canDelete}<Button variant="ghost" size="icon" onclick={() => confirmDelete(item)}><Trash2 class="w-4 h-4 text-destructive" /></Button>{/if}
+{/snippet}
+
+<Header group="parents" />
+<div class="min-h-[100dvh] bg-background text-foreground font-body antialiased pt-28 px-6 sm:px-10 lg:px-16 pb-16">
+  <div class="flex items-center justify-between mb-8">
+    <h1 class="font-heading font-semibold tracking-tight text-2xl">Parents</h1>
+    {#if permissions.canCreate}<Button onclick={openCreate}>Add Parent</Button>{/if}
+  </div>
+  <DataTable {columns} rows={parents} rowAction={rowActions} />
+  {#if meta}<Pagination {meta} />{/if}
+</div>
+
+<Modal bind:open={isOpen} title={selected ? 'Edit Parent' : 'Add Parent'}>
+  <form class="flex flex-col gap-4" onsubmit={(e) => { e.preventDefault(); submit(); }}>
+    <div><Label for="user">User</Label>
+      <select id="user" bind:value={form.user_id} class="h-10 w-full rounded-sm border border-border bg-background px-3 text-sm">
+        {#each users as u}<option value={u.id}>{u.name}</option>{/each}
+      </select>
+    </div>
+    <div><Label for="phone">Phone</Label><Input id="phone" bind:value={form.phone} /></div>
+    <div><Label for="address">Address</Label><Input id="address" bind:value={form.address} /></div>
+    <div class="flex justify-end gap-2">
+      <Button variant="outline" onclick={() => isOpen = false}>Cancel</Button>
+      <Button type="submit">{selected ? 'Update' : 'Create'}</Button>
+    </div>
+  </form>
+</Modal>
+
+<ConfirmDialog bind:open={isDeleteOpen} title="Delete Parent" onConfirm={remove} destructive />

@@ -127,6 +127,7 @@ Route.delete('/school-locations/:id', [Auth], schoolLocations.removeSchoolLocati
 Route.post('/school-locations/:id/activate', [Auth], schoolLocations.activateSchoolLocation);
 
 // Teacher Confirmations (anti-fraud)
+Route.get('/teacher/confirm', [Auth], teacherConfirmations.confirmPage);
 Route.get('/teacher/confirmations', [Auth], teacherConfirmations.teacherConfirmationsPage);
 Route.get('/teacher/confirmations/data', [Auth], teacherConfirmations.listTeacherConfirmations);
 Route.get('/teacher/confirmations/:id', [Auth], teacherConfirmations.teacherConfirmationData);

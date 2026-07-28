@@ -128,6 +128,19 @@ export function roleToForm(role: Role): RoleForm {
 }
 
 // =============================================================================
+// Dashboard Types
+// =============================================================================
+
+export interface DashboardStats {
+  totalStudents: number;
+  totalTeachers: number;
+  totalClasses: number;
+  totalSubjects: number;
+  totalParents?: number;
+  totalAcademicYears?: number;
+}
+
+// =============================================================================
 // SIGAP Form Types
 // =============================================================================
 

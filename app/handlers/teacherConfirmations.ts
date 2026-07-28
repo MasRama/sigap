@@ -1,7 +1,7 @@
 import type { NaraRequest, NaraResponse } from '@core';
 import { jsonSuccess, jsonCreated, jsonError, jsonServerError, jsonValidationError, queryString } from '@core';
 import Logger from '@services/Logger';
-import { findTeacherConfirmationById, findConfirmationsByTeacher, createTeacherConfirmation, findTodayConfirmationBySchedule } from '@queries/teacherConfirmations';
+import { findTeacherConfirmationById, findAllTeacherConfirmations, findConfirmationsByTeacher, createTeacherConfirmation, findTodayConfirmationBySchedule } from '@queries/teacherConfirmations';
 import { findScheduleById } from '@queries/schedules';
 import { findActiveSchoolLocation } from '@queries/schoolLocations';
 import { isInsideRadius, validateCoordinates } from '@services/Geolocation';
@@ -13,9 +13,19 @@ import type { TeacherConfirmation } from '@types';
 const canView = (userId: string): boolean => isAdmin(userId) || hasPermission(userId, 'confirmations.view');
 
 export const teacherConfirmationsPage = (req: NaraRequest, res: NaraResponse) => {
-  const userId = req.user?.id;
+  if (!req.user) return res.redirect('/login');
+  const userId = req.user.id;
   const permissions = { canView: userId ? canView(userId) : false };
-  return res.inertia('teacherConfirmations', { permissions });
+  const records = canView(userId) ? findAllTeacherConfirmations() : findConfirmationsByTeacher(userId);
+  return res.inertia('teacherConfirmations', { permissions, records });
+};
+
+export const confirmPage = (req: NaraRequest, res: NaraResponse) => {
+  if (!req.user) return res.redirect('/login');
+
+  const scheduleId = req.query.schedule_id as string | undefined;
+  const schedule = scheduleId ? findScheduleById(scheduleId) : null;
+  return res.inertia('teacher/confirm', { scheduleId: scheduleId || null, schedule });
 };
 
 export const listTeacherConfirmations = (req: NaraRequest, res: NaraResponse) => {
