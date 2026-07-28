@@ -2,10 +2,11 @@
   import { router } from '@inertiajs/svelte';
   import axios from 'axios';
   import { api } from '$lib/api';
-  import Header from '../../Components/Header.svelte';
+  import Sidebar from '../../Components/Sidebar.svelte';
   import CameraCapture from '../../Components/CameraCapture.svelte';
   import GeoButton from '../../Components/GeoButton.svelte';
   import Button from '../../Components/Button.svelte';
+  import { fly } from 'svelte/transition';
 
   let { scheduleId: initialScheduleId = null }: { scheduleId?: string | null } = $props();
   let scheduleId = $state('');
@@ -21,9 +22,9 @@
   let isLoading = $state(false);
 
   async function submit(): Promise<void> {
-    if (!photo) { geoError = 'Please capture a photo first'; return; }
-    if (!coords) { geoError = 'Please share your location'; return; }
-    if (!scheduleId) { geoError = 'Schedule ID missing'; return; }
+    if (!photo) { geoError = 'Silakan ambil foto terlebih dahulu'; return; }
+    if (!coords) { geoError = 'Silakan bagikan lokasi Anda'; return; }
+    if (!scheduleId) { geoError = 'ID jadwal tidak ditemukan'; return; }
     isLoading = true;
     const result = await api(() => axios.post('/teacher/confirmations', {
       schedule_id: scheduleId,
@@ -36,38 +37,80 @@
   }
 </script>
 
-<Header group="teacher" />
-<div class="min-h-[100dvh] bg-background text-foreground font-body antialiased pt-28 px-6 sm:px-10 lg:px-16 pb-16">
-  <h1 class="font-heading font-semibold tracking-tight text-2xl mb-2">Confirm Attendance</h1>
-  <p class="text-sm text-muted-foreground mb-8">Capture a selfie and share your location to verify presence.</p>
+<Sidebar group="teacher" />
 
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-    <CameraCapture onCapture={(data) => photo = data} />
+<div class="min-h-[100dvh] bg-background text-foreground font-body antialiased selection:bg-primary/20 selection:text-primary pt-20 lg:pt-8 lg:pl-64 px-6 sm:px-10 lg:px-16 pb-16">
+  <div in:fly={{ y: 20, duration: 700 }}>
+    <p class="font-mono-accent text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-2">Verifikasi Kehadiran</p>
+    <h1 class="font-heading font-semibold tracking-[-0.02em] text-2xl text-foreground mb-2">Konfirmasi Kehadiran</h1>
+    <p class="text-sm text-muted-foreground mb-8">Ambil foto dan bagikan lokasi Anda untuk memverifikasi kehadiran.</p>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6" in:fly={{ y: 20, duration: 700, delay: 100 }}>
+    <!-- Camera capture card -->
+    <div class="bg-card border border-border rounded-lg overflow-hidden">
+      <div class="px-5 py-3 bg-secondary/60 border-b border-border">
+        <span class="font-mono-accent text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Foto Konfirmasi</span>
+      </div>
+      <div class="p-5">
+        <CameraCapture onCapture={(data) => photo = data} />
+      </div>
+    </div>
 
     <div class="flex flex-col gap-6">
-      <div class="rounded-sm border border-border bg-card p-5">
-        <p class="font-heading font-medium text-foreground">Location</p>
-        {#if coords}
-          <p class="text-xs text-muted-foreground mt-1">Lat: {coords.latitude.toFixed(6)}, Lng: {coords.longitude.toFixed(6)}</p>
-        {:else}
-          <p class="text-xs text-muted-foreground mt-1">Not acquired</p>
-        {/if}
-        <GeoButton class="mt-4" onLocation={(c) => { coords = c; geoError = null; }} onError={(m) => geoError = m} />
+      <!-- Location card -->
+      <div class="bg-card border border-border rounded-lg overflow-hidden">
+        <div class="px-5 py-3 bg-secondary/60 border-b border-border flex items-center justify-between">
+          <span class="font-mono-accent text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Geolokasi</span>
+          {#if coords}
+            <span class="flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-primary"></span>
+              <span class="font-mono-accent text-[10px] uppercase tracking-[0.15em] text-primary">Aktif</span>
+            </span>
+          {/if}
+        </div>
+        <div class="p-5">
+          {#if coords}
+            <dl class="flex flex-col gap-2 font-mono-accent text-xs">
+              <div class="flex justify-between border-b border-border/60 pb-2">
+                <dt class="text-muted-foreground">Latitude</dt>
+                <dd class="text-foreground">{coords.latitude.toFixed(6)}°</dd>
+              </div>
+              <div class="flex justify-between">
+                <dt class="text-muted-foreground">Longitude</dt>
+                <dd class="text-foreground">{coords.longitude.toFixed(6)}°</dd>
+              </div>
+            </dl>
+          {:else}
+            <p class="text-sm text-muted-foreground">Lokasi belum didapatkan.</p>
+          {/if}
+          <GeoButton class="mt-4" onLocation={(c) => { coords = c; geoError = null; }} onError={(m) => geoError = m} />
+        </div>
       </div>
 
+      <!-- Photo preview -->
       {#if photo}
-        <div class="rounded-sm border border-border bg-card p-5">
-          <p class="font-heading font-medium text-foreground mb-2">Preview</p>
-          <img src={photo} alt="Captured selfie" class="w-full max-w-xs rounded-sm" />
+        <div class="bg-card border border-border rounded-lg overflow-hidden">
+          <div class="px-5 py-3 bg-secondary/60 border-b border-border">
+            <span class="font-mono-accent text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Pratinjau Foto</span>
+          </div>
+          <div class="p-5">
+            <img src={photo} alt="Foto konfirmasi" class="w-full max-w-xs rounded-md" />
+          </div>
         </div>
       {/if}
 
+      <!-- Error -->
       {#if geoError}
-        <p class="text-sm text-destructive">{geoError}</p>
+        <div class="rounded-md border border-destructive/30 bg-destructive/5 px-4 py-3 flex items-start gap-3">
+          <span class="w-2 h-2 rounded-full bg-destructive shrink-0 mt-1.5"></span>
+          <span class="text-sm text-destructive leading-relaxed">{geoError}</span>
+        </div>
       {/if}
 
-      <Button onclick={submit} disabled={isLoading} class="self-start">
-        {isLoading ? 'Submitting...' : 'Submit Confirmation'}
+      <!-- Submit -->
+      <Button onclick={submit} disabled={isLoading} size="lg" class="self-start">
+        {isLoading ? 'Memproses...' : 'Kirim Konfirmasi'}
       </Button>
     </div>
   </div>

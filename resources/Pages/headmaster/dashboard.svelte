@@ -1,31 +1,40 @@
 <script lang="ts">
-  import Header from '../../Components/Header.svelte';
+  import Sidebar from '../../Components/Sidebar.svelte';
   import StatCard from '../../Components/StatCard.svelte';
   import BentoCard from '../../Components/BentoCard.svelte';
   import { inertia } from '@inertiajs/svelte';
+  import { fly } from 'svelte/transition';
   import { ArrowRight } from '@lucide/svelte';
   import type { DashboardStats } from '../../types';
 
   let { stats }: { stats?: DashboardStats } = $props();
 </script>
 
-<Header group="headmaster" />
-<div class="min-h-[100dvh] bg-background text-foreground font-body antialiased pt-28 px-6 sm:px-10 lg:px-16 pb-16">
-  <h1 class="font-heading font-semibold tracking-tight text-2xl mb-8">Headmaster Dashboard</h1>
+<Sidebar group="headmaster" />
 
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-    <StatCard label="Students" value={stats?.totalStudents ?? 0} />
-    <StatCard label="Teachers" value={stats?.totalTeachers ?? 0} />
-    <StatCard label="Classes" value={stats?.totalClasses ?? 0} />
-    <StatCard label="Subjects" value={stats?.totalSubjects ?? 0} />
+<div class="min-h-[100dvh] bg-background text-foreground font-body antialiased selection:bg-primary/20 selection:text-primary pt-20 lg:pt-8 lg:pl-64 px-6 sm:px-10 lg:px-16 pb-16">
+  <div in:fly={{ y: 20, duration: 700 }}>
+    <p class="font-mono-accent text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-2">Dasbor Kepala Sekolah</p>
+    <h1 class="font-heading font-semibold tracking-[-0.02em] text-2xl text-foreground mb-8">Pengawasan Sekolah</h1>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-    <BentoCard title="Outside confirmations" description="Teachers who confirmed outside the school radius.">
-      <a href="/headmaster/reports" use:inertia class="inline-flex items-center gap-1 text-sm text-primary hover:text-primary/80 mt-4"><ArrowRight class="w-4 h-4" /> View reports</a>
+  <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4" in:fly={{ y: 20, duration: 700, delay: 100 }}>
+    <StatCard label="Siswa" value={stats?.totalStudents ?? 0} />
+    <StatCard label="Guru" value={stats?.totalTeachers ?? 0} />
+    <StatCard label="Kelas" value={stats?.totalClasses ?? 0} />
+    <StatCard label="Mapel" value={stats?.totalSubjects ?? 0} />
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4" in:fly={{ y: 20, duration: 700, delay: 200 }}>
+    <BentoCard title="Konfirmasi di Luar Radius" description="Guru yang konfirmasi di luar radius sekolah.">
+      <a href="/headmaster/reports" use:inertia class="inline-flex items-center gap-1 text-sm text-primary hover:text-primary/80 mt-auto">
+        <ArrowRight class="w-4 h-4" /> Lihat laporan
+      </a>
     </BentoCard>
-    <BentoCard title="Class reports" description="Compare grades and attendance by class and subject.">
-      <a href="/reports/class-subject" use:inertia class="inline-flex items-center gap-1 text-sm text-primary hover:text-primary/80 mt-4"><ArrowRight class="w-4 h-4" /> Open reports</a>
+    <BentoCard title="Laporan Kelas" description="Bandingkan nilai dan kehadiran per kelas dan mapel.">
+      <a href="/reports/class-subject" use:inertia class="inline-flex items-center gap-1 text-sm text-primary hover:text-primary/80 mt-auto">
+        <ArrowRight class="w-4 h-4" /> Buka laporan
+      </a>
     </BentoCard>
   </div>
 </div>

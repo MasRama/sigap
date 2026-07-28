@@ -1,29 +1,55 @@
 <script lang="ts">
   import { inertia } from '@inertiajs/svelte';
-  import Header from '../../Components/Header.svelte';
-  import BentoCard from '../../Components/BentoCard.svelte';
-  import type { Student } from '../../types';
+  import Sidebar from '../../Components/Sidebar.svelte';
+  import { fly } from 'svelte/transition';
   import { ArrowRight } from '@lucide/svelte';
+  import type { Student } from '../../types';
 
   let { children = [] }: { children?: (Student & { grades?: { score: number }[]; attendance?: { status: string }[] })[] } = $props();
 </script>
 
-<Header group="parent" />
-<div class="min-h-[100dvh] bg-background text-foreground font-body antialiased pt-28 px-6 sm:px-10 lg:px-16 pb-16">
-  <h1 class="font-heading font-semibold tracking-tight text-2xl mb-8">My Children</h1>
+<Sidebar group="parent" />
 
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-    {#each children as child}
-      <BentoCard title={child.name} description="NIS {child.nis}">
-        <div class="mt-4 space-y-2 text-sm">
-          <p class="text-muted-foreground">Grades: {child.grades?.length ?? 0}</p>
-          <p class="text-muted-foreground">Attendance records: {child.attendance?.length ?? 0}</p>
-        </div>
-        <div class="mt-4 flex gap-2">
-          <a href="/parent/child/{child.id}/attendance" use:inertia class="inline-flex items-center gap-1 text-sm text-primary hover:text-primary/80"><ArrowRight class="w-4 h-4" /> Attendance</a>
-          <a href="/parent/child/{child.id}/grades" use:inertia class="inline-flex items-center gap-1 text-sm text-primary hover:text-primary/80"><ArrowRight class="w-4 h-4" /> Grades</a>
-        </div>
-      </BentoCard>
-    {/each}
+<div class="min-h-[100dvh] bg-background text-foreground font-body antialiased selection:bg-primary/20 selection:text-primary pt-20 lg:pt-8 lg:pl-64 px-6 sm:px-10 lg:px-16 pb-16">
+  <div in:fly={{ y: 20, duration: 700 }}>
+    <p class="font-mono-accent text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-2">Orang Tua</p>
+    <h1 class="font-heading font-semibold tracking-[-0.02em] text-2xl text-foreground mb-8">Anak Saya</h1>
   </div>
+
+  {#if children.length === 0}
+    <div class="bg-card border border-border rounded-lg px-6 py-12 text-center">
+      <p class="text-sm text-muted-foreground">Belum ada data anak terdaftar.</p>
+    </div>
+  {:else}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" in:fly={{ y: 20, duration: 700, delay: 100 }}>
+      {#each children as child}
+        <article class="bg-card border border-border rounded-lg overflow-hidden">
+          <header class="px-5 py-3 border-b border-border bg-secondary/40 flex items-center justify-between">
+            <span class="font-heading text-sm font-semibold text-foreground truncate">{child.name}</span>
+            <span class="font-mono-accent text-[10px] text-muted-foreground shrink-0">NIS {child.nis}</span>
+          </header>
+          <div class="px-5 py-4">
+            <div class="flex flex-col gap-2.5 text-sm">
+              <div class="flex justify-between border-b border-border/60 pb-2">
+                <span class="text-muted-foreground">Nilai</span>
+                <span class="text-foreground font-medium">{child.grades?.length ?? 0}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-muted-foreground">Kehadiran</span>
+                <span class="text-foreground font-medium">{child.attendance?.length ?? 0}</span>
+              </div>
+            </div>
+          </div>
+          <footer class="px-5 py-3 border-t border-border bg-secondary/30 flex gap-4">
+            <a href="/parent/child/{child.id}/attendance" use:inertia class="inline-flex items-center gap-1 text-xs text-primary hover:text-primary/80 transition-colors">
+              Kehadiran <ArrowRight class="w-3.5 h-3.5" />
+            </a>
+            <a href="/parent/child/{child.id}/grades" use:inertia class="inline-flex items-center gap-1 text-xs text-primary hover:text-primary/80 transition-colors">
+              Nilai <ArrowRight class="w-3.5 h-3.5" />
+            </a>
+          </footer>
+        </article>
+      {/each}
+    </div>
+  {/if}
 </div>
