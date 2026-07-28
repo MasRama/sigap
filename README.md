@@ -7,258 +7,117 @@
 
 SIGAP helps schools manage academic years, classes, students, teachers, schedules, journals, grades, and parent access. The anti-fraud confirmation flow requires teachers to capture a selfie and share their location before class, so every journal entry is tied to a real person at a real place.
 
----
-
-## The craft of building with machines.
-
-Say to your machine: *"Add a products CRUD."*
-
-That's all. The machine reads `AGENTS.md` for conventions, loads the `crud-pattern` skill for the workflow, checks `migrations/` for table shapes, writes the types, the migration, the queries, the validator, the handlers, the routes, the page — then runs `npm run check` to verify its own work. You review. You ship.
-
-```
-types/models.ts          →  interface Product { ... }
-migrations/...ts         →  CREATE TABLE products (...)
-queries/products.ts      →  findProductById(), createProduct(), ...
-validators/schemas.ts    →  CreateProductSchema (Zod)
-handlers/products.ts     →  productsPage, listProducts, addProduct, editProduct, removeProducts
-routes/web.ts            →  Route.get/post/put/delete('/products', ...)
-Pages/products.svelte    →  Full UI with table, forms, toast notifications
-```
-
-Ten files. Correct conventions. The machine did it all — you just asked.
+Built on the Nara AI-first TypeScript starter: functions over classes, raw SQL over ORM, Svelte 5 + Inertia.js, and SQLite.
 
 ---
 
-## Five quiet principles.
+## What it does
 
-Each one removes a reason for the machine to guess.
-
-**01. Flat, by design.**
-Files at arm's reach. No deep nesting to navigate. The machine finds things by name, and so do you.
-
-**02. Functions, not classes.**
-Standalone functions the machine writes accurately. No inheritance to hallucinate, no hidden state to chase.
-
-**03. Raw SQL, not magic.**
-Every query explicit, readable, predictable. The machine writes SQL fluently. No query builder syntax to invent.
-
-**04. No hidden behavior.**
-Traceable end to end. No decorators, no implicit middleware, no magic resolvers.
-
-**05. Few dependencies.**
-Fewer APIs to learn. Fewer mistakes to make. Each one earns its place.
-
-See [`docs/decisions/`](./docs/decisions/) for ten ADRs explaining *why* each decision was made.
+| Module | What |
+|---|---|
+| **Master data** | Academic years, classes, subjects, students, teachers, parents, schedules, school locations. |
+| **Teacher flow** | Daily schedule, selfie + geolocation confirmation, digital journal, and grades. |
+| **Anti-fraud** | Haversine distance check against the active school location; photos saved locally and auditable. |
+| **Parent portal** | View their children's attendance and grades. |
+| **Headmaster view** | Dashboard summary and report of confirmations made outside the school radius. |
 
 ---
 
-## What makes SIGAP AI-first.
-
-| Layer | What | Why it matters |
-|---|---|---|
-| **Context** | `AGENTS.md` (root + 11 nested) + 9 skills + 10 ADRs | The machine reads conventions, not guesses. Skills loaded on demand to save context window. |
-| **Topology** | `CODEMAP.md` (auto-generated index) | The machine knows what exists before searching. Reads one file instead of the whole tree. |
-| **Scaffolding** | `npm run gen:resource` | Eleven files scaffolded with correct conventions (including test stub). The machine can't make structural mistakes. |
-| **Enforcement** | `npm run lint:layers` (17 rules) + 200+ tests + pre-commit hook | The machine pushes a violation → blocked. Naming, layer boundaries, import direction, anti-patterns. |
-| **Verification** | `npm run check` | One command. The machine doesn't need to remember three. |
-| **CI** | 9 steps: typecheck → layer lint → AGENTS accuracy → security → links → file size → type safety → eval harness → tests | Last line of defense. Cloud agents can't bypass with `--no-verify`. |
-| **Policy** | Dependency policy (16 categories: allowed vs banned) | The machine checks the table before suggesting a dependency. No Prisma, no JWT, no React. |
-| **Pitfalls** | 10 real mistakes AI makes, with fix | The machine reads before coding. Prevents common errors. |
----
-
-## Begin.
+## Quick start
 
 ```bash
-git clone https://github.com/MasRama/sigap.git my-app && cd my-app
+git clone https://github.com/MasRama/sigap.git && cd sigap
 npm install
 cp .env.example .env
+npm run migrate:fresh
 npm run dev
 ```
 
-Open [http://localhost:5555](http://localhost:5555). You're live.
+Open [http://localhost:5555](http://localhost:5555).
 
-> Migrations run automatically on startup. To reset: `npm run migrate:fresh`
+### Default accounts
 
----
+After `npm run migrate:fresh` the seeders create these accounts:
 
-## How to talk to the machine.
+| Email | Password | Role |
+|---|---|---|
+| `admin@sigap.id` | `admin123` | admin |
+| `budi@sigap.id` | `teacher123` | teacher |
+| `siti@sigap.id` | `teacher123` | teacher |
+| `andi@sigap.id` | `parent123` | parent |
 
-SIGAP is built to be driven by natural language. The machine reads `AGENTS.md` for conventions, loads skills on demand, and verifies its own work with `npm run check`. A good prompt is short and names the resource + fields.
-
-**Add a full-stack resource:**
-
-```
-Add a products CRUD with name (string), price (number), and description (text).
-```
-
-The machine runs `npm run gen:resource products -- --fields="name:string,price:number,description:text"`, then `npm run migrate`, then `npm run check`. You review the diff.
-
-**Add a field to an existing resource:**
-
-```
-Add an is_active boolean column to users. Default true. Update the form and table.
-```
-
-**Fix a bug:**
-
-```
-The /users page shows raw JSON instead of HTML. Fix it.
-```
-
-The machine reads `lint:layers` rule L3, finds the handler returning `jsonSuccess` from a `*Page` handler, switches to `res.inertia()`.
-
-**Security audit:**
-
-```
-Run an OWASP Top 10 audit on the auth flow. Report findings in the standard format.
-```
-
-The machine loads the `pentest-pattern` skill and runs the POCs against the running server.
-
-**Rules of thumb:**
-- Name the resource and fields — don't say "add a thing"
-- One resource per prompt — the machine stays focused
-- Let the machine run `npm run check` itself — don't paste the output back
-- Review the diff, don't just trust it
+The demo also seeds:
+- 1 academic year (`2025/2026`)
+- 2 classes (`10A`, `10B`)
+- 3 subjects (`Mathematics`, `Biology`, `English`)
+- 10 students
+- 1 school location (`Main Campus`)
 
 ---
 
-## The verification loop.
-
-The machine writes code, then verifies its own work. You don't trust the diff — the gates do.
-
-```
-Agent writes code
-  │
-  ▼
-npm run check
-  ├── tsc --noEmit           (typecheck)
-  ├── lint:layers            (17 architectural rules)
-  ├── check:freshness        (CODEMAP not stale)
-  ├── check:agents           (AGENTS.md Structure tables accurate)
-  ├── check:security         (7 dangerous pattern checks)
-  ├── check:links            (markdown links resolve)
-  ├── check:filesize         (no file over 500 lines)
-  ├── check:types            (no new `any` beyond baseline)
-  └── vitest                 (266 tests)
-  │
-  ├── All green → commit
-  └── Any red → agent reads the error, fixes, re-runs check
-```
-
-The error messages are written for the agent, not just the human. Each violation includes the fix and a link to the relevant skill. This is the maker-verifier pattern: the agent that wrote the code is not the one grading it — the gates are independent and deterministic.
-
-**Prove it works:**
-
-```bash
-npm run eval
-```
-
-Runs a full end-to-end test of the AI-first tooling: generates a resource with `gen:resource`, verifies all 11 files follow conventions (naming, barrel exports, route entries, raw SQL, no ORM, test stub with pre-wired mocks), runs the gates on the generated code, then cleans up — leaving zero trace. 39 checks, all must pass.
-
-This runs in CI on every push — if `gen:resource` or any gate breaks, CI fails before merge.
-
----
-
-## Architecture.
-
-```
-Browser (Svelte 5 + Inertia.js)
-  │  router.visit() for pages · axios for data
-  ▼
-Server (ultimate-express / uWebSockets.js)
-  │
-  ├── Handlers (functions)
-  │     ├── Queries (raw SQL via better-sqlite3)
-  │     └── Services (Auth, Logger, Storage, CacheStore, LoginThrottle)
-  │
-  └── SQLite (embedded, zero-config)
-```
-
-**Two route types:**
-
-| Type | Called by | Returns |
-|------|-----------|---------|
-| Page | Browser navigation | `res.inertia('pageName', { data })` |
-| Data | `axios` from Svelte | `jsonSuccess()`, `jsonError()`, `jsonCreated()` |
-
----
-
-## What's inside.
+## Tech stack
 
 | Area | Stack |
-|------|-------|
-| Server | ultimate-express (uWebSockets.js, 250k+ req/s) |
+|---|---|
+| Server | ultimate-express (uWebSockets.js) |
 | Frontend | Svelte 5, Inertia.js, Tailwind CSS 4, Zag JS |
 | Database | SQLite via better-sqlite3, raw SQL migrations |
-| Auth | Session-based + RBAC (roles & permissions) |
-| Security | CSRF (double-submit cookie), rate limiting, XSS sanitization, security headers, timing-safe comparisons, login throttling |
-| Storage | Local file storage with sharp image processing, magic byte validation |
-| DX | Path aliases, structured logging (Pino), Vitest, Docker-ready |
+| Auth | Session-based + RBAC |
+| Validation | Zod |
+| Security | CSRF, rate limiting, XSS sanitization, security headers, login throttling |
+| Storage | Local file storage for confirmation photos |
 
 ---
 
-## Tooling.
+## Project structure
 
-```bash
-# Scaffolding (optional — the machine can also write files manually)
-npm run gen:resource products -- --fields="name:string,price:number"
-
-# Verification
-npm run check              # lint + typecheck + layer lint + tests
-npm run lint:layers        # 17 layer boundary + naming + import direction rules
-
-# Topology
-npm run codemap            # regenerate CODEMAP.md (auto-indexed)
+```
+./
+├── app/
+│   ├── handlers/    # Request handlers (functions)
+│   ├── queries/     # Raw SQL functions
+│   ├── services/    # SQLite, Auth, Logger, Storage, Geolocation, CameraUpload
+│   ├── middlewares/ # auth, csrf, rateLimit, securityHeaders
+│   ├── validators/  # Zod schemas
+│   └── core/        # App, Router, errors, response helpers
+├── routes/web.ts    # All routes
+├── migrations/      # Raw SQL migrations
+├── seeds/           # Seed files
+├── resources/       # Svelte 5 + Inertia frontend
+│   ├── Pages/       # Route pages
+│   ├── Components/  # Reusable UI components
+│   └── lib/         # api.ts, toast.ts, utils.ts
+├── tests/           # Vitest tests
+└── docs/decisions/  # ADRs
 ```
 
 ---
 
-## Database.
-
-Migrations are raw SQL strings executed by a lightweight migrator. No ORM, no query builder — just SQL.
+## Verification
 
 ```bash
-npm run migrate            # run pending migrations (auto-runs on startup)
-npm run migrate:rollback   # rollback last batch
-npm run migrate:status     # show pending/applied
-npm run migrate:fresh      # drop all + re-migrate + seed
-npm run seed               # run seeders
+npm run check      # lint + typecheck + layer lint + all gate checks + tests
+npm run lint:layers # 17 layer boundary and naming rules
+npm run test       # 266+ tests
 ```
 
 ---
 
-## Deployment.
+## Read
 
-```bash
-# Docker
-docker build -t nara-app .
-docker run -p 5555:5555 nara-app
-
-# Manual
-npm run build && npm start
-```
-
-Set `NODE_ENV=production` and configure SSL for production use. See [.env.production.example](./.env.production.example) for reference.
+| File | Purpose |
+|---|---|
+| [`AGENTS.md`](./AGENTS.md) | Conventions, anti-patterns, structure |
+| [`CODEMAP.md`](./CODEMAP.md) | Auto-generated codebase index |
+| [`routes/web.ts`](./routes/web.ts) | All routes in one file |
+| [`docs/decisions/`](./docs/decisions/README.md) | Architecture decision records |
 
 ---
 
-## Read.
+## Requirements
 
-| File | For | Read when |
-|---|---|---|
-| [`AGENTS.md`](./AGENTS.md) | Conventions, anti-patterns, structure | First time here |
-| [`CODEMAP.md`](./CODEMAP.md) | Codebase topology (auto-generated index) | Before searching the codebase |
-| [`routes/web.ts`](./routes/web.ts) | All routes in one file | Before adding routes |
-| [`.agents/skills/`](./.agents/skills/SKILL.md) | 9 deep-dive skills (CRUD, SQL, auth, Inertia, API/errors, deps, pitfalls, pentest, testing) | When touching that pattern |
-| [`docs/decisions/`](./docs/decisions/README.md) | 10 ADRs explaining *why* decisions were made | When questioning a convention |
+Node.js >= 20 · npm · SQLite is embedded.
 
----
-
-## Requirements.
-
-Node.js >= 20 · npm · That's it. SQLite is embedded.
-
-## License.
+## License
 
 [MIT](./LICENSE) — Built by [MasRama](https://github.com/MasRama)
