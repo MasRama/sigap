@@ -1,0 +1,61 @@
+{
+  "compilerOptions": {
+    "target": "es2021",
+    "lib": ["es2021"],
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "outDir": "./build",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "removeComments": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noImplicitReturns": false,
+    "noFallthroughCasesInSwitch": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["app/*"],
+      "@core": ["app/core/index.ts"],
+      "@core/*": ["app/core/*"],
+      "@handlers": ["app/handlers/index.ts"],
+      "@handlers/*": ["app/handlers/*"],
+      "@services": ["app/services/index.ts"],
+      "@services/*": ["app/services/*"],
+      "@middlewares/*": ["app/middlewares/*"],
+      "@validators/*": ["app/validators/*"],
+      "@validators": ["app/validators/index.ts"],
+      "@queries": ["app/queries/index.ts"],
+      "@queries/*": ["app/queries/*"],
+      "@types": ["app/types/models.ts"],
+      "@types/*": ["app/types/*"],
+      "@config/*": ["app/config/*"],
+      "@config": ["app/config/index.ts"],
+      "@routes/*": ["routes/*"],
+      "@resources/*": ["resources/*"],
+      "@root/*": ["./*"],
+      "$lib": ["resources/lib/index.ts"],
+      "$lib/*": ["resources/lib/*"]
+    }
+  },
+  "include": [
+    "./*.ts",
+    "migrations",
+    "seeds",
+    "scripts",
+    "app",
+    "routes"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build"
+  ]
+}
