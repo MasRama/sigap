@@ -152,16 +152,16 @@ Semua id `TEXT PRIMARY KEY` UUID, timestamp `INTEGER`, FK `ON DELETE CASCADE`.
 
 ---
 
-## 6. Backend Handlers
+## 6. Backend Handlers — `[commit-id]`
 
 > Setiap resource memiliki **1 page handler** (Inertia) + **N data handler** (JSON). Contoh `students.ts`: `studentsPage` (res.inertia) + `listStudents`, `addStudent`, `editStudent`, `removeStudents` (json).
 
 ### Public & Auth
-- [ ] **6.1** `app/handlers/school.ts` — `landingPage` (Inertia), public.
-- [ ] **6.2** `app/handlers/auth.ts` — Inertia pages: `loginPage` | Data handlers: `submitLogin`, `logout`, `changePassword`. Register public **dihapus** (akun dibuat admin).
+- [x] **6.1** `app/handlers/school.ts` — `landingPage` (Inertia), public. (masih menggunakan `home.ts`)
+- [x] **6.2** `app/handlers/auth.ts` — Inertia pages: `loginPage` | Data handlers: `submitLogin`, `logout`, `changePassword`. Register public **dihapus** (akun dibuat admin).
 
 ### Dashboard
-- [ ] **6.3** `app/handlers/dashboard.ts`:
+- [x] **6.3** `app/handlers/dashboard.ts`:
   - `dashboardPage` — role-aware Inertia page, kirim `role`, `quickLinks`.
   - `dashboardData` — json ringkasan per role:
     - teacher: jadwal hari ini, status konfirmasi.
@@ -170,51 +170,52 @@ Semua id `TEXT PRIMARY KEY` UUID, timestamp `INTEGER`, FK `ON DELETE CASCADE`.
     - admin: shortcut master data.
 
 ### Master Data (per file: 1 page + list/add/edit/remove)
-- [ ] **6.4** `app/handlers/academicYears.ts` — `academicYearsPage` (Inertia) + `listAcademicYears`, `addAcademicYear`, `editAcademicYear`, `removeAcademicYear` (json).
-- [ ] **6.5** `app/handlers/classes.ts` — `classesPage` + `listClasses`, `addClass`, `editClass`, `removeClass`.
-- [ ] **6.6** `app/handlers/subjects.ts` — `subjectsPage` + `listSubjects`, `addSubject`, `editSubject`, `removeSubject`.
-- [ ] **6.7** `app/handlers/students.ts` — `studentsPage` + `listStudents`, `addStudent`, `editStudent`, `removeStudents`. Import sederhana (opsional).
-- [ ] **6.8** `app/handlers/teachers.ts` — `teachersPage` + `listTeachers`, `addTeacher`, `editTeacher`, `removeTeachers` + assign subjects.
-- [ ] **6.9** `app/handlers/parents.ts` — `parentsPage` + `listParents`, `addParent`, `editParent`, `removeParents`.
-- [ ] **6.10** `app/handlers/schedules.ts` — `schedulesPage` + `listSchedules`, `addSchedule`, `editSchedule`, `removeSchedules`.
-- [ ] **6.11** `app/handlers/schoolLocations.ts` — `schoolLocationsPage` + `listSchoolLocations`, `addSchoolLocation`, `editSchoolLocation`, `removeSchoolLocation`, `setActiveSchoolLocation`.
+- [x] **6.4** `app/handlers/academicYears.ts` — `academicYearsPage` (Inertia) + `listAcademicYears`, `addAcademicYear`, `editAcademicYear`, `removeAcademicYear` (json).
+- [x] **6.5** `app/handlers/classes.ts` — `classesPage` + `listClasses`, `addClass`, `editClass`, `removeClass`.
+- [x] **6.6** `app/handlers/subjects.ts` — `subjectsPage` + `listSubjects`, `addSubject`, `editSubject`, `removeSubject`.
+- [x] **6.7** `app/handlers/students.ts` — `studentsPage` + `listStudents`, `addStudent`, `editStudent`, `removeStudent`.
+- [x] **6.8** `app/handlers/teachers.ts` — `teachersPage` + `listTeachers`, `addTeacher`, `editTeacher`, `removeTeacher` + assign subjects.
+- [x] **6.9** `app/handlers/parents.ts` — `parentsPage` + `listParents`, `addParent`, `editParent`, `removeParent`.
+- [x] **6.10** `app/handlers/schedules.ts` — `schedulesPage` + `listSchedules`, `addSchedule`, `editSchedule`, `removeSchedule`.
+- [x] **6.11** `app/handlers/schoolLocations.ts` — `schoolLocationsPage` + `listSchoolLocations`, `addSchoolLocation`, `editSchoolLocation`, `removeSchoolLocation`, `setActiveSchoolLocation`.
 
 ### Teacher Flow
-- [ ] **6.12** `app/handlers/teacherSchedule.ts`:
+- [x] **6.12** `app/handlers/teacherSchedule.ts`:
   - `teacherSchedulePage` (Inertia) — halaman jadwal hari ini.
   - `listTodaySchedules` (json) — jadwal aktif hari ini beserta status konfirmasi masing-masing.
-- [ ] **6.13** `app/handlers/teacherConfirmations.ts`:
+- [x] **6.13** `app/handlers/teacherConfirmations.ts`:
   - `submitConfirmation` (json) — menerima `photo` (multipart), `latitude`, `longitude`, `schedule_id`.
     - Validasi waktu: hanya bisa saat `start_time <= now <= end_time`.
     - Hitung jarak ke active school location; tetap sukses, set flag `is_inside_school` dan `distance_meters`.
     - Response hanya `jsonSuccess('Konfirmasi berhasil')` tanpa status lokasi.
-- [ ] **6.14** `app/handlers/journals.ts`:
+- [x] **6.14** `app/handlers/journals.ts`:
   - `journalsPage` (Inertia).
   - `listJournals` (json) — by teacher/date.
   - `createJournal` (json) — hanya bisa jika guru sudah konfirmasi untuk schedule tersebut; terima `material` + array `attendance`.
-- [ ] **6.15** `app/handlers/grades.ts`:
+- [x] **6.15** `app/handlers/grades.ts`:
   - `gradesPage` (Inertia) — form pilih kelas/mapel/jenis penilaian.
   - `listGrades` (json) — by class, subject, type.
   - `saveGrades` (json) — bulk insert/update nilai siswa.
 
 ### Parent
-- [ ] **6.16** `app/handlers/parent.ts`:
+- [x] **6.16** `app/handlers/parent.ts`:
   - `parentDashboardPage` (Inertia).
   - `parentDashboardData` (json) — ringkasan anak.
   - `childAttendanceData` (json) — riwayat kehadiran anak.
   - `childGradesData` (json) — nilai per mapel anak.
 
 ### Headmaster
-- [ ] **6.17** `app/handlers/headmaster.ts`:
+- [x] **6.17** `app/handlers/headmaster.ts`:
   - `headmasterDashboardPage` (Inertia).
   - `headmasterDashboardData` (json) — tren kehadiran sekolah, perbandingan nilai antar kelas.
   - `headmasterReportsPage` (Inertia) — laporan.
   - `listOutsideConfirmations` (json) — daftar guru yang konfirmasi dari luar sekolah.
 
 ### Aggregates
-- [ ] **6.18** `app/handlers/attendance.ts` — data untuk laporan (json).
-- [ ] **6.19** `app/handlers/reports.ts` — aggregate endpoint tambahan (json).
-- [ ] **6.20** `app/handlers/index.ts` — update barrel exports.
+- [x] **6.18** `app/handlers/attendance.ts` — data untuk laporan (json).
+- [x] **6.19** `app/handlers/reports.ts` — aggregate endpoint tambahan (json).
+- [x] **6.20** `app/handlers/index.ts` — update barrel exports.
+- [x] **6.21** Update `routes/web.ts` untuk semua endpoint baru.
 
 ---
 

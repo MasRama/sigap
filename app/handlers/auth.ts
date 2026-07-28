@@ -3,9 +3,8 @@ import { jsonSuccess, jsonError, jsonValidationError, isUniqueConstraintError } 
 import { hashPassword, comparePassword, processLogin as loginSession, logout as endSession } from '@services/Authenticate';
 import LoginThrottle from '@services/LoginThrottle';
 import Logger from '@services/Logger';
-import { findUserByEmail, createUser, findUserById, updatePassword, deleteSessionsByUserId } from '@queries';
-import { randomUUID } from 'crypto';
-import { LoginSchema, RegisterSchema, ChangePasswordSchema, zodToErrors } from '@validators';
+import { findUserByEmail, findUserById, updatePassword, deleteSessionsByUserId } from '@queries';
+import { LoginSchema, ChangePasswordSchema, zodToErrors } from '@validators';
 
 export const loginPage = (req: NaraRequest, res: NaraResponse) => {
   if (req.cookies.auth_id) {
@@ -14,15 +13,6 @@ export const loginPage = (req: NaraRequest, res: NaraResponse) => {
     return res.redirect('/dashboard');
   }
   return res.inertia('auth/login');
-};
-
-export const registerPage = (req: NaraRequest, res: NaraResponse) => {
-  if (req.cookies.auth_id) {
-    const isI = req.headers['x-inertia'];
-    if (isI) return res.setHeader('X-Inertia-Location', '/dashboard').redirect('/dashboard');
-    return res.redirect('/dashboard');
-  }
-  return res.inertia('auth/register');
 };
 
 export const submitLogin = (req: NaraRequest, res: NaraResponse) => {
@@ -63,36 +53,6 @@ export const submitLogin = (req: NaraRequest, res: NaraResponse) => {
   Logger.logAuth('login_success', { userId: user.id, ip });
   loginSession(user, req, res);
   return jsonSuccess(res, 'Login successful');
-};
-
-export const submitRegister = (req: NaraRequest, res: NaraResponse) => {
-  const parsed = RegisterSchema.safeParse(req.body);
-  if (!parsed.success) {
-    const errors = zodToErrors(parsed.error);
-    const msg = Object.values(errors).flat().join(', ');
-    return jsonValidationError(res, msg, errors);
-  }
-
-  const { name, email, password } = parsed.data;
-
-  try {
-    const user = createUser({
-      id: randomUUID(),
-      name,
-      email,
-      password: hashPassword(password),
-    });
-
-    Logger.logAuth('registration_success', { userId: user.id, ip: req.ip });
-    loginSession(user, req, res);
-    return jsonSuccess(res, 'Registration successful');
-  } catch (error: unknown) {
-    if (isUniqueConstraintError(error)) {
-      Logger.logSecurity('Registration failed - duplicate', { email, ip: req.ip });
-      return jsonError(res, 'Email already in use', 400, 'DUPLICATE_EMAIL');
-    }
-    throw error;
-  }
 };
 
 export const logout = (req: NaraRequest, res: NaraResponse) => {

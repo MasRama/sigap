@@ -4,6 +4,24 @@ import * as auth from '@handlers/auth';
 import * as users from '@handlers/users';
 import * as roles from '@handlers/roles';
 import * as assets from '@handlers/assets';
+import * as dashboard from '@handlers/dashboard';
+import * as academicYears from '@handlers/academicYears';
+import * as classes from '@handlers/classes';
+import * as subjects from '@handlers/subjects';
+import * as students from '@handlers/students';
+import * as teachers from '@handlers/teachers';
+import * as parents from '@handlers/parents';
+import * as schedules from '@handlers/schedules';
+import * as schoolLocations from '@handlers/schoolLocations';
+import * as teacherConfirmations from '@handlers/teacherConfirmations';
+import * as journals from '@handlers/journals';
+import * as studentAttendance from '@handlers/studentAttendance';
+import * as grades from '@handlers/grades';
+import * as teacherSchedule from '@handlers/teacherSchedule';
+import * as attendance from '@handlers/attendance';
+import * as reports from '@handlers/reports';
+import * as parent from '@handlers/parent';
+import * as headmaster from '@handlers/headmaster';
 import Auth from '@middlewares/auth';
 import { strictRateLimit } from '@middlewares/rateLimit';
 
@@ -15,13 +33,13 @@ Route.get('/', home.landingPage);
 // Auth
 Route.get('/login', auth.loginPage);
 Route.post('/login', strictRateLimit(), auth.submitLogin);
-Route.get('/register', auth.registerPage);
-Route.post('/register', strictRateLimit(), auth.submitRegister);
 Route.post('/logout', strictRateLimit(), auth.logout);
 Route.post('/change-password', [Auth], auth.changePassword);
 
+// Protected - Dashboard
+Route.get('/dashboard', [Auth], dashboard.dashboardPage);
+
 // Protected - Users
-Route.get('/dashboard', [Auth], users.dashboardPage);
 Route.get('/users', [Auth], users.usersPage);
 Route.get('/profile', [Auth], users.profilePage);
 Route.post('/change-profile', [Auth], users.changeProfile);
@@ -36,6 +54,131 @@ Route.get('/roles/permissions', [Auth], roles.permissionsData);
 Route.post('/roles', [Auth], roles.addRole);
 Route.put('/roles/:id', [Auth], roles.editRole);
 Route.delete('/roles/:id', [Auth], roles.removeRole);
+
+// Academic Years
+Route.get('/academic-years', [Auth], academicYears.academicYearsPage);
+Route.get('/academic-years/data', [Auth], academicYears.listAcademicYears);
+Route.get('/academic-years/:id', [Auth], academicYears.activeAcademicYearData);
+Route.post('/academic-years', [Auth], academicYears.addAcademicYear);
+Route.put('/academic-years/:id', [Auth], academicYears.editAcademicYear);
+Route.delete('/academic-years/:id', [Auth], academicYears.removeAcademicYear);
+Route.post('/academic-years/:id/activate', [Auth], academicYears.activateAcademicYear);
+
+// Classes
+Route.get('/classes', [Auth], classes.classesPage);
+Route.get('/classes/data', [Auth], classes.listClasses);
+Route.get('/classes/:id', [Auth], classes.classData);
+Route.post('/classes', [Auth], classes.addClass);
+Route.put('/classes/:id', [Auth], classes.editClass);
+Route.delete('/classes/:id', [Auth], classes.removeClass);
+
+// Subjects
+Route.get('/subjects', [Auth], subjects.subjectsPage);
+Route.get('/subjects/data', [Auth], subjects.listSubjects);
+Route.get('/subjects/:id', [Auth], subjects.subjectData);
+Route.post('/subjects', [Auth], subjects.addSubject);
+Route.put('/subjects/:id', [Auth], subjects.editSubject);
+Route.delete('/subjects/:id', [Auth], subjects.removeSubject);
+
+// Students
+Route.get('/students', [Auth], students.studentsPage);
+Route.get('/students/data', [Auth], students.listStudents);
+Route.get('/students/by-class/:id', [Auth], students.studentsByClass);
+Route.get('/students/:id', [Auth], students.studentData);
+Route.post('/students', [Auth], students.addStudent);
+Route.put('/students/:id', [Auth], students.editStudent);
+Route.delete('/students/:id', [Auth], students.removeStudent);
+
+// Teachers
+Route.get('/teachers', [Auth], teachers.teachersPage);
+Route.get('/teachers/data', [Auth], teachers.listTeachers);
+Route.get('/teachers/by-user/:userId', [Auth], teachers.teacherByUser);
+Route.get('/teachers/:id', [Auth], teachers.teacherData);
+Route.post('/teachers', [Auth], teachers.addTeacher);
+Route.put('/teachers/:id', [Auth], teachers.editTeacher);
+Route.delete('/teachers/:id', [Auth], teachers.removeTeacher);
+Route.post('/teachers/:id/subjects', [Auth], teachers.assignTeacherSubjects);
+
+// Parents
+Route.get('/parents', [Auth], parents.parentsPage);
+Route.get('/parents/data', [Auth], parents.listParents);
+Route.get('/parents/by-user/:userId', [Auth], parents.parentByUser);
+Route.get('/parents/:id', [Auth], parents.parentData);
+Route.post('/parents', [Auth], parents.addParent);
+Route.put('/parents/:id', [Auth], parents.editParent);
+Route.delete('/parents/:id', [Auth], parents.removeParent);
+
+// Schedules
+Route.get('/schedules', [Auth], schedules.schedulesPage);
+Route.get('/schedules/data', [Auth], schedules.listSchedules);
+Route.get('/schedules/:id', [Auth], schedules.scheduleData);
+Route.post('/schedules', [Auth], schedules.addSchedule);
+Route.put('/schedules/:id', [Auth], schedules.editSchedule);
+Route.delete('/schedules/:id', [Auth], schedules.removeSchedule);
+
+// School Locations
+Route.get('/school-locations', [Auth], schoolLocations.schoolLocationsPage);
+Route.get('/school-locations/data', [Auth], schoolLocations.listSchoolLocations);
+Route.get('/school-locations/active', [Auth], schoolLocations.activeSchoolLocationData);
+Route.get('/school-locations/:id', [Auth], schoolLocations.schoolLocationData);
+Route.post('/school-locations', [Auth], schoolLocations.addSchoolLocation);
+Route.put('/school-locations/:id', [Auth], schoolLocations.editSchoolLocation);
+Route.delete('/school-locations/:id', [Auth], schoolLocations.removeSchoolLocation);
+Route.post('/school-locations/:id/activate', [Auth], schoolLocations.activateSchoolLocation);
+
+// Teacher Confirmations (anti-fraud)
+Route.get('/teacher/confirmations', [Auth], teacherConfirmations.teacherConfirmationsPage);
+Route.get('/teacher/confirmations/data', [Auth], teacherConfirmations.listTeacherConfirmations);
+Route.get('/teacher/confirmations/:id', [Auth], teacherConfirmations.teacherConfirmationData);
+Route.get('/teacher/confirmations/outside', [Auth], teacherConfirmations.outsideConfirmationsData);
+Route.post('/teacher/confirmations', [Auth], teacherConfirmations.submitTeacherConfirmation);
+
+// Journals
+Route.get('/journals', [Auth], journals.journalsPage);
+Route.get('/journals/data', [Auth], journals.listJournals);
+Route.get('/journals/:id', [Auth], journals.journalData);
+Route.post('/journals', [Auth], journals.addJournal);
+Route.put('/journals/:id', [Auth], journals.editJournal);
+Route.delete('/journals/:id', [Auth], journals.removeJournal);
+
+// Student Attendance
+Route.get('/attendance', [Auth], studentAttendance.studentAttendancePage);
+Route.get('/attendance/journal/:journalId', [Auth], studentAttendance.listAttendanceByJournal);
+Route.get('/attendance/student/:studentId', [Auth], studentAttendance.listAttendanceByStudent);
+Route.post('/attendance', [Auth], studentAttendance.saveAttendance);
+Route.delete('/attendance/:id', [Auth], studentAttendance.removeAttendance);
+
+// Grades
+Route.get('/grades', [Auth], grades.gradesPage);
+Route.get('/grades/data', [Auth], grades.listGrades);
+Route.get('/grades/student/:studentId', [Auth], grades.gradesByStudent);
+Route.get('/grades/:id', [Auth], grades.gradeData);
+Route.post('/grades', [Auth], grades.addGrade);
+Route.put('/grades/:id', [Auth], grades.editGrade);
+Route.delete('/grades/:id', [Auth], grades.removeGrade);
+
+// Teacher Schedule
+Route.get('/teacher/schedule', [Auth], teacherSchedule.teacherSchedulePage);
+Route.get('/teacher/schedule/today', [Auth], teacherSchedule.listTodaySchedules);
+Route.get('/teacher/schedule/:id', [Auth], teacherSchedule.todayScheduleDetail);
+
+// Attendance Reports
+Route.get('/attendance/report/:studentId', [Auth], attendance.attendanceReportData);
+
+// Reports
+Route.get('/reports/class-subject', [Auth], reports.classSubjectReport);
+
+// Parent Dashboard
+Route.get('/parent/dashboard', [Auth], parent.parentDashboardPage);
+Route.get('/parent/dashboard/data', [Auth], parent.parentDashboardData);
+Route.get('/parent/child/:studentId/attendance', [Auth], parent.childAttendanceData);
+Route.get('/parent/child/:studentId/grades', [Auth], parent.childGradesData);
+
+// Headmaster Dashboard
+Route.get('/headmaster/dashboard', [Auth], headmaster.headmasterDashboardPage);
+Route.get('/headmaster/dashboard/data', [Auth], headmaster.headmasterDashboardData);
+Route.get('/headmaster/reports', [Auth], headmaster.headmasterReportsPage);
+Route.get('/headmaster/reports/outside-confirmations', [Auth], headmaster.listOutsideConfirmations);
 
 // Assets
 Route.post('/assets/avatar', [Auth, strictRateLimit(), assets.avatarMiddleware as any], assets.uploadAsset);
