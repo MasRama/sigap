@@ -10,9 +10,9 @@
 
 ## Stats
 
-- Files indexed: 196
-- Total lines: 17625
-- Total exports: 632
+- Files indexed: 197
+- Total lines: 17715
+- Total exports: 633
 - Entry points (★): `app/core/index.ts`, `resources/app.ts`, `routes/web.ts`, `server.ts`
 
 ## File Tree
@@ -271,6 +271,7 @@
 - `01_permissions.ts` (85L) — run
 - `02_roles.ts` (110L) — run
 - `03_admin.ts` (24L) — run
+- `04_demo.ts` (90L) — run
 
 ### tests/
 
@@ -1262,6 +1263,10 @@
 
 - `fn` **run**
 
+### `seeds/04_demo.ts`
+
+- `fn` **run**
+
 ### `tests/helpers/mocks.ts`
 
 - `fn` **mockRequest**
@@ -1385,6 +1390,7 @@
 - `seeds/01_permissions.ts` → `../app/services/SQLite`
 - `seeds/02_roles.ts` → `../app/services/SQLite`
 - `seeds/03_admin.ts` → `../app/services/Authenticate`, `../app/services/SQLite`
+- `seeds/04_demo.ts` → `../app/services/Authenticate`, `../app/services/SQLite`
 - `server.ts` → `@core`, `@routes/web`
 - `tests/core/response.test.ts` → `../helpers/mocks`
 - `tests/core/Router.test.ts` → `../../app/core/Router`
@@ -1415,3 +1421,4 @@
 - [`docs/decisions/0008-agents-md-over-readme.md`](docs/decisions/0008-agents-md-over-readme.md) — ADR 0008: AGENTS.md as primary AI context
 - [`docs/decisions/0009-descriptive-handler-names.md`](docs/decisions/0009-descriptive-handler-names.md) — ADR 0009: Descriptive handler names over REST conventions
 - [`docs/decisions/0010-english-error-messages.md`](docs/decisions/0010-english-error-messages.md) — ADR 0010: English for user-facing messages
+- [`docs/decisions/0011-camera-geolocation-anti-fraud.md`](docs/decisions/0011-camera-geolocation-anti-fraud.md) — ADR 0011: Camera + Geolocation for Anti-Fraud Teacher Confirmation

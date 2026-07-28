@@ -401,7 +401,7 @@ Semua id `TEXT PRIMARY KEY` UUID, timestamp `INTEGER`, FK `ON DELETE CASCADE`.
 - [x] **12.1** Update `seeds/01_permissions.ts` — permission SIGAP baru.
 - [x] **12.2** Update `seeds/02_roles.ts` — roles: `admin`, `headmaster`, `teacher`, `parent`.
 - [x] **12.3** Update `seeds/03_admin.ts` — admin default `admin@sigap.id` / `admin123`.
-- [ ] **12.4** (Opsional) `seeds/04_demo.ts` — data demo: 1 tahun ajaran, 2 kelas, 3 mapel, 10 siswa, 2 guru, 1 orang tua.
+- [x] **12.4** (Opsional) `seeds/04_demo.ts` — data demo: 1 tahun ajaran, 2 kelas, 3 mapel, 10 siswa, 2 guru, 1 orang tua.
 
 ---
 
@@ -409,8 +409,8 @@ Semua id `TEXT PRIMARY KEY` UUID, timestamp `INTEGER`, FK `ON DELETE CASCADE`.
 
 - [x] **13.1** `npm run lint` — tsc --noEmit, perbaiki type errors.
 - [x] **13.2** `npm run lint:layers` — pastikan layer boundaries terjaga.
-- [ ] **13.3** `npm run migrate:fresh` — rebuild schema + seed.
-- [ ] **13.4** `npm run dev` — smoke test login & dashboard.
+- [x] **13.3** `npm run migrate:fresh` — rebuild schema + seed. (skipped - user)
+- [x] **13.4** `npm run dev` — smoke test login & dashboard. (skipped - user)
 - [x] **13.5** `npx vitest run tests/handlers/...` untuk setiap handler baru.
 - [x] **13.6** `npx vitest run tests/queries/...` untuk setiap query baru.
 - [x] **13.7** Tambah/ubah convention tests jika diperlukan.
@@ -422,10 +422,10 @@ Semua id `TEXT PRIMARY KEY` UUID, timestamp `INTEGER`, FK `ON DELETE CASCADE`.
 
 - [x] **14.1** Update `README.md` — deskripsi SIGAP, cara install, seed demo, role default.
 - [x] **14.2** Update `AGENTS.md` root — brand, warna, fitur domain, routing baru.
-- [ ] **14.3** Buat ADR baru di `docs/decisions/` jika ada keputusan arsitektur signifikan (misal: `adr-camera-location-anti-fraud.md`).
+- [x] **14.3** Buat ADR baru di `docs/decisions/` jika ada keputusan arsitektur signifikan (misal: `adr-camera-location-anti-fraud.md`).
 - [x] **14.4** Regenerate `CODEMAP.md` setelah struktur stabil: `npm run codemap`.
-- [ ] **14.5** Perbarui `package.json` scripts/description.
-- [ ] **14.6** Commit pertama ke git baru: `git add . && git commit -m "init: SIGAP sky-blue school management platform"`.
+- [x] **14.5** Perbarui `package.json` scripts/description. (description already SIGAP-focused; scripts complete)
+- [x] **14.6** Commit pertama ke git baru: `git add . && git commit -m "init: SIGAP sky-blue school management platform"`. (N/A — repo already has SIGAP history)
 
 ---
 
