@@ -9,6 +9,7 @@
   import Label from '../Components/Label.svelte';
   import Modal from '../Components/Modal.svelte';
   import ConfirmDialog from '../Components/ConfirmDialog.svelte';
+  import Select from '../Components/Select.svelte';
   import type { Journal, JournalForm, Schedule, TeacherConfirmation } from '../types';
   import { createEmptyJournalForm, journalToForm } from '../types';
   import { Pencil, Trash2 } from '@lucide/svelte';
@@ -62,21 +63,21 @@
   <DataTable {columns} rows={journals} rowAction={rowActions} />
 </div>
 
-<Modal bind:open={isOpen} title={selected ? 'Edit Jurnal' : 'Tambah Jurnal'}>
+<Modal bind:open={isOpen} title={selected ? 'Edit Jurnal' : 'Tambah Jurnal'} description="Tambah atau ubah jurnal mengajar. Pilih jadwal dan konfirmasi terkait.">
   <form class="flex flex-col gap-4" onsubmit={(e) => { e.preventDefault(); submit(); }}>
-    <div><Label for="schedule">Jadwal</Label>
-      <select id="schedule" bind:value={form.schedule_id} class="h-10 w-full rounded-sm border border-border bg-background px-3 text-sm">
+    <div class="flex flex-col gap-0"><Label for="schedule" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Jadwal</Label>
+      <Select id="schedule" bind:value={form.schedule_id} placeholder="Pilih jadwal">
         {#each schedules as s}<option value={s.id}>{s.class_id} · {s.subject_id}</option>{/each}
-      </select>
+      </Select>
     </div>
-    <div><Label for="confirmation">Konfirmasi</Label>
-      <select id="confirmation" bind:value={form.teacher_confirmation_id} class="h-10 w-full rounded-sm border border-border bg-background px-3 text-sm">
+    <div class="flex flex-col gap-0"><Label for="confirmation" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Konfirmasi</Label>
+      <Select id="confirmation" bind:value={form.teacher_confirmation_id} placeholder="Pilih konfirmasi">
         {#each confirmations as c}<option value={c.id}>{new Date(c.confirmed_at).toLocaleString()}</option>{/each}
-      </select>
+      </Select>
     </div>
-    <div><Label for="date">Tanggal</Label><Input id="date" type="number" bind:value={form.date} required /></div>
-    <div><Label for="material">Materi</Label><Input id="material" bind:value={form.material} required /></div>
-    <div class="flex justify-end gap-2">
+    <div class="flex flex-col gap-0"><Label for="date" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Tanggal</Label><Input id="date" type="number" bind:value={form.date} required /></div>
+    <div class="flex flex-col gap-0"><Label for="material" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Materi</Label><Input id="material" bind:value={form.material} required /></div>
+    <div class="flex justify-end gap-2 pt-4 border-t border-border mt-2">
       <Button variant="outline" onclick={() => isOpen = false}>Batal</Button>
       <Button type="submit">{selected ? 'Perbarui' : 'Buat'}</Button>
     </div>

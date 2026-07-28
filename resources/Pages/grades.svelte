@@ -9,6 +9,7 @@
   import Label from '../Components/Label.svelte';
   import Modal from '../Components/Modal.svelte';
   import ConfirmDialog from '../Components/ConfirmDialog.svelte';
+  import Select from '../Components/Select.svelte';
   import Pagination from '../Components/Pagination.svelte';
   import type { Grade, GradeForm, Student, Subject, Class, AcademicYear, PaginationMeta } from '../types';
   import { createEmptyGradeForm, gradeToForm } from '../types';
@@ -64,31 +65,31 @@
   {#if meta}<Pagination {meta} />{/if}
 </div>
 
-<Modal bind:open={isOpen} title={selected ? 'Edit Nilai' : 'Tambah Nilai'}>
+<Modal bind:open={isOpen} title={selected ? 'Edit Nilai' : 'Tambah Nilai'} description="Tambah atau ubah nilai siswa. Pilih siswa, mapel, kelas, dan jenis penilaian.">
   <form class="flex flex-col gap-4" onsubmit={(e) => { e.preventDefault(); submit(); }}>
-    <div><Label for="student">Siswa</Label>
-      <select id="student" bind:value={form.student_id} class="h-10 w-full rounded-sm border border-border bg-background px-3 text-sm">
+    <div class="flex flex-col gap-0"><Label for="student" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Siswa</Label>
+      <Select id="student" bind:value={form.student_id} placeholder="Pilih siswa">
         {#each students as s}<option value={s.id}>{s.name}</option>{/each}
-      </select>
+      </Select>
     </div>
-    <div><Label for="subject">Mapel</Label>
-      <select id="subject" bind:value={form.subject_id} class="h-10 w-full rounded-sm border border-border bg-background px-3 text-sm">
+    <div class="flex flex-col gap-0"><Label for="subject" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Mapel</Label>
+      <Select id="subject" bind:value={form.subject_id} placeholder="Pilih mapel">
         {#each subjects as s}<option value={s.id}>{s.name}</option>{/each}
-      </select>
+      </Select>
     </div>
-    <div><Label for="class">Kelas</Label>
-      <select id="class" bind:value={form.class_id} class="h-10 w-full rounded-sm border border-border bg-background px-3 text-sm">
+    <div class="flex flex-col gap-0"><Label for="class" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Kelas</Label>
+      <Select id="class" bind:value={form.class_id} placeholder="Pilih kelas">
         {#each classes as c}<option value={c.id}>{c.name}</option>{/each}
-      </select>
+      </Select>
     </div>
-    <div><Label for="year">Tahun Ajaran</Label>
-      <select id="year" bind:value={form.academic_year_id} class="h-10 w-full rounded-sm border border-border bg-background px-3 text-sm">
+    <div class="flex flex-col gap-0"><Label for="year" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Tahun Ajaran</Label>
+      <Select id="year" bind:value={form.academic_year_id} placeholder="Pilih tahun ajaran">
         {#each years as y}<option value={y.id}>{y.name}</option>{/each}
-      </select>
+      </Select>
     </div>
-    <div><Label for="type">Jenis</Label><Input id="type" bind:value={form.type} required /></div>
-    <div><Label for="score">Nilai</Label><Input id="score" type="number" bind:value={form.score} required /></div>
-    <div class="flex justify-end gap-2">
+    <div class="flex flex-col gap-0"><Label for="type" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Jenis</Label><Input id="type" bind:value={form.type} required /></div>
+    <div class="flex flex-col gap-0"><Label for="score" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Nilai</Label><Input id="score" type="number" bind:value={form.score} required /></div>
+    <div class="flex justify-end gap-2 pt-4 border-t border-border mt-2">
       <Button variant="outline" onclick={() => isOpen = false}>Batal</Button>
       <Button type="submit">{selected ? 'Perbarui' : 'Buat'}</Button>
     </div>

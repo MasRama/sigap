@@ -9,6 +9,7 @@
   import Label from '../Components/Label.svelte';
   import Modal from '../Components/Modal.svelte';
   import ConfirmDialog from '../Components/ConfirmDialog.svelte';
+  import Select from '../Components/Select.svelte';
   import Pagination from '../Components/Pagination.svelte';
   import type { Teacher, TeacherForm, User, PaginationMeta } from '../types';
   import { createEmptyTeacherForm, teacherToForm } from '../types';
@@ -64,16 +65,16 @@
   {#if meta}<Pagination {meta} />{/if}
 </div>
 
-<Modal bind:open={isOpen} title={selected ? 'Edit Guru' : 'Tambah Guru'}>
+<Modal bind:open={isOpen} title={selected ? 'Edit Guru' : 'Tambah Guru'} description="Tambah atau ubah data guru. Pilih pengguna dan isi NIP.">
   <form class="flex flex-col gap-4" onsubmit={(e) => { e.preventDefault(); submit(); }}>
-    <div><Label for="user">Pengguna</Label>
-      <select id="user" bind:value={form.user_id} class="h-10 w-full rounded-sm border border-border bg-background px-3 text-sm">
+    <div class="flex flex-col gap-0"><Label for="user" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Pengguna</Label>
+      <Select id="user" bind:value={form.user_id} placeholder="Pilih pengguna">
         {#each users as u}<option value={u.id}>{u.name}</option>{/each}
-      </select>
+      </Select>
     </div>
-    <div><Label for="employee_id">NIP</Label><Input id="employee_id" bind:value={form.employee_id} /></div>
-    <div><Label for="phone">Telepon</Label><Input id="phone" bind:value={form.phone} /></div>
-    <div class="flex justify-end gap-2">
+    <div class="flex flex-col gap-0"><Label for="employee_id" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">NIP</Label><Input id="employee_id" bind:value={form.employee_id} /></div>
+    <div class="flex flex-col gap-0"><Label for="phone" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Telepon</Label><Input id="phone" bind:value={form.phone} /></div>
+    <div class="flex justify-end gap-2 pt-4 border-t border-border mt-2">
       <Button variant="outline" onclick={() => isOpen = false}>Batal</Button>
       <Button type="submit">{selected ? 'Perbarui' : 'Buat'}</Button>
     </div>

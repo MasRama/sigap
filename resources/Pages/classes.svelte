@@ -9,6 +9,7 @@
   import Label from '../Components/Label.svelte';
   import Modal from '../Components/Modal.svelte';
   import ConfirmDialog from '../Components/ConfirmDialog.svelte';
+  import Select from '../Components/Select.svelte';
   import type { Class, ClassForm, AcademicYear } from '../types';
   import { createEmptyClassForm, classToForm } from '../types';
   import { Pencil, Trash2 } from '@lucide/svelte';
@@ -62,16 +63,16 @@
   <DataTable {columns} rows={classes} rowAction={rowActions} />
 </div>
 
-<Modal bind:open={isOpen} title={selected ? 'Edit Kelas' : 'Tambah Kelas'}>
+<Modal bind:open={isOpen} title={selected ? 'Edit Kelas' : 'Tambah Kelas'} description="Tambah atau ubah data kelas. Pilih tahun ajaran yang aktif.">
   <form class="flex flex-col gap-4" onsubmit={(e) => { e.preventDefault(); submit(); }}>
-    <div><Label for="name">Nama</Label><Input id="name" bind:value={form.name} required /></div>
-    <div><Label for="grade">Tingkat</Label><Input id="grade" bind:value={form.grade} required /></div>
-    <div><Label for="year">Tahun Ajaran</Label>
-      <select id="year" bind:value={form.academic_year_id} class="h-10 w-full rounded-sm border border-border bg-background px-3 text-sm">
+    <div class="flex flex-col gap-0"><Label for="name" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Nama</Label><Input id="name" bind:value={form.name} required /></div>
+    <div class="flex flex-col gap-0"><Label for="grade" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Tingkat</Label><Input id="grade" bind:value={form.grade} required /></div>
+    <div class="flex flex-col gap-0"><Label for="year" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Tahun Ajaran</Label>
+      <Select id="year" bind:value={form.academic_year_id} placeholder="Pilih tahun ajaran">
         {#each years as year}<option value={year.id}>{year.name}</option>{/each}
-      </select>
+      </Select>
     </div>
-    <div class="flex justify-end gap-2">
+    <div class="flex justify-end gap-2 pt-4 border-t border-border mt-2">
       <Button variant="outline" onclick={() => isOpen = false}>Batal</Button>
       <Button type="submit">{selected ? 'Perbarui' : 'Buat'}</Button>
     </div>

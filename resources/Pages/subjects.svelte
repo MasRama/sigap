@@ -9,6 +9,7 @@
   import Label from '../Components/Label.svelte';
   import Modal from '../Components/Modal.svelte';
   import ConfirmDialog from '../Components/ConfirmDialog.svelte';
+  import Select from '../Components/Select.svelte';
   import type { Subject, SubjectForm } from '../types';
   import { createEmptySubjectForm, subjectToForm } from '../types';
   import { Pencil, Trash2 } from '@lucide/svelte';
@@ -62,11 +63,11 @@
   <DataTable {columns} rows={subjects} rowAction={rowActions} />
 </div>
 
-<Modal bind:open={isOpen} title={selected ? 'Edit Mapel' : 'Tambah Mapel'}>
+<Modal bind:open={isOpen} title={selected ? 'Edit Mapel' : 'Tambah Mapel'} description="Tambah atau ubah mata pelajaran. Kode dan nama wajib diisi.">
   <form class="flex flex-col gap-4" onsubmit={(e) => { e.preventDefault(); submit(); }}>
-    <div><Label for="code">Kode</Label><Input id="code" bind:value={form.code} required /></div>
-    <div><Label for="name">Nama</Label><Input id="name" bind:value={form.name} required /></div>
-    <div class="flex justify-end gap-2">
+    <div class="flex flex-col gap-0"><Label for="code" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Kode</Label><Input id="code" bind:value={form.code} required /></div>
+    <div class="flex flex-col gap-0"><Label for="name" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Nama</Label><Input id="name" bind:value={form.name} required /></div>
+    <div class="flex justify-end gap-2 pt-4 border-t border-border mt-2">
       <Button variant="outline" onclick={() => isOpen = false}>Batal</Button>
       <Button type="submit">{selected ? 'Perbarui' : 'Buat'}</Button>
     </div>

@@ -10,6 +10,7 @@
   import Switch from '../Components/Switch.svelte';
   import Modal from '../Components/Modal.svelte';
   import ConfirmDialog from '../Components/ConfirmDialog.svelte';
+  import Select from '../Components/Select.svelte';
   import type { SchoolLocation, SchoolLocationForm } from '../types';
   import { createEmptySchoolLocationForm, schoolLocationToForm } from '../types';
   import { Pencil, Trash2 } from '@lucide/svelte';
@@ -67,15 +68,15 @@
   <DataTable {columns} rows={locations} rowAction={rowActions} />
 </div>
 
-<Modal bind:open={isOpen} title={selected ? 'Edit Lokasi' : 'Tambah Lokasi'}>
+<Modal bind:open={isOpen} title={selected ? 'Edit Lokasi' : 'Tambah Lokasi'} description="Tambah atau ubah lokasi sekolah. Atur koordinat dan radius geofencing.">
   <form class="flex flex-col gap-4" onsubmit={(e) => { e.preventDefault(); submit(); }}>
-    <div><Label for="name">Nama</Label><Input id="name" bind:value={form.name} required /></div>
-    <div><Label for="address">Alamat</Label><Input id="address" bind:value={form.address} /></div>
-    <div><Label for="lat">Latitude</Label><Input id="lat" type="number" step="any" bind:value={form.latitude} required /></div>
-    <div><Label for="lng">Longitude</Label><Input id="lng" type="number" step="any" bind:value={form.longitude} required /></div>
-    <div><Label for="radius">Radius (meter)</Label><Input id="radius" type="number" bind:value={form.radius_meters} required /></div>
+    <div class="flex flex-col gap-0"><Label for="name" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Nama</Label><Input id="name" bind:value={form.name} required /></div>
+    <div class="flex flex-col gap-0"><Label for="address" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Alamat</Label><Input id="address" bind:value={form.address} /></div>
+    <div class="flex flex-col gap-0"><Label for="lat" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Latitude</Label><Input id="lat" type="number" step="any" bind:value={form.latitude} required /></div>
+    <div class="flex flex-col gap-0"><Label for="lng" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Longitude</Label><Input id="lng" type="number" step="any" bind:value={form.longitude} required /></div>
+    <div class="flex flex-col gap-0"><Label for="radius" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Radius (meter)</Label><Input id="radius" type="number" bind:value={form.radius_meters} required /></div>
     <div class="flex items-center gap-2"><Switch bind:checked={form.is_active} /><Label>Aktif</Label></div>
-    <div class="flex justify-end gap-2">
+    <div class="flex justify-end gap-2 pt-4 border-t border-border mt-2">
       <Button variant="outline" onclick={() => isOpen = false}>Batal</Button>
       <Button type="submit">{selected ? 'Perbarui' : 'Buat'}</Button>
     </div>

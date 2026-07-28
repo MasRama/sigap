@@ -10,6 +10,7 @@
   import Switch from '../Components/Switch.svelte';
   import Modal from '../Components/Modal.svelte';
   import ConfirmDialog from '../Components/ConfirmDialog.svelte';
+  import Select from '../Components/Select.svelte';
   import type { AcademicYear, AcademicYearForm, User } from '../types';
   import { createEmptyAcademicYearForm, academicYearToForm } from '../types';
   import { Pencil, Trash2 } from '@lucide/svelte';
@@ -104,13 +105,13 @@
   <DataTable {columns} rows={years} rowAction={rowActions} />
 </div>
 
-<Modal bind:open={isOpen} title={selected ? 'Edit Tahun Ajaran' : 'Tambah Tahun Ajaran'}>
+<Modal bind:open={isOpen} title={selected ? 'Edit Tahun Ajaran' : 'Tambah Tahun Ajaran'} description="Tambah atau ubah tahun ajaran. Atur periode mulai dan selesai.">
   <form class="flex flex-col gap-4" onsubmit={(e) => { e.preventDefault(); submit(); }}>
-    <div><Label for="name">Nama</Label><Input id="name" bind:value={form.name} required /></div>
-    <div><Label for="start_at">Mulai (timestamp)</Label><Input id="start_at" type="number" bind:value={form.start_at} required /></div>
-    <div><Label for="end_at">Selesai (timestamp)</Label><Input id="end_at" type="number" bind:value={form.end_at} required /></div>
+    <div class="flex flex-col gap-0"><Label for="name" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Nama</Label><Input id="name" bind:value={form.name} required /></div>
+    <div class="flex flex-col gap-0"><Label for="start_at" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Mulai (timestamp)</Label><Input id="start_at" type="number" bind:value={form.start_at} required /></div>
+    <div class="flex flex-col gap-0"><Label for="end_at" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Selesai (timestamp)</Label><Input id="end_at" type="number" bind:value={form.end_at} required /></div>
     <div class="flex items-center gap-2"><Switch bind:checked={form.is_active} /><Label>Aktif</Label></div>
-    <div class="flex justify-end gap-2">
+    <div class="flex justify-end gap-2 pt-4 border-t border-border mt-2">
       <Button variant="outline" onclick={() => isOpen = false}>Batal</Button>
       <Button type="submit">{selected ? 'Perbarui' : 'Buat'}</Button>
     </div>

@@ -9,6 +9,7 @@
   import Label from '../Components/Label.svelte';
   import Modal from '../Components/Modal.svelte';
   import ConfirmDialog from '../Components/ConfirmDialog.svelte';
+  import Select from '../Components/Select.svelte';
   import type { Schedule, ScheduleForm, Class, Subject, AcademicYear, User } from '../types';
   import { createEmptyScheduleForm, scheduleToForm } from '../types';
   import { Pencil, Trash2 } from '@lucide/svelte';
@@ -64,36 +65,36 @@
   <DataTable {columns} rows={schedules} rowAction={rowActions} />
 </div>
 
-<Modal bind:open={isOpen} title={selected ? 'Edit Jadwal' : 'Tambah Jadwal'}>
+<Modal bind:open={isOpen} title={selected ? 'Edit Jadwal' : 'Tambah Jadwal'} description="Tambah atau ubah jadwal pelajaran. Atur hari, jam, kelas, mapel, dan guru.">
   <form class="flex flex-col gap-4" onsubmit={(e) => { e.preventDefault(); submit(); }}>
-    <div><Label for="day">Hari</Label>
-      <select id="day" bind:value={form.day_of_week} class="h-10 w-full rounded-sm border border-border bg-background px-3 text-sm">
+    <div class="flex flex-col gap-0"><Label for="day" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Hari</Label>
+      <Select id="day" bind:value={form.day_of_week} placeholder="Pilih hari">
         {#each days as day, i}<option value={i}>{day}</option>{/each}
-      </select>
+      </Select>
     </div>
-    <div><Label for="start">Mulai (timestamp)</Label><Input id="start" type="number" bind:value={form.start_time} required /></div>
-    <div><Label for="end">Selesai (timestamp)</Label><Input id="end" type="number" bind:value={form.end_time} required /></div>
-    <div><Label for="class">Kelas</Label>
-      <select id="class" bind:value={form.class_id} class="h-10 w-full rounded-sm border border-border bg-background px-3 text-sm">
+    <div class="flex flex-col gap-0"><Label for="start" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Mulai (timestamp)</Label><Input id="start" type="number" bind:value={form.start_time} required /></div>
+    <div class="flex flex-col gap-0"><Label for="end" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Selesai (timestamp)</Label><Input id="end" type="number" bind:value={form.end_time} required /></div>
+    <div class="flex flex-col gap-0"><Label for="class" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Kelas</Label>
+      <Select id="class" bind:value={form.class_id} placeholder="Pilih kelas">
         {#each classes as c}<option value={c.id}>{c.name}</option>{/each}
-      </select>
+      </Select>
     </div>
-    <div><Label for="subject">Mapel</Label>
-      <select id="subject" bind:value={form.subject_id} class="h-10 w-full rounded-sm border border-border bg-background px-3 text-sm">
+    <div class="flex flex-col gap-0"><Label for="subject" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Mapel</Label>
+      <Select id="subject" bind:value={form.subject_id} placeholder="Pilih mapel">
         {#each subjects as s}<option value={s.id}>{s.name}</option>{/each}
-      </select>
+      </Select>
     </div>
-    <div><Label for="teacher">Guru</Label>
-      <select id="teacher" bind:value={form.teacher_user_id} class="h-10 w-full rounded-sm border border-border bg-background px-3 text-sm">
+    <div class="flex flex-col gap-0"><Label for="teacher" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Guru</Label>
+      <Select id="teacher" bind:value={form.teacher_user_id} placeholder="Pilih guru">
         {#each teachers as t}<option value={t.id}>{t.name}</option>{/each}
-      </select>
+      </Select>
     </div>
-    <div><Label for="year">Tahun Ajaran</Label>
-      <select id="year" bind:value={form.academic_year_id} class="h-10 w-full rounded-sm border border-border bg-background px-3 text-sm">
+    <div class="flex flex-col gap-0"><Label for="year" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Tahun Ajaran</Label>
+      <Select id="year" bind:value={form.academic_year_id} placeholder="Pilih tahun ajaran">
         {#each years as y}<option value={y.id}>{y.name}</option>{/each}
-      </select>
+      </Select>
     </div>
-    <div class="flex justify-end gap-2">
+    <div class="flex justify-end gap-2 pt-4 border-t border-border mt-2">
       <Button variant="outline" onclick={() => isOpen = false}>Batal</Button>
       <Button type="submit">{selected ? 'Perbarui' : 'Buat'}</Button>
     </div>
