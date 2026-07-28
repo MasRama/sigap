@@ -121,25 +121,25 @@ Semua id `TEXT PRIMARY KEY` UUID, timestamp `INTEGER`, FK `ON DELETE CASCADE`.
 
 ---
 
-## 4. Backend Queries
+## 4. Backend Queries — `[commit-id]`
 
-- [ ] **4.1** `app/queries/academicYears.ts` — CRUD & aktifkan tahun ajaran.
-- [ ] **4.2** `app/queries/classes.ts` — CRUD, cari by grade/academic year.
-- [ ] **4.3** `app/queries/subjects.ts` — CRUD, cari by code.
-- [ ] **4.4** `app/queries/students.ts` — CRUD, search by NIS/name, by class, by parent, pagination.
-- [ ] **4.5** `app/queries/teachers.ts` — CRUD, find by user_id, assign subjects.
-- [ ] **4.6** `app/queries/parents.ts` — CRUD, find children.
-- [ ] **4.7** `app/queries/schedules.ts` — CRUD, find today's schedule by teacher, by class, by day.
-- [ ] **4.8** `app/queries/schoolLocations.ts` — CRUD, get active location.
-- [ ] **4.9** `app/queries/teacherConfirmations.ts` — create, find by teacher/date, find outside flags for headmaster.
-- [ ] **4.10** `app/queries/journals.ts` — CRUD, find by schedule/date, with attendance.
-- [ ] **4.11** `app/queries/studentAttendance.ts` — CRUD bulk by journal, stats.
-- [ ] **4.12** `app/queries/grades.ts` — CRUD bulk by class/subject/type, stats.
-- [ ] **4.13** `app/queries/stats.ts` — aggregate queries untuk dashboard:
+- [x] **4.1** `app/queries/academicYears.ts` — CRUD & aktifkan tahun ajaran.
+- [x] **4.2** `app/queries/classes.ts` — CRUD, cari by grade/academic year.
+- [x] **4.3** `app/queries/subjects.ts` — CRUD, cari by code.
+- [x] **4.4** `app/queries/students.ts` — CRUD, search by NIS/name, by class, by parent, pagination.
+- [x] **4.5** `app/queries/teachers.ts` — CRUD, find by user_id, assign subjects.
+- [x] **4.6** `app/queries/parents.ts` — CRUD, find children.
+- [x] **4.7** `app/queries/schedules.ts` — CRUD, find today's schedule by teacher, by class, by day.
+- [x] **4.8** `app/queries/schoolLocations.ts` — CRUD, get active location.
+- [x] **4.9** `app/queries/teacherConfirmations.ts` — create, find by teacher/date, find outside flags for headmaster.
+- [x] **4.10** `app/queries/journals.ts` — CRUD, find by schedule/date, with attendance.
+- [x] **4.11** `app/queries/studentAttendance.ts` — CRUD bulk by journal, stats.
+- [x] **4.12** `app/queries/grades.ts` — CRUD bulk by class/subject/type, stats.
+- [x] **4.13** `app/queries/stats.ts` — aggregate queries untuk dashboard:
   - attendance trend (by class / by date),
   - average score (by class / subject),
   - teachers with outside confirmations.
-- [ ] **4.14** Update `app/queries/index.ts` barrel exports.
+- [x] **4.14** Update `app/queries/index.ts` barrel exports.
 
 ---
 

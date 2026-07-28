@@ -131,13 +131,27 @@ Server (ultimate-express)
 
 | Table | Key Columns | Relations |
 |---|---|---|
-| `users` | id (uuid), email, name, password, avatar | has many roles via `user_roles` |
+| `users` | id (uuid), email, name, password, phone, avatar, is_active | has many roles via `user_roles` |
 | `sessions` | id (uuid), user_id, user_agent, expires_at | belongs to `users` |
 | `roles` | id (uuid), name, slug, description | has many permissions via `role_permissions` |
 | `permissions` | id (uuid), name, slug, resource, action, description | belongs to roles via `role_permissions` |
 | `user_roles` | id (uuid), user_id, role_id, created_at | junction: `users` ↔ `roles` |
 | `role_permissions` | id (uuid), role_id, permission_id, created_at | junction: `roles` ↔ `permissions` |
 | `assets` | id (uuid), name, type, url, mime_type, size, s3_key, user_id | belongs to `users` |
+| `academic_years` | id (uuid), name, start_at, end_at, is_active | has many `classes` |
+| `classes` | id (uuid), name, grade, academic_year_id | has many `students`, `schedules`, `class_subjects` |
+| `subjects` | id (uuid), name, code | has many `teacher_subjects`, `class_subjects` |
+| `students` | id (uuid), nis, name, class_id, parent_user_id, phone, address | belongs to `classes` and `users` (parent) |
+| `teachers` | id (uuid), user_id, employee_id, phone | belongs to `users`; has many `teacher_subjects` |
+| `parents` | id (uuid), user_id, phone, address | belongs to `users` |
+| `teacher_subjects` | id (uuid), teacher_id, subject_id, academic_year_id | junction: `teachers` ↔ `subjects` |
+| `class_subjects` | id (uuid), class_id, subject_id, teacher_id, academic_year_id | junction: `classes` ↔ `subjects` |
+| `schedules` | id (uuid), class_id, subject_id, teacher_user_id, day_of_week, start_time, end_time, academic_year_id | belongs to `classes`, `subjects`, `users`, `academic_years` |
+| `school_locations` | id (uuid), name, latitude, longitude, radius_meters, is_active | used for anti-cheat geofencing |
+| `teacher_confirmations` | id (uuid), schedule_id, teacher_user_id, photo_url, latitude, longitude, distance_meters, is_inside_school, confirmed_at | belongs to `schedules`, `users` |
+| `journals` | id (uuid), schedule_id, teacher_confirmation_id, date, material | belongs to `schedules`, `teacher_confirmations` |
+| `student_attendance` | id (uuid), student_id, schedule_id, journal_id, status | belongs to `students`, `schedules`, `journals` |
+| `grades` | id (uuid), student_id, subject_id, class_id, type, score, date, teacher_user_id | belongs to `students`, `subjects`, `classes`, `users` |
 
 - All IDs: `crypto.randomUUID()` (except auto-increment tables)
 - All timestamps: `biginteger` unix milliseconds via `Date.now()`

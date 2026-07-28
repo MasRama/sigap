@@ -16,6 +16,19 @@ Raw SQL functions in `app/queries/`. The only layer that touches `SQLite`. Handl
 | `roles.ts` | CRUD + role-permission junction + permission lookups |
 | `sessions.ts` | session CRUD + expiry cleanup + `getUserBySessionId` |
 | `assets.ts` | `createAsset`, `findAssetsByUserId` |
+| `academicYears.ts` | CRUD + active year + activation |
+| `classes.ts` | CRUD + academic-year/grade lookups + bulk delete |
+| `subjects.ts` | CRUD + code lookup |
+| `students.ts` | CRUD + search + class/parent filters + pagination + bulk delete |
+| `teachers.ts` | CRUD + user/subject lookups + subject sync |
+| `parents.ts` | CRUD + user lookup + pagination |
+| `schedules.ts` | CRUD + class/teacher/day filters |
+| `schoolLocations.ts` | CRUD + active location + activation |
+| `teacherConfirmations.ts` | CRUD + schedule/teacher/today filters + anti-cheat location data |
+| `journals.ts` | CRUD + schedule/teacher/date filters |
+| `studentAttendance.ts` | CRUD + journal/student/schedule filters + upsert + bulk delete by journal |
+| `grades.ts` | CRUD + student/class/subject/teacher filters + pagination + bulk delete |
+| `stats.ts` | Dashboard + class-subject aggregated metrics |
 | `index.ts` | barrel export (`export * from './X'`) |
 
 ## Static SQL → Template Literals (auto-parameterized, safe)

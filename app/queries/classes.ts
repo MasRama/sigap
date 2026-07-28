@@ -1,0 +1,42 @@
+import SQLite from '@services/SQLite';
+import type { Class } from '@types';
+import { randomUUID } from 'crypto';
+
+export const findAllClasses = (): Class[] =>
+  SQLite.many<Class>`SELECT * FROM classes ORDER BY grade, name`;
+
+export const findClassById = (id: string): Class | undefined =>
+  SQLite.one<Class>`SELECT * FROM classes WHERE id = ${id}`;
+
+export const findClassesByAcademicYear = (academicYearId: string): Class[] =>
+  SQLite.many<Class>`SELECT * FROM classes WHERE academic_year_id = ${academicYearId} ORDER BY grade, name`;
+
+export const findClassesByGrade = (grade: string): Class[] =>
+  SQLite.many<Class>`SELECT * FROM classes WHERE grade = ${grade} ORDER BY name`;
+
+export const createClass = (data: Omit<Class, 'id' | 'created_at' | 'updated_at'>): Class => {
+  const now = Date.now();
+  const id = randomUUID();
+  SQLite.exec`
+    INSERT INTO classes (id, name, grade, academic_year_id, created_at, updated_at)
+    VALUES (${id}, ${data.name}, ${data.grade}, ${data.academic_year_id}, ${now}, ${now})
+  `;
+  return findClassById(id)!;
+};
+
+export const updateClass = (id: string, data: Partial<Omit<Class, 'id' | 'created_at'>>): Class | undefined => {
+  SQLite.update('classes', { id }, data);
+  return findClassById(id);
+};
+
+export const deleteClass = (id: string): boolean => {
+  const result = SQLite.run('DELETE FROM classes WHERE id = ?', [id]);
+  return result.changes > 0;
+};
+
+export const deleteClasses = (ids: string[]): number => {
+  if (ids.length === 0) return 0;
+  const placeholders = ids.map(() => '?').join(',');
+  const result = SQLite.run(`DELETE FROM classes WHERE id IN (${placeholders})`, ids);
+  return result.changes;
+};
