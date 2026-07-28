@@ -1,0 +1,180 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-28T00:00:00Z",
+  "title": "Design System: SIGAP",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Verified Green",
+        "canonical": "hsl(142 71% 40%)",
+        "tonalRamp": ["#E8F8EF", "#A7E5C5", "#5FD493", "#1DA85A", "#178A48", "#0F6B38", "#0A4D28"]
+      },
+      "accent": {
+        "role": "accent",
+        "displayName": "Institutional Teal-Green",
+        "canonical": "hsl(160 84% 24%)",
+        "tonalRamp": ["#E0F2EC", "#A7D9C8", "#5BB597", "#2D8B6E", "#0C6B51", "#074D3A", "#043024"]
+      },
+      "destructive": {
+        "role": "destructive",
+        "displayName": "Alert Red",
+        "canonical": "hsl(0 72% 48%)",
+        "tonalRamp": ["#FEE8E8", "#FCCACA", "#F89999", "#D61515", "#B51010", "#8F0C0C", "#660808"]
+      },
+      "amber": {
+        "role": "tertiary",
+        "displayName": "Late Amber",
+        "canonical": "hsl(38 92% 50%)",
+        "tonalRamp": ["#FEF3E2", "#FDE0B8", "#FBC870", "#F59E0B", "#D97D06", "#A35E04", "#6D3F02"]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Hero headlines only. One per page."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section titles."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Card titles, sub-section headers."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Paragraphs, descriptions, UI text."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Metadata labels — NIS, Status, Kelas. Mono, uppercase, wide tracking."
+      },
+      "mono": {
+        "displayName": "Mono Data",
+        "purpose": "Data values — timestamps, coordinates, distances, IDs."
+      }
+    },
+    "shadows": [
+      {
+        "name": "hero-card",
+        "value": "0 2px 8px rgba(0,0,0,0.08), 0 16px 40px -12px rgba(0,0,0,0.16)",
+        "purpose": "Live attendance card in hero only. The single elevated element."
+      }
+    ],
+    "motion": [
+      {
+        "name": "staggered-reveal",
+        "value": "180ms interval, fly x:20, duration:300, easing:cubicOut",
+        "purpose": "Attendance grid rows appear one by one — the ledger is live."
+      },
+      {
+        "name": "live-pulse",
+        "value": "animate-ping, 1s infinite, opacity:0.75",
+        "purpose": "Live indicator dot — the system is working."
+      },
+      {
+        "name": "headline-in",
+        "value": "fly y:24, duration:900, delay:100, easing:cubicOut",
+        "purpose": "Hero headline entrance."
+      }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "lg", "value": "1024px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Green CTA button. Used for Masuk, Buka dashboard.",
+      "html": "<button class=\"ds-btn-primary\">Masuk →</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; gap: 8px; background: #1DA85A; color: #FFFFFF; font-family: 'Spectral', Georgia, serif; font-size: 14px; font-weight: 500; padding: 0 24px; height: 44px; border: none; border-radius: 6px; cursor: pointer; transition: background 0.2s; } .ds-btn-primary:hover { background: #1A9650; }"
+    },
+    {
+      "name": "Status Dot — Hadir",
+      "kind": "custom",
+      "refersTo": "status-dot-hadir",
+      "description": "Green dot indicating verified presence.",
+      "html": "<span class=\"ds-dot-hadir\"></span>",
+      "css": ".ds-dot-hadir { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #1DA85A; flex-shrink: 0; }"
+    },
+    {
+      "name": "Status Dot — Terlambat",
+      "kind": "custom",
+      "refersTo": "status-dot-terlambat",
+      "description": "Amber dot indicating late arrival.",
+      "html": "<span class=\"ds-dot-terlambat\"></span>",
+      "css": ".ds-dot-terlambat { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #F59E0B; flex-shrink: 0; }"
+    },
+    {
+      "name": "Status Dot — Absen",
+      "kind": "custom",
+      "refersTo": "status-dot-absen",
+      "description": "Red dot indicating absence.",
+      "html": "<span class=\"ds-dot-absen\"></span>",
+      "css": ".ds-dot-absen { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #D61515; flex-shrink: 0; }"
+    },
+    {
+      "name": "Live Indicator",
+      "kind": "custom",
+      "refersTo": "live-indicator",
+      "description": "Pulsing green dot with Live label — the system is working.",
+      "html": "<span class=\"ds-live\"><span class=\"ds-live-ping\"></span><span class=\"ds-live-dot\"></span></span>",
+      "css": ".ds-live { position: relative; display: inline-flex; align-items: center; width: 10px; height: 10px; } .ds-live-ping { position: absolute; inset: 0; border-radius: 50%; background: #1DA85A; opacity: 0.75; animation: ds-ping 1s infinite; } .ds-live-dot { position: relative; display: inline-flex; width: 10px; height: 10px; border-radius: 50%; background: #1DA85A; } @keyframes ds-ping { 75%, 100% { transform: scale(2); opacity: 0; } }"
+    },
+    {
+      "name": "Ledger Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Data container with header bar + body + optional footer. The ledger pattern.",
+      "html": "<div class=\"ds-card\"><div class=\"ds-card-header\"><span class=\"ds-card-label\">Kelas 10A</span><span class=\"ds-card-meta\">Live</span></div><div class=\"ds-card-body\"><div class=\"ds-card-row\"><span>Nama Siswa</span><span class=\"ds-dot-hadir\"></span></div></div><div class=\"ds-card-footer\"><span class=\"ds-card-footer-label\">Status</span><span class=\"ds-card-footer-value\">Terverifikasi</span></div></div>",
+      "css": ".ds-card { background: #FFFFFF; border: 1px solid #DDE1E0; border-radius: 8px; overflow: hidden; } .ds-card-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; background: rgba(245,247,246,0.6); border-bottom: 1px solid #DDE1E0; } .ds-card-label { font-family: 'Spline Sans Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: #6B7674; } .ds-card-meta { font-family: 'Spline Sans Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: #1DA85A; } .ds-card-body { padding: 20px; } .ds-card-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(221,225,224,0.6); font-size: 14px; color: #1C1F1E; } .ds-card-footer { display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; border-top: 1px solid #DDE1E0; background: rgba(29,168,90,0.05); } .ds-card-footer-label { font-family: 'Spline Sans Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: #6B7674; } .ds-card-footer-value { font-family: 'Spectral', Georgia, serif; font-size: 12px; font-weight: 600; color: #1DA85A; } .ds-dot-hadir { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #1DA85A; flex-shrink: 0; }"
+    },
+    {
+      "name": "Navigation",
+      "kind": "nav",
+      "refersTo": "navigation",
+      "description": "Fixed top nav. Solid background, no transparency transition. Logo + links + dark mode toggle.",
+      "html": "<nav class=\"ds-nav\"><div class=\"ds-nav-logo\"><span class=\"ds-nav-mark\"></span><span class=\"ds-nav-name\">SIGAP</span></div><div class=\"ds-nav-links\"><a class=\"ds-nav-link\">Masuk</a></div></nav>",
+      "css": ".ds-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 50; display: flex; align-items: center; justify-content: space-between; height: 64px; padding: 0 24px; background: #FFFFFF; border-bottom: 1px solid #DDE1E0; } .ds-nav-logo { display: flex; align-items: center; gap: 12px; } .ds-nav-mark { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; background: #1DA85A; border-radius: 6px; } .ds-nav-mark::after { content: ''; width: 10px; height: 10px; background: #FFFFFF; border-radius: 2px; } .ds-nav-name { font-family: 'Spectral', Georgia, serif; font-weight: 600; font-size: 18px; letter-spacing: -0.01em; color: #1C1F1E; } .ds-nav-links { display: flex; align-items: center; gap: 20px; } .ds-nav-link { font-family: 'Public Sans', system-ui, sans-serif; font-size: 14px; color: #6B7674; cursor: pointer; transition: color 0.2s; } .ds-nav-link:hover { color: #1C1F1E; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Live Ledger",
+    "overview": "SIGAP's visual system is a digital attendance ledger that is alive — names appear one by one, status dots light up green or red, timestamps tick. The system rejects the generic SaaS landing page. Instead, the product demonstrates itself: the hero IS the product working, not a description of it.\n\nThe palette is operational, not decorative. Green means verified presence. Red means absence. Amber means late. These are semantic colors of attendance status, and the entire interface is built from them. The deep green accent panel in the hero is the institutional voice: calm, authoritative, the school speaking.\n\nDensity is high but legible. Mono type carries data. Serif carries headlines. Sans carries body. Three voices for three audiences: institution, people, data.",
+    "keyCharacteristics": [
+      "Ledger-first: every surface shows data in rows, not marketing cards",
+      "Semantic color: green/red/amber carry meaning, never decorative",
+      "Mono for data, serif for institution, sans for people",
+      "Live motion: staggered reveals, pulse indicators",
+      "No social proof: the mechanism is the proof",
+      "Bahasa Indonesia for all user-facing text"
+    ],
+    "rules": [
+      { "name": "The Semantic Color Rule", "body": "Green, red, and amber are reserved for attendance status meanings. Never use them decoratively.", "section": "colors" },
+      { "name": "The One Accent Rule", "body": "The deep teal-green accent panel appears once per page — in the hero. It is the institutional voice.", "section": "colors" },
+      { "name": "The Three Voices Rule", "body": "Serif speaks for the institution. Sans speaks for people. Mono speaks for data. Never mix their roles.", "section": "typography" },
+      { "name": "The Flat-By-Default Rule", "body": "Surfaces are flat. Borders and tonal layering create hierarchy. Shadows reserved for the single live element.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do show the product working — live data, staggered reveals, status dots",
+      "Do use green/red/amber only for their semantic attendance meanings",
+      "Do use mono type for all data values",
+      "Do use the card header + body + footer structure for all data containers",
+      "Do keep the hero split 5/7 — green panel left, data right",
+      "Do use Bahasa Indonesia for all user-facing text"
+    ],
+    "donts": [
+      "Don't use green, red, or amber as decorative colors",
+      "Don't add shadows to cards at rest",
+      "Don't use gradient transitions between sections",
+      "Don't add testimonials, trusted-by logos, pricing tables, or social proof",
+      "Don't use serif for data values or mono for headlines",
+      "Don't animate the nav background on scroll",
+      "Don't use real teacher photos in the hero"
+    ]
+  }
+}

@@ -92,7 +92,7 @@ See [`.agents/skills/auth-rbac.md`](../../.agents/skills/auth-rbac.md) and [`.ag
 - **No SQLite import** — go through `@queries` (L1, enforced)
 - **Allowed service imports**: `Authenticate`, `Logger`, `Storage`, `LoginThrottle`, `CacheStore` (L2, enforced)
 - **try/catch only in mutations** — queries bubble errors, handlers catch
-- **English for user-facing messages** (ADR 0010) — `'Product created'`, not `'Produk berhasil dibuat'`
+- **Bahasa Indonesia for user-facing messages** (ADR 0010) — `'Produk berhasil dibuat'`, not `'Product created'`. English for code, comments, logs, and internal error codes only.
 - **No `console.log`** — use `Logger.info/warn/error` (L9, enforced)
 - **No `bcrypt` direct** — use `hashPassword`/`comparePassword` from `@services/Authenticate` (L10, enforced)
 - Add new handler file → update `index.ts` with `export * as name from './name'`

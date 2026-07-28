@@ -54,7 +54,7 @@ AI-first TypeScript full-stack starter kit. Functions over classes, raw SQL over
 7. **Svelte 5 runes only** — `$state`, `$derived`, `$effect`, `$props`. Never `onMount`, `$:`, `export let`, or Svelte stores. (L8)
 8. **Logger, not console** — `Logger.info/warn/error`. `console.log` only in bootstrap files where Logger isn't initialized. (L9)
 9. **`hashPassword()` from Authenticate, never bcrypt direct** — the wrapper enforces the correct cost factor. (L10)
-10. **English for all user-facing messages** — error messages, toast, validation. (ADR 0010)
+10. **Bahasa Indonesia for all user-facing messages** — error messages, toast, validation, page copy, labels, buttons. English for code, comments, logs, and internal error codes. (ADR 0010)
 11. **AGENTS.md stays in sync with code** — every documented directory has an AGENTS.md, every Structure table matches the actual files. (check:agents, convention test)
 12. **CODEMAP stays fresh** — regenerated after any source change. Stale CODEMAP blocks CI. (check:freshness)
 13. **Files stay small** — source files under 500 lines. Split before they grow into monsters. (check:filesize)
@@ -196,7 +196,7 @@ See [`.agents/skills/common-pitfalls.md`](./.agents/skills/common-pitfalls.md) �
 6. **Don't** use `console.log` — use `Logger.info/warn/error`
 7. **Don't** use `fetch()` on frontend — use `api(() => axios.method(...))`
 8. **Don't** use bcrypt directly — use `hashPassword()` from `@services/Authenticate`
-9. **Don't** mix languages in error messages — use English for user-facing messages (see ADR 0010)
+9. **Don't** mix languages in user-facing messages — use Bahasa Indonesia for toast, validation, API error `message`, and page copy. Code, comments, logs, and internal error codes stay English (see ADR 0010)
 10. **Don't** use generic handler names (`index`, `store`, `create`, `update`, `destroy`) — use descriptive names (`createUser`, `updateRole`, `listRoles`)
 11. **Don't** use vague function names (`handle`, `process`, `run`, `do`, `execute` as standalone) — describe what it does (`processPayment`, `handleWebhookDelivery`)
 

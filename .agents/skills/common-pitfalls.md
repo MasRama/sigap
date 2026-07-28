@@ -63,8 +63,8 @@ Mistakes AI agents make in Nara. Read before coding.
 
 **Fix:** Build placeholders manually: `const placeholders = ids.map(() => '?').join(','); SQLite.run(\`DELETE FROM products WHERE id IN (${placeholders})\`, ids)`.
 
-### 10. Using a language other than English for user-facing messages
+### 10. Using English for user-facing messages
 
-**Wrong:** `jsonError(res, 'Email sudah digunakan', 400)` — inconsistent with ADR 0010.
+**Wrong:** `jsonError(res, 'Email already in use', 400)` — inconsistent with ADR 0010 (revised 2026-07-28).
 
-**Fix:** `jsonError(res, 'Email already in use', 400, 'DUPLICATE_EMAIL')` — English for all user-facing messages (ADR 0010).
+**Fix:** `jsonError(res, 'Email sudah digunakan', 400, 'DUPLICATE_EMAIL')` — Bahasa Indonesia for all user-facing messages. The internal error code (`DUPLICATE_EMAIL`) stays English.

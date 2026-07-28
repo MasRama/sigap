@@ -1420,5 +1420,5 @@
 - [`docs/decisions/0007-zag-js-over-custom-ui.md`](docs/decisions/0007-zag-js-over-custom-ui.md) — ADR 0007: Zag JS over custom UI primitives
 - [`docs/decisions/0008-agents-md-over-readme.md`](docs/decisions/0008-agents-md-over-readme.md) — ADR 0008: AGENTS.md as primary AI context
 - [`docs/decisions/0009-descriptive-handler-names.md`](docs/decisions/0009-descriptive-handler-names.md) — ADR 0009: Descriptive handler names over REST conventions
-- [`docs/decisions/0010-english-error-messages.md`](docs/decisions/0010-english-error-messages.md) — ADR 0010: English for user-facing messages
+- [`docs/decisions/0010-english-error-messages.md`](docs/decisions/0010-english-error-messages.md) — ADR 0010: Bahasa Indonesia for user-facing messages
 - [`docs/decisions/0011-camera-geolocation-anti-fraud.md`](docs/decisions/0011-camera-geolocation-anti-fraud.md) — ADR 0011: Camera + Geolocation for Anti-Fraud Teacher Confirmation

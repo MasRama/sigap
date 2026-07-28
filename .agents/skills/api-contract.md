@@ -17,7 +17,7 @@ Every JSON endpoint returns one of two shapes. No exceptions.
 { success: false, message: string, code?: string, errors?: Record<string, string[]> }
 ```
 
-Messages: English for user-facing (ADR 0010).
+Messages: Bahasa Indonesia for user-facing (ADR 0010, revised 2026-07-28). Internal error codes (`DUPLICATE_EMAIL`, `FORBIDDEN`) stay English.
 
 ## Response Helpers (handlers)
 
@@ -176,5 +176,5 @@ Toast notifications fire automatically unless `{ showSuccessToast: false }` is p
 - **Do** use Zod schemas for all input validation
 - **Don't** catch errors in queries — let them bubble to handlers
 - **Don't** use `console.log` — use `Logger`
-- **Don't** mix languages — English for user-facing messages (ADR 0010)
+- **Don't** mix languages — Bahasa Indonesia for user-facing messages, English for code/logs/internal error codes (ADR 0010)
 - **Don't** expose internal error details (stack traces, SQL) in responses
