@@ -13,6 +13,7 @@
   import type { Grade, GradeForm, Student, Subject, Class, AcademicYear, PaginationMeta } from '../types';
   import { createEmptyGradeForm, gradeToForm } from '../types';
   import { Pencil, Trash2 } from '@lucide/svelte';
+  import { fly } from 'svelte/transition';
 
   let { permissions, grades = [], students = [], subjects = [], classes = [], years = [], meta }: { permissions: { canCreate?: boolean; canEdit?: boolean; canDelete?: boolean }; grades?: Grade[]; students?: Student[]; subjects?: Subject[]; classes?: Class[]; years?: AcademicYear[]; meta?: PaginationMeta } = $props();
 
@@ -47,9 +48,17 @@
 
 <Sidebar group="grades" />
 <div class="min-h-[100dvh] bg-background text-foreground font-body antialiased pt-20 lg:pt-8 lg:pl-80 px-6 sm:px-10 lg:pr-16 pb-16">
-  <div class="flex items-center justify-between mb-8">
-    <h1 class="font-heading font-semibold tracking-tight text-2xl">Nilai</h1>
-    {#if permissions.canCreate}<Button onclick={openCreate}>Tambah Nilai</Button>{/if}
+  <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12" in:fly={{ y: 20, duration: 800 }}>
+    <div>
+      <p class="font-mono-accent text-[10px] uppercase tracking-[0.25em] text-muted-foreground mb-4">Penilaian</p>
+      <h1 class="font-heading font-semibold tracking-[-0.03em] leading-[1] text-[clamp(2rem,5vw,3.5rem)] text-foreground">
+        Nilai.
+      </h1>
+      <p class="mt-4 text-base text-muted-foreground leading-relaxed max-w-[52ch]">
+        Kelola nilai siswa per mata pelajaran dan jenis penilaian.
+      </p>
+    </div>
+    {#if permissions.canCreate}<Button onclick={openCreate} size="lg">Tambah Nilai</Button>{/if}
   </div>
   <DataTable {columns} rows={grades} rowAction={rowActions} />
   {#if meta}<Pagination {meta} />{/if}

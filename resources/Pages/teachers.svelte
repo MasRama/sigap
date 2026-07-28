@@ -13,6 +13,7 @@
   import type { Teacher, TeacherForm, User, PaginationMeta } from '../types';
   import { createEmptyTeacherForm, teacherToForm } from '../types';
   import { Pencil, Trash2 } from '@lucide/svelte';
+  import { fly } from 'svelte/transition';
 
   let { permissions, teachers = [], users = [], meta }: { permissions: { canCreate?: boolean; canEdit?: boolean; canDelete?: boolean }; teachers?: Teacher[]; users?: User[]; meta?: PaginationMeta } = $props();
 
@@ -47,9 +48,17 @@
 
 <Sidebar group="teachers" />
 <div class="min-h-[100dvh] bg-background text-foreground font-body antialiased pt-20 lg:pt-8 lg:pl-80 px-6 sm:px-10 lg:pr-16 pb-16">
-  <div class="flex items-center justify-between mb-8">
-    <h1 class="font-heading font-semibold tracking-tight text-2xl">Guru</h1>
-    {#if permissions.canCreate}<Button onclick={openCreate}>Tambah Guru</Button>{/if}
+  <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12" in:fly={{ y: 20, duration: 800 }}>
+    <div>
+      <p class="font-mono-accent text-[10px] uppercase tracking-[0.25em] text-muted-foreground mb-4">Manajemen Guru</p>
+      <h1 class="font-heading font-semibold tracking-[-0.03em] leading-[1] text-[clamp(2rem,5vw,3.5rem)] text-foreground">
+        Guru.
+      </h1>
+      <p class="mt-4 text-base text-muted-foreground leading-relaxed max-w-[52ch]">
+        Data guru terdaftar beserta NIP dan kontak. Tambah, edit, atau hapus.
+      </p>
+    </div>
+    {#if permissions.canCreate}<Button onclick={openCreate} size="lg">Tambah Guru</Button>{/if}
   </div>
   <DataTable {columns} rows={teachers} rowAction={rowActions} />
   {#if meta}<Pagination {meta} />{/if}

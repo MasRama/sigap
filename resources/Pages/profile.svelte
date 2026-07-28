@@ -76,7 +76,7 @@
       <!-- Page header -->
       <div class="mb-12" in:fly={{ y: 20, duration: 800 }}>
         <p class="font-heading text-xs uppercase tracking-[0.25em] text-muted-foreground mb-4">Akun</p>
-        <h1 class="font-heading font-semibold tracking-[-0.03em] leading-[1] text-[clamp(2.5rem,6vw,4.5rem)] text-foreground">
+        <h1 class="font-heading font-semibold tracking-[-0.03em] leading-[1] text-[clamp(2rem,5vw,3.5rem)] text-foreground">
           Profil.
         </h1>
         <p class="mt-5 text-lg text-muted-foreground leading-relaxed max-w-[52ch]">

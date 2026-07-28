@@ -13,6 +13,7 @@
   import type { Student, StudentForm, Class, User } from '../types';
   import { createEmptyStudentForm, studentToForm } from '../types';
   import { Pencil, Trash2 } from '@lucide/svelte';
+  import { fly } from 'svelte/transition';
 
   let {
     permissions,
@@ -60,9 +61,17 @@
 
 <Sidebar group="students" />
 <div class="min-h-[100dvh] bg-background text-foreground font-body antialiased pt-20 lg:pt-8 lg:pl-80 px-6 sm:px-10 lg:pr-16 pb-16">
-  <div class="flex items-center justify-between mb-8">
-    <h1 class="font-heading font-semibold tracking-tight text-2xl">Siswa</h1>
-    {#if permissions.canCreate}<Button onclick={openCreate}>Tambah Siswa</Button>{/if}
+  <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12" in:fly={{ y: 20, duration: 800 }}>
+    <div>
+      <p class="font-mono-accent text-[10px] uppercase tracking-[0.25em] text-muted-foreground mb-4">Manajemen Siswa</p>
+      <h1 class="font-heading font-semibold tracking-[-0.03em] leading-[1] text-[clamp(2rem,5vw,3.5rem)] text-foreground">
+        Siswa.
+      </h1>
+      <p class="mt-4 text-base text-muted-foreground leading-relaxed max-w-[52ch]">
+        Daftar siswa terdaftar. Tambah, edit, atau hapus data siswa.
+      </p>
+    </div>
+    {#if permissions.canCreate}<Button onclick={openCreate} size="lg">Tambah Siswa</Button>{/if}
   </div>
   <DataTable {columns} rows={students} rowAction={rowActions} />
   {#if meta}<Pagination {meta} />{/if}

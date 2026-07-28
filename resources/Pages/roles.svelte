@@ -137,7 +137,7 @@
       <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12" in:fly={{ y: 20, duration: 800 }}>
         <div>
           <p class="font-heading text-xs uppercase tracking-[0.25em] text-muted-foreground mb-4">Manajemen</p>
-          <h1 class="font-heading font-semibold tracking-[-0.03em] leading-[1] text-[clamp(2.5rem,6vw,4.5rem)] text-foreground">
+          <h1 class="font-heading font-semibold tracking-[-0.03em] leading-[1] text-[clamp(2rem,5vw,3.5rem)] text-foreground">
             Peran.
           </h1>
           <p class="mt-5 text-lg text-muted-foreground leading-relaxed max-w-[52ch]">

@@ -13,6 +13,7 @@
   import type { Parent, ParentForm, User, PaginationMeta } from '../types';
   import { createEmptyParentForm, parentToForm } from '../types';
   import { Pencil, Trash2 } from '@lucide/svelte';
+  import { fly } from 'svelte/transition';
 
   let { permissions, parents = [], users = [], meta }: { permissions: { canCreate?: boolean; canEdit?: boolean; canDelete?: boolean }; parents?: Parent[]; users?: User[]; meta?: PaginationMeta } = $props();
 
@@ -47,9 +48,17 @@
 
 <Sidebar group="parents" />
 <div class="min-h-[100dvh] bg-background text-foreground font-body antialiased pt-20 lg:pt-8 lg:pl-80 px-6 sm:px-10 lg:pr-16 pb-16">
-  <div class="flex items-center justify-between mb-8">
-    <h1 class="font-heading font-semibold tracking-tight text-2xl">Orang Tua</h1>
-    {#if permissions.canCreate}<Button onclick={openCreate}>Tambah Orang Tua</Button>{/if}
+  <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12" in:fly={{ y: 20, duration: 800 }}>
+    <div>
+      <p class="font-mono-accent text-[10px] uppercase tracking-[0.25em] text-muted-foreground mb-4">Manajemen Orang Tua</p>
+      <h1 class="font-heading font-semibold tracking-[-0.03em] leading-[1] text-[clamp(2rem,5vw,3.5rem)] text-foreground">
+        Orang Tua.
+      </h1>
+      <p class="mt-4 text-base text-muted-foreground leading-relaxed max-w-[52ch]">
+        Data orang tua siswa. Tambah, edit, atau hapus data wali.
+      </p>
+    </div>
+    {#if permissions.canCreate}<Button onclick={openCreate} size="lg">Tambah Orang Tua</Button>{/if}
   </div>
   <DataTable {columns} rows={parents} rowAction={rowActions} />
   {#if meta}<Pagination {meta} />{/if}

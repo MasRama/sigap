@@ -12,6 +12,7 @@
   import type { Class, ClassForm, AcademicYear } from '../types';
   import { createEmptyClassForm, classToForm } from '../types';
   import { Pencil, Trash2 } from '@lucide/svelte';
+  import { fly } from 'svelte/transition';
 
   let { permissions, classes = [], years = [] }: { permissions: { canCreate?: boolean; canEdit?: boolean; canDelete?: boolean }; classes?: Class[]; years?: AcademicYear[] } = $props();
 
@@ -46,9 +47,17 @@
 
 <Sidebar group="classes" />
 <div class="min-h-[100dvh] bg-background text-foreground font-body antialiased pt-20 lg:pt-8 lg:pl-80 px-6 sm:px-10 lg:pr-16 pb-16">
-  <div class="flex items-center justify-between mb-8">
-    <h1 class="font-heading font-semibold tracking-tight text-2xl">Kelas</h1>
-    {#if permissions.canCreate}<Button onclick={openCreate}>Tambah Kelas</Button>{/if}
+  <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12" in:fly={{ y: 20, duration: 800 }}>
+    <div>
+      <p class="font-mono-accent text-[10px] uppercase tracking-[0.25em] text-muted-foreground mb-4">Manajemen Kelas</p>
+      <h1 class="font-heading font-semibold tracking-[-0.03em] leading-[1] text-[clamp(2rem,5vw,3.5rem)] text-foreground">
+        Kelas.
+      </h1>
+      <p class="mt-4 text-base text-muted-foreground leading-relaxed max-w-[52ch]">
+        Daftar kelas sekolah per tahun ajaran. Tambah, edit, atau hapus kelas.
+      </p>
+    </div>
+    {#if permissions.canCreate}<Button onclick={openCreate} size="lg">Tambah Kelas</Button>{/if}
   </div>
   <DataTable {columns} rows={classes} rowAction={rowActions} />
 </div>
