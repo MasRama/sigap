@@ -330,24 +330,24 @@ Semua id `TEXT PRIMARY KEY` UUID, timestamp `INTEGER`, FK `ON DELETE CASCADE`.
 
 ---
 
-## 9. Frontend Components (Complete Rewrite)
+## 9. Frontend Components (Complete Rewrite) — `19cd0a8`
 
-- [ ] **9.1** `resources/Components/SigapIcon.svelte` — logo lingkaran/sky icon.
-- [ ] **9.2** `resources/Components/Header.svelte` — nav per role:
+- [x] **9.1** `resources/Components/SigapIcon.svelte` — logo lingkaran/sky icon.
+- [x] **9.2** `resources/Components/Header.svelte` — nav per role:
   - Teacher: Jadwal, Konfirmasi, Jurnal, Nilai.
   - Parent: Anak, Kehadiran, Nilai.
   - Headmaster: Dashboard, Laporan, Guru Luar.
   - Admin: Master Data, Monitoring.
-- [ ] **9.3** `resources/Components/Button.svelte` — sky variants, rounded pills, button-in-button trailing icon.
-- [ ] **9.4** `resources/Components/Badge.svelte` — status badge (hadir, sakit, izin, alpa; dalam/luar).
-- [ ] **9.5** `resources/Components/Input.svelte`, `Label.svelte`, `Switch.svelte` — theme sky.
-- [ ] **9.6** Buat `resources/Components/CameraCapture.svelte` — komponen kamera live + capture ke blob/base64, no file picker.
-- [ ] **9.7** Buat `resources/Components/GeoButton.svelte` — tombol ambil lokasi dengan `navigator.geolocation`.
-- [ ] **9.8** Buat `resources/Components/Modal.svelte`, `ConfirmDialog.svelte` reusable dengan Zag JS.
-- [ ] **9.9** Buat `resources/Components/BentoCard.svelte` — kartu dashboard bento.
-- [ ] **9.10** Buat `resources/Components/StatCard.svelte` — angka statistik.
-- [ ] **9.11** Buat `resources/Components/DataTable.svelte` — tabel master data.
-- [ ] **9.12** Update `resources/Components/Pagination.svelte`.
+- [x] **9.3** `resources/Components/Button.svelte` — sky variants, rounded pills, button-in-button trailing icon.
+- [x] **9.4** `resources/Components/Badge.svelte` — status badge (hadir, sakit, izin, alpa; dalam/luar).
+- [x] **9.5** `resources/Components/Input.svelte`, `Label.svelte`, `Switch.svelte` — theme sky.
+- [x] **9.6** Buat `resources/Components/CameraCapture.svelte` — komponen kamera live + capture ke blob/base64, no file picker.
+- [x] **9.7** Buat `resources/Components/GeoButton.svelte` — tombol ambil lokasi dengan `navigator.geolocation`.
+- [x] **9.8** Buat `resources/Components/Modal.svelte`, `ConfirmDialog.svelte` reusable dengan Zag JS.
+- [x] **9.9** Buat `resources/Components/BentoCard.svelte` — kartu dashboard bento.
+- [x] **9.10** Buat `resources/Components/StatCard.svelte` — angka statistik.
+- [x] **9.11** Buat `resources/Components/DataTable.svelte` — tabel master data.
+- [x] **9.12** Update `resources/Components/Pagination.svelte`.
 
 ---
 
