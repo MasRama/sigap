@@ -60,7 +60,7 @@
 
 ---
 
-## 1. Branding & Konfigurasi Warna
+## 1. Branding & Konfigurasi Warna — `65e548e`
 
 - [x] **1.1** Buat file konfigurasi tema terpusat:
   - `resources/config/theme.ts` — source of truth untuk token HSL/RGB.
@@ -83,28 +83,28 @@
 
 ---
 
-## 2. Database Schema (Migrations)
+## 2. Database Schema (Migrations) — `[commit-id]`
 
 Semua id `TEXT PRIMARY KEY` UUID, timestamp `INTEGER`, FK `ON DELETE CASCADE`.
 
-- [ ] **2.1** `academic_years` — `id`, `name`, `start_at`, `end_at`, `is_active`.
-- [ ] **2.2** `classes` — `id`, `name`, `grade`, `academic_year_id`.
-- [ ] **2.3** `subjects` — `id`, `name`, `code`.
-- [ ] **2.4** `students` — `id`, `nis`, `name`, `class_id`, `parent_user_id`, `phone`, `address`, `created_at`, `updated_at`.
-- [ ] **2.5** `teachers` — `id`, `user_id`, `employee_id`, `phone`, `created_at`, `updated_at`.
-- [ ] **2.6** `parents` — `id`, `user_id`, `phone`, `address`, `created_at`, `updated_at`.
-- [ ] **2.7** `teacher_subjects` — junction `teacher_id`, `subject_id`, `academic_year_id`.
-- [ ] **2.8** `class_subjects` — junction `class_id`, `subject_id`, `teacher_id`, `academic_year_id`.
-- [ ] **2.9** `schedules` — `id`, `class_id`, `subject_id`, `teacher_user_id`, `day_of_week`, `start_time`, `end_time`, `academic_year_id`, `created_at`, `updated_at`. Index: `class_id`, `teacher_user_id`, `day_of_week`.
-- [ ] **2.10** `school_locations` — `id`, `name`, `latitude`, `longitude`, `radius_meters`, `is_active`, `created_at`.
-- [ ] **2.11** `teacher_confirmations` — `id`, `schedule_id`, `teacher_user_id`, `photo_url`, `latitude`, `longitude`, `distance_meters`, `is_inside_school`, `confirmed_at`, `created_at`.
-- [ ] **2.12** `journals` — `id`, `schedule_id`, `teacher_confirmation_id`, `date`, `material`, `created_at`, `updated_at`.
-- [ ] **2.13** `student_attendance` — `id`, `student_id`, `schedule_id`, `journal_id`, `status` (present/sick/leave/absent), `created_at`, `updated_at`.
-- [ ] **2.14** `grades` — `id`, `student_id`, `subject_id`, `class_id`, `type` (task/daily_quiz/midterm/final), `score`, `date`, `teacher_user_id`, `created_at`, `updated_at`.
-- [ ] **2.15** Update `users` table (via migration baru):
+- [x] **2.1** `academic_years` — `id`, `name`, `start_at`, `end_at`, `is_active`.
+- [x] **2.2** `classes` — `id`, `name`, `grade`, `academic_year_id`.
+- [x] **2.3** `subjects` — `id`, `name`, `code`.
+- [x] **2.4** `students` — `id`, `nis`, `name`, `class_id`, `parent_user_id`, `phone`, `address`, `created_at`, `updated_at`.
+- [x] **2.5** `teachers` — `id`, `user_id`, `employee_id`, `phone`, `created_at`, `updated_at`.
+- [x] **2.6** `parents` — `id`, `user_id`, `phone`, `address`, `created_at`, `updated_at`.
+- [x] **2.7** `teacher_subjects` — junction `teacher_id`, `subject_id`, `academic_year_id`.
+- [x] **2.8** `class_subjects` — junction `class_id`, `subject_id`, `teacher_id`, `academic_year_id`.
+- [x] **2.9** `schedules` — `id`, `class_id`, `subject_id`, `teacher_user_id`, `day_of_week`, `start_time`, `end_time`, `academic_year_id`, `created_at`, `updated_at`. Index: `class_id`, `teacher_user_id`, `day_of_week`.
+- [x] **2.10** `school_locations` — `id`, `name`, `latitude`, `longitude`, `radius_meters`, `is_active`, `created_at`.
+- [x] **2.11** `teacher_confirmations` — `id`, `schedule_id`, `teacher_user_id`, `photo_url`, `latitude`, `longitude`, `distance_meters`, `is_inside_school`, `confirmed_at`, `created_at`.
+- [x] **2.12** `journals` — `id`, `schedule_id`, `teacher_confirmation_id`, `date`, `material`, `created_at`, `updated_at`.
+- [x] **2.13** `student_attendance` — `id`, `student_id`, `schedule_id`, `journal_id`, `status` (present/sick/leave/absent), `created_at`, `updated_at`.
+- [x] **2.14** `grades` — `id`, `student_id`, `subject_id`, `class_id`, `type` (task/daily_quiz/midterm/final), `score`, `date`, `teacher_user_id`, `created_at`, `updated_at`.
+- [x] **2.15** Update `users` table (via migration baru):
   - Hapus kolom `membership_date` jika tidak dipakai.
   - Tambah `phone`, `is_active` jika diperlukan.
-- [ ] **2.16** Roles & permissions baru untuk SIGAP:
+- [x] **2.16** Roles & permissions baru untuk SIGAP:
   - `admin`, `headmaster`, `teacher`, `parent`.
   - Permissions: `students.*`, `teachers.*`, `parents.*`, `classes.*`, `subjects.*`, `schedules.*`, `journals.*`, `grades.*`, `attendance.*`, `confirmations.*`, `school_locations.*`, `academic_years.*`.
 
