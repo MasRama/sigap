@@ -405,7 +405,7 @@ Semua id `TEXT PRIMARY KEY` UUID, timestamp `INTEGER`, FK `ON DELETE CASCADE`.
 
 ---
 
-## 13. Testing & Verification — `TBC`
+## 13. Testing & Verification — `e041d49`
 
 - [x] **13.1** `npm run lint` — tsc --noEmit, perbaiki type errors.
 - [x] **13.2** `npm run lint:layers` — pastikan layer boundaries terjaga.
@@ -418,7 +418,7 @@ Semua id `TEXT PRIMARY KEY` UUID, timestamp `INTEGER`, FK `ON DELETE CASCADE`.
 
 ---
 
-## 14. Dokumentasi & Project Health — `TBC`
+## 14. Dokumentasi & Project Health — `e041d49`
 
 - [x] **14.1** Update `README.md` — deskripsi SIGAP, cara install, seed demo, role default.
 - [x] **14.2** Update `AGENTS.md` root — brand, warna, fitur domain, routing baru.
