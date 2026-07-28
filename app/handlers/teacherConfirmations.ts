@@ -4,7 +4,7 @@ import Logger from '@services/Logger';
 import { findTeacherConfirmationById, findAllTeacherConfirmations, findConfirmationsByTeacher, createTeacherConfirmation, findTodayConfirmationBySchedule } from '@queries/teacherConfirmations';
 import { findScheduleById } from '@queries/schedules';
 import { findActiveSchoolLocation } from '@queries/schoolLocations';
-import { isInsideRadius, validateCoordinates } from '@services/Geolocation';
+import { haversineDistance, validateCoordinates } from '@services/Geolocation';
 import { saveConfirmationPhoto } from '@services/CameraUpload';
 import { isAdmin, hasPermission } from '@queries/users';
 import { TeacherConfirmationSchema, zodToErrors } from '@validators';
@@ -76,9 +76,8 @@ export const submitTeacherConfirmation = async (req: NaraRequest, res: NaraRespo
   let longitude: number | null = parsed.data.longitude ?? null;
 
   if (location && latitude !== null && longitude !== null && validateCoordinates(latitude, longitude)) {
-    distanceMeters = Math.round(isInsideRadius({ latitude, longitude }, { latitude: location.latitude, longitude: location.longitude }, location.radius_meters) ? 0 : 1);
-    distanceMeters = Math.round(distanceMeters);
-    isInside = isInsideRadius({ latitude, longitude }, { latitude: location.latitude, longitude: location.longitude }, location.radius_meters);
+    distanceMeters = Math.round(haversineDistance({ latitude, longitude }, { latitude: location.latitude, longitude: location.longitude }));
+    isInside = distanceMeters <= location.radius_meters;
   }
 
   // Save photo
