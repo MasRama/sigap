@@ -83,7 +83,7 @@
 
 ---
 
-## 2. Database Schema (Migrations) — `[commit-id]`
+## 2. Database Schema (Migrations) — `03d88bc`
 
 Semua id `TEXT PRIMARY KEY` UUID, timestamp `INTEGER`, FK `ON DELETE CASCADE`.
 
