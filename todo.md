@@ -121,7 +121,7 @@ Semua id `TEXT PRIMARY KEY` UUID, timestamp `INTEGER`, FK `ON DELETE CASCADE`.
 
 ---
 
-## 4. Backend Queries — `[commit-id]`
+## 4. Backend Queries — `f9b0f4a`
 
 - [x] **4.1** `app/queries/academicYears.ts` — CRUD & aktifkan tahun ajaran.
 - [x] **4.2** `app/queries/classes.ts` — CRUD, cari by grade/academic year.
