@@ -49,7 +49,20 @@
   }
 
   let menuLinks = $derived([
-    { href: '/dashboard', label: 'Overview', group: 'dashboard', show: true },
+    { href: '/dashboard', label: 'Dashboard', group: 'dashboard', show: true },
+    { href: '/teacher/schedule', label: 'Schedule', group: 'teacher', show: hasPermission('schedules.view') },
+    { href: '/journals', label: 'Journals', group: 'journals', show: hasPermission('journals.view') },
+    { href: '/grades', label: 'Grades', group: 'grades', show: hasPermission('grades.view') },
+    { href: '/parent/dashboard', label: 'My Children', group: 'parent', show: hasPermission('students.view') && user?.roles?.includes('parent') },
+    { href: '/headmaster/dashboard', label: 'Reports', group: 'headmaster', show: hasPermission('headmaster.view') },
+    { href: '/academic-years', label: 'Years', group: 'academic-years', show: hasPermission('academic_years.view') },
+    { href: '/classes', label: 'Classes', group: 'classes', show: hasPermission('classes.view') },
+    { href: '/subjects', label: 'Subjects', group: 'subjects', show: hasPermission('subjects.view') },
+    { href: '/students', label: 'Students', group: 'students', show: hasPermission('students.view') },
+    { href: '/teachers', label: 'Teachers', group: 'teachers', show: hasPermission('teachers.view') },
+    { href: '/parents', label: 'Parents', group: 'parents', show: hasPermission('parents.view') },
+    { href: '/schedules', label: 'Schedules', group: 'schedules', show: hasPermission('schedules.view') },
+    { href: '/school-locations', label: 'Locations', group: 'school-locations', show: hasPermission('school_locations.view') },
     { href: '/users', label: 'Users', group: 'users', show: hasPermission('users.view') },
     { href: '/roles', label: 'Roles', group: 'roles', show: hasPermission('roles.view') },
     { href: '/profile', label: 'Profile', group: 'profile', show: !!user },
@@ -124,11 +137,8 @@
             </div>
           </div>
         {:else}
-          <a href="/login" use:inertia class="text-sm text-muted-foreground hover:text-foreground transition-colors">
+          <a href="/login" use:inertia class="inline-flex items-center gap-1.5 px-5 h-9 rounded-sm bg-foreground text-background text-sm font-heading font-medium hover:bg-primary hover:text-primary-foreground transition-colors">
             Sign in
-          </a>
-          <a href="/register" use:inertia class="inline-flex items-center gap-1.5 px-5 h-9 rounded-sm bg-foreground text-background text-sm font-heading font-medium hover:bg-primary hover:text-primary-foreground transition-colors">
-            Begin
             <ArrowUpRight class="w-3.5 h-3.5" />
           </a>
         {/if}
@@ -191,15 +201,10 @@
                         Sign out
                       </button>
                     {:else}
-                      <div class="flex flex-col gap-3">
-                        <a href="/login" use:inertia onclick={() => isMenuOpen = false} class="inline-flex items-center justify-center h-10 rounded-sm border border-border text-sm text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-colors">
-                          Sign in
-                        </a>
-                        <a href="/register" use:inertia onclick={() => isMenuOpen = false} class="inline-flex items-center justify-center gap-1.5 h-10 rounded-sm bg-foreground text-background text-sm font-heading font-medium hover:bg-primary hover:text-primary-foreground transition-colors">
-                          Begin
-                          <ArrowUpRight class="w-3.5 h-3.5" />
-                        </a>
-                      </div>
+                      <a href="/login" use:inertia onclick={() => isMenuOpen = false} class="inline-flex items-center justify-center gap-1.5 h-10 rounded-sm bg-foreground text-background text-sm font-heading font-medium hover:bg-primary hover:text-primary-foreground transition-colors">
+                        Sign in
+                        <ArrowUpRight class="w-3.5 h-3.5" />
+                      </a>
                     {/if}
                   </div>
                 </div>
