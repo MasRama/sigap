@@ -6,7 +6,7 @@ import { findGradesByStudent } from '@queries/grades';
 import { findAttendanceByStudent } from '@queries/studentAttendance';
 
 export const parentDashboardPage = (req: NaraRequest, res: NaraResponse) => {
-  return res.inertia('parentDashboard');
+  return res.inertia('parent/dashboard');
 };
 
 export const parentDashboardData = (req: NaraRequest, res: NaraResponse) => {

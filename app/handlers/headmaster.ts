@@ -10,7 +10,7 @@ const isHeadmaster = (userId: string): boolean =>
 
 export const headmasterDashboardPage = (req: NaraRequest, res: NaraResponse) => {
   const userId = req.user?.id;
-  return res.inertia('headmasterDashboard', { canView: userId ? isHeadmaster(userId) : false });
+  return res.inertia('headmaster/dashboard', { canView: userId ? isHeadmaster(userId) : false });
 };
 
 export const headmasterDashboardData = (req: NaraRequest, res: NaraResponse) => {
@@ -22,7 +22,7 @@ export const headmasterDashboardData = (req: NaraRequest, res: NaraResponse) => 
 
 export const headmasterReportsPage = (req: NaraRequest, res: NaraResponse) => {
   const userId = req.user?.id;
-  return res.inertia('headmasterReports', { canView: userId ? isHeadmaster(userId) : false });
+  return res.inertia('headmaster/reports', { canView: userId ? isHeadmaster(userId) : false });
 };
 
 export const listOutsideConfirmations = (req: NaraRequest, res: NaraResponse) => {

@@ -8,7 +8,7 @@ const isTeacher = (userId: string): boolean => isAdmin(userId) || hasPermission(
 
 export const teacherSchedulePage = (req: NaraRequest, res: NaraResponse) => {
   const userId = req.user?.id;
-  return res.inertia('teacherSchedule', { isTeacher: userId ? isTeacher(userId) : false });
+  return res.inertia('teacher/schedule', { isTeacher: userId ? isTeacher(userId) : false });
 };
 
 export const listTodaySchedules = (req: NaraRequest, res: NaraResponse) => {
