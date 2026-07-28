@@ -63,3 +63,146 @@ export interface RolePermission {
   permission_id: string;
   created_at: number;
 }
+
+export interface AcademicYear {
+  id: string;
+  name: string;
+  start_at: number;
+  end_at: number;
+  is_active: number;
+  created_at: number;
+  updated_at: number;
+}
+
+export interface Class {
+  id: string;
+  name: string;
+  grade: string;
+  academic_year_id: string;
+  created_at: number;
+  updated_at: number;
+}
+
+export interface Subject {
+  id: string;
+  name: string;
+  code: string;
+  created_at: number;
+  updated_at: number;
+}
+
+export interface Student {
+  id: string;
+  nis: string;
+  name: string;
+  class_id: string;
+  parent_user_id: string | null;
+  phone: string | null;
+  address: string | null;
+  created_at: number;
+  updated_at: number;
+}
+
+export interface Teacher {
+  id: string;
+  user_id: string;
+  employee_id: string | null;
+  phone: string | null;
+  created_at: number;
+  updated_at: number;
+}
+
+export interface Parent {
+  id: string;
+  user_id: string;
+  phone: string | null;
+  address: string | null;
+  created_at: number;
+  updated_at: number;
+}
+
+export interface TeacherSubject {
+  id: string;
+  teacher_id: string;
+  subject_id: string;
+  academic_year_id: string;
+  created_at: number;
+}
+
+export interface ClassSubject {
+  id: string;
+  class_id: string;
+  subject_id: string;
+  teacher_id: string | null;
+  academic_year_id: string;
+  created_at: number;
+}
+
+export interface Schedule {
+  id: string;
+  class_id: string;
+  subject_id: string;
+  teacher_user_id: string;
+  day_of_week: number;
+  start_time: number;
+  end_time: number;
+  academic_year_id: string;
+  created_at: number;
+  updated_at: number;
+}
+
+export interface SchoolLocation {
+  id: string;
+  name: string;
+  latitude: number;
+  longitude: number;
+  radius_meters: number;
+  is_active: number;
+  created_at: number;
+}
+
+export interface TeacherConfirmation {
+  id: string;
+  schedule_id: string;
+  teacher_user_id: string;
+  photo_url: string;
+  latitude: number | null;
+  longitude: number | null;
+  distance_meters: number | null;
+  is_inside_school: number;
+  confirmed_at: number;
+  created_at: number;
+}
+
+export interface Journal {
+  id: string;
+  schedule_id: string;
+  teacher_confirmation_id: string;
+  date: number;
+  material: string;
+  created_at: number;
+  updated_at: number;
+}
+
+export interface StudentAttendance {
+  id: string;
+  student_id: string;
+  schedule_id: string;
+  journal_id: string;
+  status: 'present' | 'sick' | 'leave' | 'absent';
+  created_at: number;
+  updated_at: number;
+}
+
+export interface Grade {
+  id: string;
+  student_id: string;
+  subject_id: string;
+  class_id: string;
+  type: 'task' | 'daily_quiz' | 'midterm' | 'final';
+  score: number;
+  date: number;
+  teacher_user_id: string;
+  created_at: number;
+  updated_at: number;
+}

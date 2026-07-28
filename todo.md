@@ -110,14 +110,14 @@ Semua id `TEXT PRIMARY KEY` UUID, timestamp `INTEGER`, FK `ON DELETE CASCADE`.
 
 ---
 
-## 3. Backend Types & Validators
+## 3. Backend Types & Validators — `[commit-id]`
 
-- [ ] **3.1** Perbarui `app/types/models.ts`:
+- [x] **3.1** Perbarui `app/types/models.ts`:
   - Tambah interface: `AcademicYear`, `Class`, `Subject`, `Student`, `Teacher`, `Parent`, `Schedule`, `SchoolLocation`, `TeacherConfirmation`, `Journal`, `StudentAttendance`, `Grade`.
-- [ ] **3.2** Perbarui `app/types/shared.ts` untuk tipe-tipe response frontend.
-- [ ] **3.3** Buat Zod schemas di `app/validators/schemas.ts` untuk setiap fitur:
+- [x] **3.2** Perbarui `app/types/shared.ts` untuk tipe-tipe response frontend.
+- [x] **3.3** Buat Zod schemas di `app/validators/schemas.ts` untuk setiap fitur:
   - `AcademicYearSchema`, `ClassSchema`, `SubjectSchema`, `StudentSchema`, `TeacherSchema`, `ParentSchema`, `ScheduleSchema`, `SchoolLocationSchema`, `JournalSchema`, `GradeSchema`, `StudentAttendanceSchema`.
-- [ ] **3.4** Tambah helper `zodToErrors` tetap dipakai.
+- [x] **3.4** Tambah helper `zodToErrors` tetap dipakai.
 
 ---
 
