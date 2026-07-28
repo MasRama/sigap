@@ -14,13 +14,32 @@ Inertia.js pages rendered by Svelte 5. Each page is a route destination — the 
 
 | File | Purpose |
 |------|---------|
-| `dashboard.svelte` | Admin dashboard with user stats + user list |
+| `academicYears.svelte` | Academic year CRUD |
+| `classes.svelte` | Class CRUD |
+| `dashboard.svelte` | Role-aware dashboard with stats |
+| `grades.svelte` | Grade CRUD |
+| `journals.svelte` | Journal CRUD |
 | `landing.svelte` | Public landing page |
+| `parents.svelte` | Parent record CRUD |
 | `profile.svelte` | User profile + password change (Zag JS tabs) |
 | `roles.svelte` | Role management (CRUD table + permissions) |
+| `schedules.svelte` | Schedule CRUD |
+| `schoolLocations.svelte` | School location CRUD |
+| `studentAttendance.svelte` | Student attendance list |
+| `students.svelte` | Student CRUD |
+| `subjects.svelte` | Subject CRUD |
+| `teacherConfirmations.svelte` | Teacher confirmation list |
+| `teachers.svelte` | Teacher CRUD |
 | `users.svelte` | User management (CRUD table + role assignment) |
 | `auth/login.svelte` | Login form |
-| `auth/register.svelte` | Registration form |
+| `auth/register.svelte` | Registration form (legacy) |
+| `headmaster/dashboard.svelte` | Headmaster overview |
+| `headmaster/reports.svelte` | Outside confirmations report |
+| `parent/attendance.svelte` | Parent view of child attendance |
+| `parent/dashboard.svelte` | Parent children summary |
+| `parent/grades.svelte` | Parent view of child grades |
+| `teacher/confirm.svelte` | Anti-fraud confirmation capture |
+| `teacher/schedule.svelte` | Teacher daily schedule |
 
 ## Page Pattern (Svelte 5 + Inertia + axios)
 

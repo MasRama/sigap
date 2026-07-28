@@ -17,6 +17,8 @@ Infrastructure code wrapped in functions. No classes, no singletons. Each servic
 | `Logger.ts` | Pino-based structured logging (file rotation via pino-roll) | handlers, middlewares, services |
 | `Storage.ts` | Local file storage + `url()` + `filePath()` | assets handler |
 | `CacheStore.ts` | In-memory LRU (`assetCache`, `templateCache`) | View, assets |
+| `CameraUpload.ts` | Save confirmation selfie images to local storage | teacher confirmation handler |
+| `Geolocation.ts` | Haversine distance and coordinate validation | teacher confirmation handler |
 | `LoginThrottle.ts` | Per-IP + per-email login attempt limiter | auth handler |
 | `View.ts` | Inertia HTML shell renderer | renderer middleware |
 | `Migrator.ts` | Migration runner (up/down/status/fresh) | scripts/migrate.ts |

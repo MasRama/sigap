@@ -405,25 +405,25 @@ Semua id `TEXT PRIMARY KEY` UUID, timestamp `INTEGER`, FK `ON DELETE CASCADE`.
 
 ---
 
-## 13. Testing & Verification
+## 13. Testing & Verification — `TBC`
 
-- [ ] **13.1** `npm run lint` — tsc --noEmit, perbaiki type errors.
-- [ ] **13.2** `npm run lint:layers` — pastikan layer boundaries terjaga.
+- [x] **13.1** `npm run lint` — tsc --noEmit, perbaiki type errors.
+- [x] **13.2** `npm run lint:layers` — pastikan layer boundaries terjaga.
 - [ ] **13.3** `npm run migrate:fresh` — rebuild schema + seed.
 - [ ] **13.4** `npm run dev` — smoke test login & dashboard.
-- [ ] **13.5** `npx vitest run tests/handlers/...` untuk setiap handler baru.
-- [ ] **13.6** `npx vitest run tests/queries/...` untuk setiap query baru.
-- [ ] **13.7** Tambah/ubah convention tests jika diperlukan.
-- [ ] **13.8** Perbarui `tests/helpers/mocks.ts` jika ada type Nara yang berganti nama.
+- [x] **13.5** `npx vitest run tests/handlers/...` untuk setiap handler baru.
+- [x] **13.6** `npx vitest run tests/queries/...` untuk setiap query baru.
+- [x] **13.7** Tambah/ubah convention tests jika diperlukan.
+- [x] **13.8** Perbarui `tests/helpers/mocks.ts` jika ada type Nara yang berganti nama.
 
 ---
 
-## 14. Dokumentasi & Project Health
+## 14. Dokumentasi & Project Health — `TBC`
 
-- [ ] **14.1** Update `README.md` — deskripsi SIGAP, cara install, seed demo, role default.
-- [ ] **14.2** Update `AGENTS.md` root — brand, warna, fitur domain, routing baru.
+- [x] **14.1** Update `README.md` — deskripsi SIGAP, cara install, seed demo, role default.
+- [x] **14.2** Update `AGENTS.md` root — brand, warna, fitur domain, routing baru.
 - [ ] **14.3** Buat ADR baru di `docs/decisions/` jika ada keputusan arsitektur signifikan (misal: `adr-camera-location-anti-fraud.md`).
-- [ ] **14.4** Regenerate `CODEMAP.md` setelah struktur stabil: `npm run codemap`.
+- [x] **14.4** Regenerate `CODEMAP.md` setelah struktur stabil: `npm run codemap`.
 - [ ] **14.5** Perbarui `package.json` scripts/description.
 - [ ] **14.6** Commit pertama ke git baru: `git add . && git commit -m "init: SIGAP sky-blue school management platform"`.
 

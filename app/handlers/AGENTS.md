@@ -12,12 +12,30 @@ Request handlers — functions that receive `NaraRequest` / `NaraResponse` and r
 
 | File | Purpose |
 |------|---------|
-| `auth.ts` | login/register/logout/change-password (session + throttle) |
-| `users.ts` | dashboard/users/profile pages + user CRUD |
-| `roles.ts` | roles page + role CRUD + permissions data |
+| `academicYears.ts` | academic year CRUD + activation |
 | `assets.ts` | avatar upload + static asset serving |
+| `attendance.ts` | student attendance records |
+| `auth.ts` | login/logout/change-password (session + throttle) |
+| `classes.ts` | class CRUD |
+| `dashboard.ts` | dashboard page + stats |
+| `grades.ts` | grade CRUD |
+| `headmaster.ts` | headmaster reports and dashboards |
 | `home.ts` | landing page |
 | `index.ts` | barrel export (`export * as X from './X'`) |
+| `journals.ts` | journal CRUD |
+| `parent.ts` | parent dashboard, child attendance/grades |
+| `parents.ts` | parent record CRUD |
+| `reports.ts` | class/subject reports |
+| `roles.ts` | roles page + role CRUD + permissions data |
+| `schedules.ts` | schedule CRUD |
+| `schoolLocations.ts` | school location CRUD + activation |
+| `studentAttendance.ts` | student attendance list |
+| `students.ts` | student CRUD |
+| `subjects.ts` | subject CRUD |
+| `teacherConfirmations.ts` | anti-fraud teacher confirmation + photo |
+| `teacherSchedule.ts` | teacher daily schedule |
+| `teachers.ts` | teacher CRUD |
+| `users.ts` | users/profile pages + user CRUD |
 
 ## The Two Route Types (critical)
 

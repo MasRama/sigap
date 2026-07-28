@@ -3,9 +3,9 @@
 [![CI](https://github.com/MasRama/sigap/actions/workflows/ci.yml/badge.svg)](https://github.com/MasRama/sigap/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 
-> A quiet foundation for people who build software by talking to machines.
+> Trust-first school management — verify attendance with camera and geolocation.
 
-Most starter kits fight the machine. Layers of abstraction it cannot read. Classes it has to guess. Magic it cannot trace. SIGAP is the opposite — flat, plain, readable. The machine understands it on the first look, and so do you.
+SIGAP helps schools manage academic years, classes, students, teachers, schedules, journals, grades, and parent access. The anti-fraud confirmation flow requires teachers to capture a selfie and share their location before class, so every journal entry is tied to a real person at a real place.
 
 ---
 

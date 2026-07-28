@@ -15,15 +15,22 @@ Reusable Svelte 5 UI components shared across pages. All use TypeScript and Tail
 | File | Purpose | Key Props |
 |------|---------|-----------|
 | `Badge.svelte` | Inline status/label badge | `variant`, `href`, `children` |
-| `Button.svelte` | Button with variants | `variant` (default/destructive/outline), `size` (default/sm/lg), `href`, `type`, `disabled`, `children` |
+| `BentoCard.svelte` | Dashboard bento card | `title`, `description`, `children`, `class` |
+| `Button.svelte` | Button with variants | `variant`, `size`, `href`, `type`, `disabled`, `children` |
+| `CameraCapture.svelte` | Live selfie capture | `onCapture`, `facingMode`, `class` |
 | `Can.svelte` | Authorization wrapper | `permission` (string), `role` (string), `children` |
+| `ConfirmDialog.svelte` | Reusable confirm dialog | `open`, `title`, `description`, `onConfirm`, `destructive` |
 | `DarkModeToggle.svelte` | Dark mode toggle | `onchange?: (isDark: boolean) => void` |
+| `DataTable.svelte` | Master data table | `columns`, `rows`, `keyField`, `rowAction`, `emptyMessage` |
+| `GeoButton.svelte` | Location capture button | `onLocation`, `onError`, `label`, `loadingLabel` |
 | `Header.svelte` | Top nav bar + user menu | `group` (string — active nav section) |
-| `Input.svelte` | Styled text input | `value` (bindable), `type`, `files` (bindable), `className` |
-| `Label.svelte` | Form label | `children` |
-| `SigapIcon.svelte` | Logo SVG | — |
+| `Input.svelte` | Styled text input | `value` (bindable), `type`, `class` |
+| `Label.svelte` | Form label | `for`, `children` |
+| `Modal.svelte` | Reusable dialog (Zag JS) | `open`, `title`, `description`, `children`, `footer` |
 | `Pagination.svelte` | Page navigation | `meta: PaginationMeta`, `preserveState?: boolean` |
 | `RoleModal.svelte` | Create/edit role modal | Zag JS dialog — open/close via `bind:open` |
+| `SigapIcon.svelte` | Logo SVG | — |
+| `StatCard.svelte` | Dashboard statistic | `label`, `value`, `change`, `class` |
 | `Switch.svelte` | Toggle switch | `checked` (bindable), `disabled`, `onCheckedChange` |
 | `UserModal.svelte` | Create/edit user modal | Zag JS dialog — open/close via `bind:open` |
 
