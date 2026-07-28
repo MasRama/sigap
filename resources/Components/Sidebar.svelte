@@ -7,7 +7,7 @@
   import { useMachine, normalizeProps, portal } from "@zag-js/svelte";
   import {
     Menu, LogOut, LayoutDashboard, CalendarCheck, BookOpen, GraduationCap,
-    Users, BarChart3, Calendar, School, BookMarked, UserCheck, UserCog,
+    Users, ChartColumn, Calendar, School, BookMarked, UserCheck, UserCog,
     CalendarClock, MapPin, Shield, User,
   } from '@lucide/svelte';
 
@@ -51,7 +51,7 @@
     { href: '/journals', label: 'Jurnal', group: 'journals', icon: BookOpen, show: hasPermission('journals.view') },
     { href: '/grades', label: 'Nilai', group: 'grades', icon: GraduationCap, show: hasPermission('grades.view') },
     { href: '/parent/dashboard', label: 'Anak Saya', group: 'parent', icon: Users, show: hasPermission('students.view') && user?.roles?.includes('parent') },
-    { href: '/headmaster/dashboard', label: 'Laporan', group: 'headmaster', icon: BarChart3, show: hasPermission('headmaster.view') },
+    { href: '/headmaster/dashboard', label: 'Laporan', group: 'headmaster', icon: ChartColumn, show: hasPermission('headmaster.view') },
     { href: '/academic-years', label: 'Tahun Ajaran', group: 'academic-years', icon: Calendar, show: hasPermission('academic_years.view') },
     { href: '/classes', label: 'Kelas', group: 'classes', icon: School, show: hasPermission('classes.view') },
     { href: '/subjects', label: 'Mapel', group: 'subjects', icon: BookMarked, show: hasPermission('subjects.view') },
