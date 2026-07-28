@@ -318,15 +318,15 @@ Semua id `TEXT PRIMARY KEY` UUID, timestamp `INTEGER`, FK `ON DELETE CASCADE`.
 
 ---
 
-## 8. Frontend Foundation (Complete Rewrite)
+## 8. Frontend Foundation (Complete Rewrite) — `[commit-id]`
 
-- [ ] **8.1** `resources/app.ts` — inisialisasi Inertia + axios CSRF + toast.
-- [ ] **8.2** `resources/index.css` — update dengan theme config, font baru, no Inter.
-- [ ] **8.3** `resources/lib/api.ts` — tetap gunakan `api()` wrapper.
-- [ ] **8.4** `resources/lib/toast.ts` — tetap gunakan `svelte-sonner`.
-- [ ] **8.5** `resources/lib/utils.ts` — `cn()` tetap.
-- [ ] **8.6** Buat `resources/lib/permissions.ts` — helper permission checks client-side.
-- [ ] **8.7** `resources/types/index.ts` dan `forms.ts` — tambah tipe baru SIGAP.
+- [x] **8.1** `resources/app.ts` — inisialisasi Inertia + axios CSRF + toast.
+- [x] **8.2** `resources/index.css` — update dengan theme config, font baru, no Inter.
+- [x] **8.3** `resources/lib/api.ts` — tetap gunakan `api()` wrapper.
+- [x] **8.4** `resources/lib/toast.ts` — tetap gunakan `svelte-sonner`.
+- [x] **8.5** `resources/lib/utils.ts` — `cn()` tetap.
+- [x] **8.6** Buat `resources/lib/permissions.ts` — helper permission checks client-side.
+- [x] **8.7** `resources/types/index.ts` dan `forms.ts` — tambah tipe baru SIGAP.
 
 ---
 

@@ -13,7 +13,7 @@ createInertiaApp({
     return pages[`./Pages/${name}.svelte`]
   },
   setup({ el, App, props }) {
-    el!.classList.add('dark:bg-gray-900', 'min-h-screen')
+    el!.classList.add('bg-background', 'text-foreground', 'min-h-screen', 'antialiased')
     mount(App, { target: el!, props })
 
     const portalEl = document.createElement('div')

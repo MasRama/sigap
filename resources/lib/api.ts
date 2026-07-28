@@ -51,7 +51,7 @@ export async function api<T = unknown>(
     }
   } catch (error: unknown) {
     const axiosError = error as { response?: { data?: ApiResponse } };
-    const message = axiosError?.response?.data?.message || 'Terjadi kesalahan, coba lagi';
+    const message = axiosError?.response?.data?.message || 'Something went wrong, please try again';
     const code = axiosError?.response?.data?.code;
     const errors = axiosError?.response?.data?.errors;
 

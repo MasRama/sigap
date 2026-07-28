@@ -20,9 +20,36 @@ export type {
   ApiSuccessResponse,
   ApiErrorResponse,
   ApiResponse,
+  AcademicYear,
+  Class,
+  Subject,
+  Student,
+  Teacher,
+  Parent,
+  Schedule,
+  SchoolLocation,
+  TeacherConfirmation,
+  Journal,
+  StudentAttendance,
+  Grade,
 } from '../../app/types/shared';
 
-import type { User, Role } from '../../app/types/shared';
+import type {
+  User,
+  Role,
+  AcademicYear,
+  Class,
+  Subject,
+  Student,
+  Teacher,
+  Parent,
+  Schedule,
+  SchoolLocation,
+  TeacherConfirmation,
+  Journal,
+  StudentAttendance,
+  Grade,
+} from '../../app/types/shared';
 
 // =============================================================================
 // Form Types (frontend-only)
@@ -97,5 +124,252 @@ export function roleToForm(role: Role): RoleForm {
     slug: role.slug || '',
     description: role.description || '',
     permissions,
+  };
+}
+
+// =============================================================================
+// SIGAP Form Types
+// =============================================================================
+
+export interface AcademicYearForm {
+  id: string | null;
+  name: string;
+  start_at: number;
+  end_at: number;
+  is_active: boolean;
+}
+
+export interface ClassForm {
+  id: string | null;
+  name: string;
+  grade: string;
+  academic_year_id: string;
+}
+
+export interface SubjectForm {
+  id: string | null;
+  name: string;
+  code: string;
+}
+
+export interface StudentForm {
+  id: string | null;
+  nis: string;
+  name: string;
+  class_id: string;
+  parent_user_id: string | null;
+  phone: string;
+  address: string;
+}
+
+export interface TeacherForm {
+  id: string | null;
+  user_id: string;
+  employee_id: string;
+  phone: string;
+}
+
+export interface ParentForm {
+  id: string | null;
+  user_id: string;
+  phone: string;
+  address: string;
+}
+
+export interface ScheduleForm {
+  id: string | null;
+  class_id: string;
+  subject_id: string;
+  teacher_user_id: string;
+  academic_year_id: string;
+  day_of_week: number;
+  start_time: number;
+  end_time: number;
+}
+
+export interface SchoolLocationForm {
+  id: string | null;
+  name: string;
+  address: string;
+  latitude: number;
+  longitude: number;
+  radius_meters: number;
+  is_active: boolean;
+}
+
+export interface JournalForm {
+  id: string | null;
+  schedule_id: string;
+  teacher_confirmation_id: string;
+  date: number;
+  material: string;
+}
+
+export interface GradeForm {
+  id: string | null;
+  student_id: string;
+  subject_id: string;
+  class_id: string;
+  academic_year_id: string;
+  type: string;
+  score: number;
+}
+
+export interface StudentAttendanceForm {
+  student_id: string;
+  journal_id: string;
+  status: 'present' | 'sick' | 'leave' | 'absent';
+  note: string;
+}
+
+// =============================================================================
+// SIGAP Form Factories
+// =============================================================================
+
+export function createEmptyAcademicYearForm(): AcademicYearForm {
+  return { id: null, name: '', start_at: 0, end_at: 0, is_active: false };
+}
+
+export function academicYearToForm(year: AcademicYear): AcademicYearForm {
+  return {
+    id: year.id,
+    name: year.name,
+    start_at: year.start_at,
+    end_at: year.end_at,
+    is_active: year.is_active === 1,
+  };
+}
+
+export function createEmptyClassForm(): ClassForm {
+  return { id: null, name: '', grade: '', academic_year_id: '' };
+}
+
+export function classToForm(cls: Class): ClassForm {
+  return { id: cls.id, name: cls.name, grade: cls.grade, academic_year_id: cls.academic_year_id };
+}
+
+export function createEmptySubjectForm(): SubjectForm {
+  return { id: null, name: '', code: '' };
+}
+
+export function subjectToForm(subject: Subject): SubjectForm {
+  return { id: subject.id, name: subject.name, code: subject.code };
+}
+
+export function createEmptyStudentForm(): StudentForm {
+  return { id: null, nis: '', name: '', class_id: '', parent_user_id: null, phone: '', address: '' };
+}
+
+export function studentToForm(student: Student): StudentForm {
+  return {
+    id: student.id,
+    nis: student.nis,
+    name: student.name,
+    class_id: student.class_id,
+    parent_user_id: student.parent_user_id,
+    phone: student.phone || '',
+    address: student.address || '',
+  };
+}
+
+export function createEmptyTeacherForm(): TeacherForm {
+  return { id: null, user_id: '', employee_id: '', phone: '' };
+}
+
+export function teacherToForm(teacher: Teacher): TeacherForm {
+  return {
+    id: teacher.id,
+    user_id: teacher.user_id,
+    employee_id: teacher.employee_id || '',
+    phone: teacher.phone || '',
+  };
+}
+
+export function createEmptyParentForm(): ParentForm {
+  return { id: null, user_id: '', phone: '', address: '' };
+}
+
+export function parentToForm(parent: Parent): ParentForm {
+  return {
+    id: parent.id,
+    user_id: parent.user_id,
+    phone: parent.phone || '',
+    address: parent.address || '',
+  };
+}
+
+export function createEmptyScheduleForm(): ScheduleForm {
+  return { id: null, class_id: '', subject_id: '', teacher_user_id: '', academic_year_id: '', day_of_week: 1, start_time: 0, end_time: 0 };
+}
+
+export function scheduleToForm(schedule: Schedule): ScheduleForm {
+  return {
+    id: schedule.id,
+    class_id: schedule.class_id,
+    subject_id: schedule.subject_id,
+    teacher_user_id: schedule.teacher_user_id,
+    academic_year_id: schedule.academic_year_id,
+    day_of_week: schedule.day_of_week,
+    start_time: schedule.start_time,
+    end_time: schedule.end_time,
+  };
+}
+
+export function createEmptySchoolLocationForm(): SchoolLocationForm {
+  return { id: null, name: '', address: '', latitude: 0, longitude: 0, radius_meters: 100, is_active: false };
+}
+
+export function schoolLocationToForm(location: SchoolLocation): SchoolLocationForm {
+  return {
+    id: location.id,
+    name: location.name,
+    address: location.address || '',
+    latitude: location.latitude,
+    longitude: location.longitude,
+    radius_meters: location.radius_meters,
+    is_active: location.is_active === 1,
+  };
+}
+
+export function createEmptyJournalForm(): JournalForm {
+  return { id: null, schedule_id: '', teacher_confirmation_id: '', date: Date.now(), material: '' };
+}
+
+export function journalToForm(journal: Journal): JournalForm {
+  return {
+    id: journal.id,
+    schedule_id: journal.schedule_id,
+    teacher_confirmation_id: journal.teacher_confirmation_id,
+    date: journal.date,
+    material: journal.material,
+  };
+}
+
+export function createEmptyGradeForm(): GradeForm {
+  return { id: null, student_id: '', subject_id: '', class_id: '', academic_year_id: '', type: 'assignment', score: 0 };
+}
+
+export function gradeToForm(grade: Grade): GradeForm {
+  return {
+    id: grade.id,
+    student_id: grade.student_id,
+    subject_id: grade.subject_id,
+    class_id: grade.class_id,
+    academic_year_id: grade.academic_year_id,
+    type: grade.type,
+    score: grade.score,
+  };
+}
+
+export function createEmptyAttendanceForm(): StudentAttendanceForm {
+  return { student_id: '', journal_id: '', status: 'present', note: '' };
+}
+
+export function attendanceToForm(attendance: StudentAttendance): StudentAttendanceForm {
+  return {
+    student_id: attendance.student_id,
+    journal_id: attendance.journal_id,
+    status: attendance.status,
+    note: attendance.note || '',
   };
 }
