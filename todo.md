@@ -219,11 +219,11 @@ Semua id `TEXT PRIMARY KEY` UUID, timestamp `INTEGER`, FK `ON DELETE CASCADE`.
 
 ---
 
-## 7. Routes
+## 7. Routes — `[commit-id]`
 
 > Semua route **page** return Inertia. Semua route **data** return JSON. Tidak ada `/api/data/*` catch-all; tiap resource punya route data spesifik.
 
-- [ ] **7.1** Rewrite `routes/web.ts`:
+- [x] **7.1** Rewrite `routes/web.ts`:
 
   ```ts
   // Public
@@ -313,8 +313,8 @@ Semua id `TEXT PRIMARY KEY` UUID, timestamp `INTEGER`, FK `ON DELETE CASCADE`.
   Route.get('/headmaster/reports/data', [Auth], headmaster.listOutsideConfirmations);
   ```
 
-- [ ] **7.2** Pastikan semua route protected dengan `Auth` middleware.
-- [ ] **7.3** Terapkan `strictRateLimit()` pada login, konfirmasi, upload.
+- [x] **7.2** Pastikan semua route protected dengan `Auth` middleware.
+- [x] **7.3** Terapkan `strictRateLimit()` pada login, konfirmasi, upload.
 
 ---
 
