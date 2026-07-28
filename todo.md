@@ -110,7 +110,7 @@ Semua id `TEXT PRIMARY KEY` UUID, timestamp `INTEGER`, FK `ON DELETE CASCADE`.
 
 ---
 
-## 3. Backend Types & Validators — `[commit-id]`
+## 3. Backend Types & Validators — `5952213`
 
 - [x] **3.1** Perbarui `app/types/models.ts`:
   - Tambah interface: `AcademicYear`, `Class`, `Subject`, `Student`, `Teacher`, `Parent`, `Schedule`, `SchoolLocation`, `TeacherConfirmation`, `Journal`, `StudentAttendance`, `Grade`.
