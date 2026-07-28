@@ -14,7 +14,7 @@
     rows,
     keyField = 'id' as keyof T,
     class: className,
-    emptyMessage = 'No data available',
+    emptyMessage = 'Tidak ada data',
     rowAction,
   }: {
     columns: Column[];
@@ -38,17 +38,17 @@
   }
 </script>
 
-<div data-slot="data-table" class={cn("overflow-x-auto rounded-sm border border-border bg-card", className)}>
+<div data-slot="data-table" class={cn("overflow-x-auto rounded-lg border border-border bg-card", className)}>
   <table class="w-full text-sm">
-    <thead class="bg-muted/50 border-b border-border">
+    <thead class="bg-secondary/60 border-b border-border">
       <tr>
         {#each columns as col}
-          <th class={cn("px-4 py-3 text-left text-xs font-heading font-semibold uppercase tracking-wider text-muted-foreground", alignClass(col.align), col.class)}>
+          <th class={cn("px-4 py-3 text-left font-mono-accent text-[10px] uppercase tracking-[0.15em] font-medium text-muted-foreground", alignClass(col.align), col.class)}>
             {col.label}
           </th>
         {/each}
         {#if rowAction}
-          <th class="px-4 py-3 text-right text-xs font-heading font-semibold uppercase tracking-wider text-muted-foreground">Actions</th>
+          <th class="px-4 py-3 text-right font-mono-accent text-[10px] uppercase tracking-[0.15em] font-medium text-muted-foreground">Aksi</th>
         {/if}
       </tr>
     </thead>
@@ -61,7 +61,7 @@
         </tr>
       {:else}
         {#each rows as row (row[keyField])}
-          <tr class="hover:bg-muted/30 transition-colors">
+          <tr class="hover:bg-secondary/30 transition-colors">
             {#each columns as col}
               <td class={cn("px-4 py-3 text-foreground font-body whitespace-nowrap", alignClass(col.align), col.class)}>
                 {String(cellValue(row, col.key) ?? '-')}

@@ -17,17 +17,19 @@
 <div
   data-slot="stat-card"
   class={cn(
-    "flex flex-col justify-between rounded-sm border border-border bg-card p-5 text-card-foreground shadow-soft",
+    "bg-card border border-border rounded-lg overflow-hidden",
     className
   )}
 >
-  <span class="text-xs font-heading font-medium uppercase tracking-wider text-muted-foreground">{label}</span>
-  <div class="mt-3 flex items-end justify-between">
-    <span class="font-heading text-3xl font-semibold tracking-tight text-foreground">{value}</span>
+  <div class="px-4 py-2.5 bg-secondary/60 border-b border-border">
+    <span class="font-mono-accent text-[10px] uppercase tracking-[0.15em] text-muted-foreground">{label}</span>
+  </div>
+  <div class="px-4 py-4 flex items-end justify-between">
+    <span class="font-heading text-2xl font-semibold tracking-tight text-foreground">{value}</span>
     {#if change}
       <span class={cn(
-        "text-xs font-body font-medium",
-        change.positive ? "text-success-600 dark:text-success-400" : "text-destructive"
+        "text-xs font-mono-accent font-medium",
+        change.positive ? "text-primary" : "text-destructive"
       )}>
         {change.value}
       </span>

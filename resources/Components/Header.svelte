@@ -8,7 +8,6 @@
   import * as dialog from "@zag-js/dialog";
   import { useMachine, normalizeProps, portal } from "@zag-js/svelte";
   import { Menu, LogOut, ArrowUpRight } from '@lucide/svelte';
-
   interface User {
     id: string;
     name: string;
@@ -27,10 +26,7 @@
   let { group }: { group: string } = $props();
 
   let user = $derived(page.props.user as User | undefined);
-  let scrollY = $state(0);
   let isMenuOpen = $state(false);
-
-  let scrolled = $derived(scrollY > 40);
 
   const menuService = useMachine(menu.machine, { id: "header-menu" });
   const menuApi = $derived(menu.connect(menuService, normalizeProps));
@@ -50,22 +46,22 @@
 
   let menuLinks = $derived([
     { href: '/dashboard', label: 'Dashboard', group: 'dashboard', show: true },
-    { href: '/teacher/schedule', label: 'Schedule', group: 'teacher', show: hasPermission('schedules.view') },
-    { href: '/journals', label: 'Journals', group: 'journals', show: hasPermission('journals.view') },
-    { href: '/grades', label: 'Grades', group: 'grades', show: hasPermission('grades.view') },
-    { href: '/parent/dashboard', label: 'My Children', group: 'parent', show: hasPermission('students.view') && user?.roles?.includes('parent') },
-    { href: '/headmaster/dashboard', label: 'Reports', group: 'headmaster', show: hasPermission('headmaster.view') },
-    { href: '/academic-years', label: 'Years', group: 'academic-years', show: hasPermission('academic_years.view') },
-    { href: '/classes', label: 'Classes', group: 'classes', show: hasPermission('classes.view') },
-    { href: '/subjects', label: 'Subjects', group: 'subjects', show: hasPermission('subjects.view') },
-    { href: '/students', label: 'Students', group: 'students', show: hasPermission('students.view') },
-    { href: '/teachers', label: 'Teachers', group: 'teachers', show: hasPermission('teachers.view') },
-    { href: '/parents', label: 'Parents', group: 'parents', show: hasPermission('parents.view') },
-    { href: '/schedules', label: 'Schedules', group: 'schedules', show: hasPermission('schedules.view') },
-    { href: '/school-locations', label: 'Locations', group: 'school-locations', show: hasPermission('school_locations.view') },
-    { href: '/users', label: 'Users', group: 'users', show: hasPermission('users.view') },
-    { href: '/roles', label: 'Roles', group: 'roles', show: hasPermission('roles.view') },
-    { href: '/profile', label: 'Profile', group: 'profile', show: !!user },
+    { href: '/teacher/schedule', label: 'Jadwal', group: 'teacher', show: hasPermission('schedules.view') },
+    { href: '/journals', label: 'Jurnal', group: 'journals', show: hasPermission('journals.view') },
+    { href: '/grades', label: 'Nilai', group: 'grades', show: hasPermission('grades.view') },
+    { href: '/parent/dashboard', label: 'Anak Saya', group: 'parent', show: hasPermission('students.view') && user?.roles?.includes('parent') },
+    { href: '/headmaster/dashboard', label: 'Laporan', group: 'headmaster', show: hasPermission('headmaster.view') },
+    { href: '/academic-years', label: 'Tahun Ajaran', group: 'academic-years', show: hasPermission('academic_years.view') },
+    { href: '/classes', label: 'Kelas', group: 'classes', show: hasPermission('classes.view') },
+    { href: '/subjects', label: 'Mapel', group: 'subjects', show: hasPermission('subjects.view') },
+    { href: '/students', label: 'Siswa', group: 'students', show: hasPermission('students.view') },
+    { href: '/teachers', label: 'Guru', group: 'teachers', show: hasPermission('teachers.view') },
+    { href: '/parents', label: 'Orang Tua', group: 'parents', show: hasPermission('parents.view') },
+    { href: '/schedules', label: 'Jadwal', group: 'schedules', show: hasPermission('schedules.view') },
+    { href: '/school-locations', label: 'Lokasi', group: 'school-locations', show: hasPermission('school_locations.view') },
+    { href: '/users', label: 'Pengguna', group: 'users', show: hasPermission('users.view') },
+    { href: '/roles', label: 'Peran', group: 'roles', show: hasPermission('roles.view') },
+    { href: '/profile', label: 'Profil', group: 'profile', show: !!user },
   ] as MenuLink[]);
 
   let visibleMenuLinks = $derived(menuLinks.filter((item) => item.show));
@@ -76,9 +72,7 @@
   }
 </script>
 
-<svelte:window bind:scrollY />
-
-<header class="fixed inset-x-0 top-0 z-50 transition-all duration-500 bg-background/85 backdrop-blur-md {scrolled ? 'border-b border-border' : 'border-b border-transparent'}">
+<header class="fixed inset-x-0 top-0 z-50 bg-background border-b border-border">
   <nav class="h-16 px-6 sm:px-10 lg:px-16 flex items-center justify-between">
 
     <div class="flex items-center gap-8">
@@ -132,13 +126,13 @@
               <div class="h-px bg-border my-1"></div>
               <div {...menuApi.getItemProps({ value: "logout" })} onclick={handleLogout} class="data-[highlighted]:bg-muted relative flex cursor-pointer items-center gap-2 rounded-sm px-3 py-2 text-sm transition-colors duration-150 outline-hidden select-none text-muted-foreground hover:text-foreground">
                 <LogOut class="h-4 w-4" />
-                <span>Sign out</span>
+                <span>Keluar</span>
               </div>
             </div>
           </div>
         {:else}
-          <a href="/login" use:inertia class="inline-flex items-center gap-1.5 px-5 h-9 rounded-sm bg-foreground text-background text-sm font-heading font-medium hover:bg-primary hover:text-primary-foreground transition-colors">
-            Sign in
+          <a href="/login" use:inertia class="inline-flex items-center gap-1.5 px-5 h-9 rounded-sm bg-primary text-primary-foreground text-sm font-heading font-medium hover:bg-primary/90 transition-colors">
+            Masuk
             <ArrowUpRight class="w-3.5 h-3.5" />
           </a>
         {/if}
@@ -198,11 +192,11 @@
                       </div>
                       <button onclick={handleLogout} class="w-full inline-flex items-center justify-center gap-2 h-10 rounded-sm border border-border text-sm text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-colors cursor-pointer">
                         <LogOut class="h-4 w-4" />
-                        Sign out
+                        Keluar
                       </button>
                     {:else}
-                      <a href="/login" use:inertia onclick={() => isMenuOpen = false} class="inline-flex items-center justify-center gap-1.5 h-10 rounded-sm bg-foreground text-background text-sm font-heading font-medium hover:bg-primary hover:text-primary-foreground transition-colors">
-                        Sign in
+                      <a href="/login" use:inertia onclick={() => isMenuOpen = false} class="inline-flex items-center justify-center gap-1.5 h-10 rounded-sm bg-primary text-primary-foreground text-sm font-heading font-medium hover:bg-primary/90 transition-colors">
+                        Masuk
                         <ArrowUpRight class="w-3.5 h-3.5" />
                       </a>
                     {/if}
