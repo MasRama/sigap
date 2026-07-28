@@ -34,92 +34,142 @@
   }
 </script>
 
-<div class="relative min-h-[100dvh] bg-background text-foreground font-body antialiased selection:bg-primary/20 selection:text-primary overflow-hidden">
+<div class="min-h-[100dvh] bg-secondary/30 text-foreground font-body antialiased selection:bg-primary/20 selection:text-primary flex flex-col">
 
-  <!-- ───────────── FULL-BLEED IMAGE BACKGROUND ───────────── -->
-  <img
-    src="/public/landing/login.webp"
-    alt="A quiet return"
-    class="absolute inset-0 w-full h-full object-cover grayscale contrast-110 brightness-[0.45]"
-  />
-  <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/60"></div>
-  <div class="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent"></div>
-
-  <!-- ───────────── NAV (floating, like landing) ───────────── -->
-  <nav class="relative z-20 flex items-center justify-between h-16 px-6 sm:px-10 lg:px-16">
-    <a href="/" use:inertia class="flex items-center gap-2 group">
-      <span class="inline-block w-2.5 h-2.5 rounded-full bg-primary transition-transform duration-300 group-hover:scale-125"></span>
-      <span class="font-heading font-semibold tracking-tight text-lg text-white">SIGAP</span>
+  <!-- Top bar -->
+  <nav class="flex items-center justify-between h-16 px-6 sm:px-10 shrink-0">
+    <a href="/" use:inertia class="flex items-center gap-3 group">
+      <span class="inline-flex items-center justify-center w-7 h-7 bg-primary rounded-md">
+        <span class="w-2.5 h-2.5 bg-primary-foreground rounded-[2px] transition-transform duration-300 group-hover:scale-110"></span>
+      </span>
+      <span class="font-heading font-semibold tracking-tight text-lg">SIGAP</span>
     </a>
-    <div class="flex items-center gap-5 text-sm">
-      <a href="/" use:inertia class="text-white/60 hover:text-white transition-colors">Home</a>
-      <span class="w-px h-4 bg-white/20"></span>
+    <div class="flex items-center gap-4">
+      <a href="/" use:inertia class="text-sm text-muted-foreground hover:text-foreground transition-colors cursor-pointer">
+        Beranda
+      </a>
+      <span class="w-px h-4 bg-border"></span>
       <DarkModeToggle />
     </div>
   </nav>
 
-  <!-- ───────────── CONTENT: centered editorial, on image ───────────── -->
-  <div class="relative z-10 flex flex-col items-center justify-center text-center min-h-[calc(100dvh-4rem)] px-6 sm:px-10 lg:px-16 pb-20">
-    <div class="w-full max-w-[480px]" in:fly={{ y: 30, duration: 1000, delay: 100 }}>
+  <!-- Centered ledger card -->
+  <div class="flex-1 flex items-center justify-center px-6 py-12">
+    <div class="w-full max-w-[440px]" in:fly={{ y: 20, duration: 700, delay: 100 }}>
 
-      <p in:fade={{ duration: 700 }} class="font-heading text-xs uppercase tracking-[0.25em] text-white/50 mb-6">
-        SIGAP — School management
-      </p>
+      <article class="bg-card border border-border rounded-lg overflow-hidden shadow-[0_2px_8px_rgba(0,0,0,0.04),0_8px_24px_-8px_rgba(0,0,0,0.06)]">
 
-      <h1 class="font-heading font-semibold tracking-[-0.03em] leading-[0.95] text-[clamp(3rem,8vw,6rem)] text-white" in:fly={{ y: 28, duration: 1000, delay: 150 }}>
-        Sign in
-      </h1>
-
-      <p in:fly={{ y: 22, duration: 1000, delay: 300 }} class="mt-6 text-lg text-white/60 leading-relaxed max-w-[44ch] mx-auto">
-        Admin-created accounts only.
-      </p>
-
-      {#if error}
-        <div in:fade={{ duration: 200 }} role="alert" class="mt-8 rounded-xl border border-red-400/30 bg-red-500/10 backdrop-blur-sm px-4 py-3 text-sm text-red-200 text-left">
-          {error}
-        </div>
-      {/if}
-
-      <!-- form: glass inputs on image -->
-      <form class="mt-10 flex flex-col gap-5 text-left" onsubmit={(e) => { e.preventDefault(); submitForm() }}>
-        <div class="flex flex-col gap-2">
-          <Label for="email" class="text-xs uppercase tracking-[0.2em] font-heading text-white/50">Email</Label>
-          <Input bind:value={form.email} required type="text" name="email" id="email" placeholder="you@example.com" class="rounded-xl h-12 text-base text-white bg-white/5 border-white/15 backdrop-blur-md placeholder:text-white/30 focus-visible:border-primary focus-visible:ring-primary/30" />
-        </div>
-
-        <div class="flex flex-col gap-2">
-          <div class="flex items-center justify-between">
-            <Label for="password" class="text-xs uppercase tracking-[0.2em] font-heading text-white/50">Password</Label>
+        <!-- Card header bar -->
+        <header class="px-6 py-4 border-b border-border bg-secondary/60 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-primary"></span>
+            <span class="font-mono-accent text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Masuk ke akun</span>
           </div>
-          <div class="relative">
-            <Input bind:value={form.password} required type={showPassword ? 'text' : 'password'} name="password" id="password" placeholder="••••••••" class="pr-10 rounded-xl h-12 text-base text-white bg-white/5 border-white/15 backdrop-blur-md placeholder:text-white/30 focus-visible:border-primary focus-visible:ring-primary/30" />
-            <button type="button" onclick={() => (showPassword = !showPassword)} class="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors cursor-pointer" aria-label={showPassword ? 'Hide password' : 'Show password'}>
-              {#if showPassword}
-                <EyeOff class="w-4 h-4" />
-              {:else}
-                <Eye class="w-4 h-4" />
-              {/if}
-            </button>
-          </div>
+          <span class="font-mono-accent text-[10px] text-muted-foreground">SIGAP</span>
+        </header>
+
+        <!-- Card body -->
+        <div class="px-6 py-6">
+          <h2 class="font-heading text-xl font-semibold tracking-[-0.02em] text-foreground mb-1">
+            Selamat datang kembali.
+          </h2>
+          <p class="text-sm text-muted-foreground leading-relaxed mb-6">
+            Masuk dengan akun yang dibuat admin sekolah Anda.
+          </p>
+
+          <!-- Error alert -->
+          {#if error}
+            <div in:fade={{ duration: 200 }} role="alert" class="mb-5 rounded-md border border-destructive/30 bg-destructive/5 px-4 py-3 flex items-start gap-3">
+              <span class="w-2 h-2 rounded-full bg-destructive shrink-0 mt-1.5"></span>
+              <span class="text-sm text-destructive leading-relaxed">{error}</span>
+            </div>
+          {/if}
+
+          <!-- Form -->
+          <form class="flex flex-col gap-5" onsubmit={(e) => { e.preventDefault(); submitForm() }}>
+
+            <!-- Email -->
+            <div class="flex flex-col gap-2">
+              <Label for="email" class="font-mono-accent text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
+                Email
+              </Label>
+              <Input
+                bind:value={form.email}
+                required
+                type="text"
+                name="email"
+                id="email"
+                placeholder="anda@sekolah.id"
+                class="h-11 rounded-md text-sm"
+              />
+            </div>
+
+            <!-- Password -->
+            <div class="flex flex-col gap-2">
+              <Label for="password" class="font-mono-accent text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
+                Kata Sandi
+              </Label>
+              <div class="relative">
+                <Input
+                  bind:value={form.password}
+                  required
+                  type={showPassword ? 'text' : 'password'}
+                  name="password"
+                  id="password"
+                  placeholder="••••••••"
+                  class="h-11 rounded-md text-sm pr-10"
+                />
+                <button
+                  type="button"
+                  onclick={() => (showPassword = !showPassword)}
+                  class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                  aria-label={showPassword ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi'}
+                >
+                  {#if showPassword}
+                    <EyeOff class="w-4 h-4" />
+                  {:else}
+                    <Eye class="w-4 h-4" />
+                  {/if}
+                </button>
+              </div>
+            </div>
+
+            <!-- Submit -->
+            <div class="pt-1">
+              <Button
+                type="submit"
+                disabled={isLoading}
+                size="lg"
+                class="w-full h-11 rounded-md justify-center"
+              >
+                {#if isLoading}
+                  Memproses...
+                {:else}
+                  Masuk
+                  <ArrowRight class="w-4 h-4" />
+                {/if}
+              </Button>
+            </div>
+          </form>
         </div>
 
-        <div class="flex flex-wrap items-center justify-center gap-5 pt-3">
-          <Button type="submit" disabled={isLoading} size="lg" class="rounded-xl px-7 h-12 text-sm normal-case tracking-normal font-heading font-medium">
-            {#if isLoading}
-              Signing in...
-            {:else}
-              Sign in
-              <ArrowRight class="w-4 h-4" />
-            {/if}
-          </Button>
-        </div>
-      </form>
+        <!-- Card footer bar -->
+        <footer class="px-6 py-4 border-t border-border bg-secondary/30 flex items-center justify-between">
+          <span class="text-xs text-muted-foreground">Belum punya akun?</span>
+          <span class="text-xs text-foreground font-medium">Hubungi admin sekolah</span>
+        </footer>
+      </article>
+
+      <!-- Below card note -->
+      <p class="mt-5 text-center font-mono-accent text-[10px] text-muted-foreground">
+        SIGAP tidak menyediakan pendaftaran publik &middot; MIT License
+      </p>
     </div>
   </div>
 
-  <!-- ───────────── FOOTER (on image) ───────────── -->
-  <footer class="absolute bottom-0 inset-x-0 z-10 px-6 sm:px-10 lg:px-16 py-6 flex justify-between items-center text-xs text-white/40">
-    <span>&copy; {new Date().getFullYear()} SIGAP</span>
-    <span class="font-heading uppercase tracking-[0.2em]">Trust-first school management</span>
+  <!-- Bottom bar -->
+  <footer class="shrink-0 px-6 sm:px-10 py-4 flex items-center justify-between">
+    <span class="font-mono-accent text-[10px] text-muted-foreground">&copy; {new Date().getFullYear()} SIGAP</span>
+    <span class="font-mono-accent text-[10px] text-muted-foreground">Trust-first school management</span>
   </footer>
 </div>
