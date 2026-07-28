@@ -219,7 +219,7 @@ Semua id `TEXT PRIMARY KEY` UUID, timestamp `INTEGER`, FK `ON DELETE CASCADE`.
 
 ---
 
-## 7. Routes — `[commit-id]`
+## 7. Routes & RBAC — `9e54efa`
 
 > Semua route **page** return Inertia. Semua route **data** return JSON. Tidak ada `/api/data/*` catch-all; tiap resource punya route data spesifik.
 
