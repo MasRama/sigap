@@ -10,8 +10,8 @@
 
 ## Stats
 
-- Files indexed: 199
-- Total lines: 18563
+- Files indexed: 200
+- Total lines: 18607
 - Total exports: 633
 - Entry points (★): `app/core/index.ts`, `resources/app.ts`, `routes/web.ts`, `server.ts`
 
@@ -262,6 +262,7 @@
 - `check-security.ts` (166L)
 - `check-types.ts` (180L)
 - `codemap.ts` (274L)
+- `dev.ts` (44L)
 - `eval-agent.ts` (270L) — evaltestsPage, listEvaltests, addEvaltest, editEvaltest, removeEvaltests, Evaltest
 - `gen-resource.ts` (653L) — up, down, find, create, get, update, delete, list, +5
 - `lint-layers.ts` (335L)
