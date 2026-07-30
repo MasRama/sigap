@@ -10,9 +10,9 @@
 
 ## Stats
 
-- Files indexed: 200
-- Total lines: 18607
-- Total exports: 633
+- Files indexed: 201
+- Total lines: 18766
+- Total exports: 634
 - Entry points (★): `app/core/index.ts`, `resources/app.ts`, `routes/web.ts`, `server.ts`
 
 ## File Tree
@@ -275,6 +275,7 @@
 - `02_roles.ts` (110L) — run
 - `03_admin.ts` (24L) — run
 - `04_demo.ts` (90L) — run
+- `05_demo_operations.ts` (159L) — run
 
 ### tests/
 
@@ -1270,6 +1271,10 @@
 
 - `fn` **run**
 
+### `seeds/05_demo_operations.ts`
+
+- `fn` **run**
+
 ### `tests/helpers/mocks.ts`
 
 - `fn` **mockRequest**
@@ -1396,6 +1401,7 @@
 - `seeds/02_roles.ts` → `../app/services/SQLite`
 - `seeds/03_admin.ts` → `../app/services/Authenticate`, `../app/services/SQLite`
 - `seeds/04_demo.ts` → `../app/services/Authenticate`, `../app/services/SQLite`
+- `seeds/05_demo_operations.ts` → `../app/services/SQLite`
 - `server.ts` → `@core`, `@routes/web`
 - `tests/core/response.test.ts` → `../helpers/mocks`
 - `tests/core/Router.test.ts` → `../../app/core/Router`
