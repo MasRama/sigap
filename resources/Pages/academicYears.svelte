@@ -13,6 +13,7 @@
   import Select from '../Components/Select.svelte';
   import type { AcademicYear, AcademicYearForm, User } from '../types';
   import { createEmptyAcademicYearForm, academicYearToForm } from '../types';
+  import { timestampToDateInput, dateInputToTimestamp } from '$lib/utils/datetime';
   import { Pencil, Trash2 } from '@lucide/svelte';
   import { fly } from 'svelte/transition';
 
@@ -24,16 +25,22 @@
   let isDeleteOpen = $state(false);
   let form: AcademicYearForm = $state(createEmptyAcademicYearForm());
   let selected: AcademicYear | null = $state(null);
+  let startInput = $state('');
+  let endInput = $state('');
 
   function openCreate(): void {
     form = createEmptyAcademicYearForm();
     selected = null;
+    startInput = timestampToDateInput(Date.now());
+    endInput = timestampToDateInput(Date.now() + 365 * 24 * 60 * 60 * 1000);
     isOpen = true;
   }
 
   function openEdit(year: AcademicYear): void {
     selected = year;
     form = academicYearToForm(year);
+    startInput = timestampToDateInput(year.start_at);
+    endInput = timestampToDateInput(year.end_at);
     isOpen = true;
   }
 
@@ -43,7 +50,9 @@
   }
 
   async function submit(): Promise<void> {
-    const payload = { ...form, is_active: form.is_active ? 1 : 0, start_at: Number(form.start_at), end_at: Number(form.end_at) };
+    form.start_at = dateInputToTimestamp(startInput);
+    form.end_at = dateInputToTimestamp(endInput);
+    const payload = { ...form, is_active: form.is_active ? 1 : 0 };
     const result = selected
       ? await api(() => axios.put(`/academic-years/${selected!.id}`, payload))
       : await api(() => axios.post('/academic-years', payload));
@@ -108,8 +117,8 @@
 <Modal bind:open={isOpen} title={selected ? 'Edit Tahun Ajaran' : 'Tambah Tahun Ajaran'} description="Tambah atau ubah tahun ajaran. Atur periode mulai dan selesai.">
   <form class="flex flex-col gap-4" onsubmit={(e) => { e.preventDefault(); submit(); }}>
     <div class="flex flex-col gap-0"><Label for="name" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Nama</Label><Input id="name" bind:value={form.name} required /></div>
-    <div class="flex flex-col gap-0"><Label for="start_at" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Mulai (timestamp)</Label><Input id="start_at" type="number" bind:value={form.start_at} required /></div>
-    <div class="flex flex-col gap-0"><Label for="end_at" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Selesai (timestamp)</Label><Input id="end_at" type="number" bind:value={form.end_at} required /></div>
+    <div class="flex flex-col gap-0"><Label for="start_at" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Mulai</Label><Input id="start_at" type="date" bind:value={startInput} required /></div>
+    <div class="flex flex-col gap-0"><Label for="end_at" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Selesai</Label><Input id="end_at" type="date" bind:value={endInput} required /></div>
     <div class="flex items-center gap-2"><Switch bind:checked={form.is_active} /><Label>Aktif</Label></div>
     <div class="flex justify-end gap-2 pt-4 border-t border-border mt-2">
       <Button variant="outline" onclick={() => isOpen = false}>Batal</Button>

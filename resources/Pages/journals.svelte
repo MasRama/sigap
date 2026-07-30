@@ -12,6 +12,7 @@
   import Select from '../Components/Select.svelte';
   import type { Journal, JournalForm, Schedule, TeacherConfirmation } from '../types';
   import { createEmptyJournalForm, journalToForm } from '../types';
+  import { timestampToDateInput, dateInputToTimestamp } from '$lib/utils/datetime';
   import { Pencil, Trash2 } from '@lucide/svelte';
   import { fly } from 'svelte/transition';
 
@@ -21,12 +22,14 @@
   let isDeleteOpen = $state(false);
   let form: JournalForm = $state(createEmptyJournalForm());
   let selected: Journal | null = $state(null);
+  let dateInput = $state('');
 
-  function openCreate(): void { form = createEmptyJournalForm(); selected = null; isOpen = true; }
-  function openEdit(item: Journal): void { selected = item; form = journalToForm(item); isOpen = true; }
+  function openCreate(): void { form = createEmptyJournalForm(); selected = null; dateInput = timestampToDateInput(Date.now()); isOpen = true; }
+  function openEdit(item: Journal): void { selected = item; form = journalToForm(item); dateInput = timestampToDateInput(item.date); isOpen = true; }
   function confirmDelete(item: Journal): void { selected = item; isDeleteOpen = true; }
 
   async function submit(): Promise<void> {
+    form.date = dateInputToTimestamp(dateInput);
     const result = selected
       ? await api(() => axios.put(`/journals/${selected!.id}`, form))
       : await api(() => axios.post('/journals', form));
@@ -75,7 +78,7 @@
         {#each confirmations as c}<option value={c.id}>{new Date(c.confirmed_at).toLocaleString()}</option>{/each}
       </Select>
     </div>
-    <div class="flex flex-col gap-0"><Label for="date" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Tanggal</Label><Input id="date" type="number" bind:value={form.date} required /></div>
+    <div class="flex flex-col gap-0"><Label for="date" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Tanggal</Label><Input id="date" type="date" bind:value={dateInput} required /></div>
     <div class="flex flex-col gap-0"><Label for="material" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Materi</Label><Input id="material" bind:value={form.material} required /></div>
     <div class="flex justify-end gap-2 pt-4 border-t border-border mt-2">
       <Button variant="outline" onclick={() => isOpen = false}>Batal</Button>

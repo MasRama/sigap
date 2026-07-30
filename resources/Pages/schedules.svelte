@@ -12,6 +12,7 @@
   import Select from '../Components/Select.svelte';
   import type { Schedule, ScheduleForm, Class, Subject, AcademicYear, User } from '../types';
   import { createEmptyScheduleForm, scheduleToForm } from '../types';
+  import { timestampToTimeInput, timeInputToTimestamp } from '$lib/utils/datetime';
   import { Pencil, Trash2 } from '@lucide/svelte';
   import { fly } from 'svelte/transition';
 
@@ -21,14 +22,18 @@
   let isDeleteOpen = $state(false);
   let form: ScheduleForm = $state(createEmptyScheduleForm());
   let selected: Schedule | null = $state(null);
+  let startTimeInput = $state('07:30');
+  let endTimeInput = $state('09:00');
 
   const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
 
-  function openCreate(): void { form = createEmptyScheduleForm(); selected = null; isOpen = true; }
-  function openEdit(item: Schedule): void { selected = item; form = scheduleToForm(item); isOpen = true; }
+  function openCreate(): void { form = createEmptyScheduleForm(); selected = null; startTimeInput = '07:30'; endTimeInput = '09:00'; isOpen = true; }
+  function openEdit(item: Schedule): void { selected = item; form = scheduleToForm(item); startTimeInput = timestampToTimeInput(item.start_time); endTimeInput = timestampToTimeInput(item.end_time); isOpen = true; }
   function confirmDelete(item: Schedule): void { selected = item; isDeleteOpen = true; }
 
   async function submit(): Promise<void> {
+    form.start_time = timeInputToTimestamp(startTimeInput, form.day_of_week);
+    form.end_time = timeInputToTimestamp(endTimeInput, form.day_of_week);
     const result = selected
       ? await api(() => axios.put(`/schedules/${selected!.id}`, form))
       : await api(() => axios.post('/schedules', form));
@@ -72,8 +77,8 @@
         {#each days as day, i}<option value={i}>{day}</option>{/each}
       </Select>
     </div>
-    <div class="flex flex-col gap-0"><Label for="start" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Mulai (timestamp)</Label><Input id="start" type="number" bind:value={form.start_time} required /></div>
-    <div class="flex flex-col gap-0"><Label for="end" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Selesai (timestamp)</Label><Input id="end" type="number" bind:value={form.end_time} required /></div>
+    <div class="flex flex-col gap-0"><Label for="start" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Mulai</Label><Input id="start" type="time" bind:value={startTimeInput} required /></div>
+    <div class="flex flex-col gap-0"><Label for="end" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Selesai</Label><Input id="end" type="time" bind:value={endTimeInput} required /></div>
     <div class="flex flex-col gap-0"><Label for="class" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Kelas</Label>
       <Select id="class" bind:value={form.class_id} placeholder="Pilih kelas">
         {#each classes as c}<option value={c.id}>{c.name}</option>{/each}

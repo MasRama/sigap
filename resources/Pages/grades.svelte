@@ -87,7 +87,14 @@
         {#each years as y}<option value={y.id}>{y.name}</option>{/each}
       </Select>
     </div>
-    <div class="flex flex-col gap-0"><Label for="type" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Jenis</Label><Input id="type" bind:value={form.type} required /></div>
+    <div class="flex flex-col gap-0"><Label for="type" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Jenis</Label>
+      <Select id="type" bind:value={form.type} placeholder="Pilih jenis nilai">
+        <option value="task">Tugas</option>
+        <option value="daily_quiz">Kuis Harian</option>
+        <option value="midterm">UTS</option>
+        <option value="final">UAS</option>
+      </Select>
+    </div>
     <div class="flex flex-col gap-0"><Label for="score" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Nilai</Label><Input id="score" type="number" bind:value={form.score} required /></div>
     <div class="flex justify-end gap-2 pt-4 border-t border-border mt-2">
       <Button variant="outline" onclick={() => isOpen = false}>Batal</Button>

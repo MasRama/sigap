@@ -10,9 +10,9 @@
 
 ## Stats
 
-- Files indexed: 201
-- Total lines: 18766
-- Total exports: 634
+- Files indexed: 202
+- Total lines: 18829
+- Total exports: 638
 - Entry points (★): `app/core/index.ts`, `resources/app.ts`, `routes/web.ts`, `server.ts`
 
 ## File Tree
@@ -169,7 +169,7 @@
 - `GeoButton.svelte` (66L)
 - `Header.svelte` (214L)
 - `Input.svelte` (51L)
-- `Label.svelte` (19L)
+- `Label.svelte` (23L)
 - `Modal.svelte` (59L)
 - `Pagination.svelte` (69L)
 - `RoleModal.svelte` (153L)
@@ -182,16 +182,16 @@
 
 ### resources/Pages/
 
-- `academicYears.svelte` (122L)
+- `academicYears.svelte` (131L)
 - `classes.svelte` (83L)
 - `dashboard.svelte` (116L)
-- `grades.svelte` (100L)
-- `journals.svelte` (88L)
+- `grades.svelte` (107L)
+- `journals.svelte` (91L)
 - `landing.svelte` (484L)
 - `parents.svelte` (85L)
 - `profile.svelte` (213L)
 - `roles.svelte` (283L)
-- `schedules.svelte` (105L)
+- `schedules.svelte` (110L)
 - `schoolLocations.svelte` (87L)
 - `studentAttendance.svelte` (30L)
 - `students.svelte` (106L)
@@ -242,6 +242,7 @@
 
 ### resources/lib/utils/
 
+- `datetime.ts` (35L) — timestampToDateInput, dateInputToTimestamp, timestampToTimeInput, timeInputToTimestamp
 - `password.ts` (23L) — password_generator
 
 ### resources/types/
@@ -1180,6 +1181,13 @@
 ### `resources/lib/utils.ts`
 
 - `fn` **cn**
+
+### `resources/lib/utils/datetime.ts`
+
+- `fn` **timestampToDateInput**
+- `fn` **dateInputToTimestamp**
+- `fn` **timestampToTimeInput**
+- `fn` **timeInputToTimestamp**
 
 ### `resources/lib/utils/password.ts`
 
