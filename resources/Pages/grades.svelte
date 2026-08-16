@@ -11,17 +11,26 @@
   import ConfirmDialog from '../Components/ConfirmDialog.svelte';
   import Select from '../Components/Select.svelte';
   import Pagination from '../Components/Pagination.svelte';
-  import type { Grade, GradeForm, Student, Subject, Class, AcademicYear, PaginationMeta } from '../types';
+  import type { Grade, GradeForm, Student, Subject, Class, AcademicYear, PaginationMeta, ClassSubjectSummary } from '../types';
   import { createEmptyGradeForm, gradeToForm } from '../types';
-  import { Pencil, Trash2 } from '@lucide/svelte';
+  import { Pencil, Trash2, FileSpreadsheet } from '@lucide/svelte';
   import { fly } from 'svelte/transition';
 
-  let { permissions, grades = [], students = [], subjects = [], classes = [], years = [], meta }: { permissions: { canCreate?: boolean; canEdit?: boolean; canDelete?: boolean }; grades?: Grade[]; students?: Student[]; subjects?: Subject[]; classes?: Class[]; years?: AcademicYear[]; meta?: PaginationMeta } = $props();
+  let {
+    permissions, grades = [], students = [], subjects = [], classes = [], years = [], meta, summary = null, classId = '', subjectId = '',
+  }: {
+    permissions: { canCreate?: boolean; canEdit?: boolean; canDelete?: boolean };
+    grades?: Grade[]; students?: Student[]; subjects?: Subject[]; classes?: Class[]; years?: AcademicYear[];
+    meta?: PaginationMeta; summary?: ClassSubjectSummary | null; classId?: string; subjectId?: string;
+  } = $props();
 
   let isOpen = $state(false);
   let isDeleteOpen = $state(false);
   let form: GradeForm = $state(createEmptyGradeForm());
   let selected: Grade | null = $state(null);
+
+  let filterClassId = $state(classId);
+  let filterSubjectId = $state(subjectId);
 
   function openCreate(): void { form = createEmptyGradeForm(); selected = null; isOpen = true; }
   function openEdit(item: Grade): void { selected = item; form = gradeToForm(item); isOpen = true; }
@@ -39,6 +48,44 @@
     if (result.success) { isDeleteOpen = false; router.visit('/grades', { preserveScroll: true }); }
   }
 
+  function showRekap(): void {
+    if (!filterClassId || !filterSubjectId) return;
+    router.visit(`/grades?class_id=${filterClassId}&subject_id=${filterSubjectId}&page=1`);
+  }
+
+  const summaryColumns = $derived.by(() => {
+    const s = summary;
+    if (!s) return [] as { key: string; label: string; align?: 'left' | 'center' | 'right' }[];
+    return [
+      { key: 'student_name', label: 'Siswa' },
+      ...s.components.map(c => ({ key: c.type, label: c.name, align: 'right' as const })),
+      { key: 'final_score', label: 'Nilai Akhir', align: 'right' as const },
+      { key: 'kkm', label: 'KKM', align: 'center' as const },
+      { key: 'predikat', label: 'Predikat', align: 'center' as const },
+      { key: 'status', label: 'Status', align: 'center' as const },
+    ];
+  });
+
+  const summaryRows = $derived.by(() => {
+    const s = summary;
+    if (!s) return [] as Record<string, unknown>[];
+    return s.rows.map(row => {
+      const display: Record<string, unknown> = {
+        student_id: row.student_id,
+        student_name: row.student_name,
+        nis: row.nis,
+        final_score: row.final_score ?? '—',
+        kkm: row.kkm,
+        predikat: row.predikat ?? '—',
+        status: row.is_passed === null ? '—' : row.is_passed ? 'Tuntas' : 'Belum Tuntas',
+      };
+      for (const component of s.components) {
+        display[component.type] = row.scores[component.type] ?? '—';
+      }
+      return display;
+    });
+  });
+
   const columns = [{ key: 'student_id', label: 'Siswa' }, { key: 'subject_id', label: 'Mapel' }, { key: 'class_id', label: 'Kelas' }, { key: 'type', label: 'Jenis' }, { key: 'score', label: 'Nilai' }];
 </script>
 
@@ -49,18 +96,47 @@
 
 <Sidebar group="grades" />
 <div class="min-h-[100dvh] bg-background text-foreground font-body antialiased pt-20 lg:pt-8 lg:pl-80 px-6 sm:px-10 lg:pr-16 pb-16">
-  <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12" in:fly={{ y: 20, duration: 800 }}>
+  <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-8" in:fly={{ y: 20, duration: 800 }}>
     <div>
       <p class="font-mono-accent text-[10px] uppercase tracking-[0.25em] text-muted-foreground mb-4">Penilaian</p>
       <h1 class="font-heading font-semibold tracking-[-0.03em] leading-[1] text-[clamp(2rem,5vw,3.5rem)] text-foreground">
         Nilai.
       </h1>
       <p class="mt-4 text-base text-muted-foreground leading-relaxed max-w-[52ch]">
-        Kelola nilai siswa per mata pelajaran dan jenis penilaian.
+        Input nilai per komponen, lihat rekap nilai akhir, KKM, dan predikat per kelas dan mapel.
       </p>
     </div>
     {#if permissions.canCreate}<Button onclick={openCreate} size="lg">Tambah Nilai</Button>{/if}
   </div>
+
+  <div class="bg-card border border-border rounded-lg p-4 mb-8 flex flex-col sm:flex-row gap-3 items-end" in:fly={{ y: 20, duration: 700, delay: 100 }}>
+    <div class="flex flex-col gap-1 flex-1 w-full">
+      <Label for="filter-class" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1">Kelas</Label>
+      <Select id="filter-class" bind:value={filterClassId} placeholder="Pilih kelas">
+        <option value="">Semua kelas</option>
+        {#each classes as c}<option value={c.id}>{c.name}</option>{/each}
+      </Select>
+    </div>
+    <div class="flex flex-col gap-1 flex-1 w-full">
+      <Label for="filter-subject" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1">Mapel</Label>
+      <Select id="filter-subject" bind:value={filterSubjectId} placeholder="Pilih mapel">
+        <option value="">Semua mapel</option>
+        {#each subjects as s}<option value={s.id}>{s.name}</option>{/each}
+      </Select>
+    </div>
+    <Button onclick={showRekap}><FileSpreadsheet class="w-4 h-4 mr-1" /> Lihat Rekap</Button>
+  </div>
+
+  {#if summary}
+    <div class="mb-10" in:fly={{ y: 20, duration: 700, delay: 150 }}>
+      <div class="flex items-baseline justify-between mb-3">
+        <h2 class="font-heading font-semibold tracking-[-0.02em]">Rekap Nilai — {summary.subjectName} ({summary.className})</h2>
+        <p class="text-xs text-muted-foreground font-mono-accent">KKM {summary.kkm}</p>
+      </div>
+      <DataTable columns={summaryColumns} rows={summaryRows} keyField="student_id" emptyMessage="Belum ada nilai untuk kelas dan mapel ini." />
+    </div>
+  {/if}
+
   <DataTable {columns} rows={grades} rowAction={rowActions} />
   {#if meta}<Pagination {meta} />{/if}
 </div>

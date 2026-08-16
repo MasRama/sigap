@@ -1,11 +1,25 @@
 <script lang="ts">
   import { inertia } from '@inertiajs/svelte';
+  import axios from 'axios';
+  import { api } from '$lib/api';
   import Sidebar from '../../Components/Sidebar.svelte';
   import { fly } from 'svelte/transition';
   import { ArrowRight } from '@lucide/svelte';
   import type { Student } from '../../types';
 
-  let { children = [] }: { children?: (Student & { grades?: { score: number }[]; attendance?: { status: string }[] })[] } = $props();
+  type ChildSummary = Student & { gradesPublished?: boolean; grades?: { score: number }[]; attendance?: { status: string }[] };
+
+  let { children: initialChildren = [] }: { children?: ChildSummary[] } = $props();
+
+  let children = $state<ChildSummary[]>(initialChildren);
+
+  $effect(() => {
+    api(() => axios.get('/parent/dashboard/data'), { showSuccessToast: false }).then(result => {
+      if (result.success && result.data) {
+        children = (result.data as { children: ChildSummary[] }).children;
+      }
+    });
+  });
 </script>
 
 <Sidebar group="parent" />
@@ -32,7 +46,7 @@
             <div class="flex flex-col gap-2.5 text-sm">
               <div class="flex justify-between border-b border-border/60 pb-2">
                 <span class="text-muted-foreground">Nilai</span>
-                <span class="text-foreground font-medium">{child.grades?.length ?? 0}</span>
+                <span class="text-foreground font-medium">{child.gradesPublished ? (child.grades?.length ?? 0) : 'Belum rilis'}</span>
               </div>
               <div class="flex justify-between">
                 <span class="text-muted-foreground">Kehadiran</span>

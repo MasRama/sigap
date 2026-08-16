@@ -88,6 +88,7 @@ export interface AcademicYear {
   start_at: number;
   end_at: number;
   is_active: number;
+  is_grades_published: number;
   created_at?: number;
   updated_at?: number;
 }
@@ -105,6 +106,7 @@ export interface Subject {
   id: string;
   name: string;
   code: string;
+  kkm: number;
   created_at?: number;
   updated_at?: number;
 }
@@ -206,4 +208,49 @@ export interface Grade {
   teacher_user_id: string;
   created_at?: number;
   updated_at?: number;
+}
+
+export interface GradeComponent {
+  id: string;
+  academic_year_id: string;
+  type: string;
+  name: string;
+  weight: number;
+  created_at?: number;
+  updated_at?: number;
+}
+
+export interface GradeSummaryRow {
+  student_id: string;
+  student_name: string;
+  nis: string;
+  scores: Record<string, number | null>;
+  final_score: number | null;
+  kkm: number;
+  predikat: string | null;
+  is_passed: boolean | null;
+}
+
+export interface SubjectGradeSummary {
+  subject_id: string;
+  subject_name: string;
+  kkm: number;
+  scores: Record<string, number | null>;
+  final_score: number | null;
+  predikat: string | null;
+  is_passed: boolean | null;
+}
+
+export interface GradeSummaryComponent {
+  type: string;
+  name: string;
+  weight: number;
+}
+
+export interface ClassSubjectSummary {
+  className: string;
+  subjectName: string;
+  kkm: number;
+  components: GradeSummaryComponent[];
+  rows: GradeSummaryRow[];
 }

@@ -70,6 +70,7 @@ export interface AcademicYear {
   start_at: number;
   end_at: number;
   is_active: number;
+  is_grades_published: number;
   created_at: number;
   updated_at: number;
 }
@@ -87,6 +88,7 @@ export interface Subject {
   id: string;
   name: string;
   code: string;
+  kkm: number;
   created_at: number;
   updated_at: number;
 }
@@ -203,6 +205,16 @@ export interface Grade {
   score: number;
   date: number;
   teacher_user_id: string;
+  created_at: number;
+  updated_at: number;
+}
+
+export interface GradeComponent {
+  id: string;
+  academic_year_id: string;
+  type: string;
+  name: string;
+  weight: number;
   created_at: number;
   updated_at: number;
 }

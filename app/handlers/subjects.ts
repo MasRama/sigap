@@ -10,13 +10,15 @@ const canManage = (userId: string): boolean => isAdmin(userId) || hasPermission(
 
 export const subjectsPage = (req: NaraRequest, res: NaraResponse) => {
   const userId = req.user?.id;
+  const canViewFlag = userId ? canView(userId) : false;
   const permissions = {
-    canView: userId ? canView(userId) : false,
+    canView: canViewFlag,
     canCreate: userId ? canManage(userId) : false,
     canEdit: userId ? isAdmin(userId) || hasPermission(userId, 'subjects.edit') : false,
     canDelete: userId ? isAdmin(userId) || hasPermission(userId, 'subjects.delete') : false,
   };
-  return res.inertia('subjects', { permissions });
+  const subjects = canViewFlag ? findAllSubjects() : [];
+  return res.inertia('subjects', { permissions, subjects });
 };
 
 export const listSubjects = (req: NaraRequest, res: NaraResponse) => {

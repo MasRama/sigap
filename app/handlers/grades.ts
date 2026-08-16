@@ -1,7 +1,11 @@
 import type { NaraRequest, NaraResponse } from '@core';
 import { jsonSuccess, jsonCreated, jsonError, jsonServerError, jsonValidationError, jsonPaginated, queryInt, queryString } from '@core';
 import Logger from '@services/Logger';
-import { getGradesPaginated, findGradeById, findGradesByStudent, createGrade, updateGrade, deleteGrade } from '@queries/grades';
+import { getGradesPaginated, findGradeById, findGradesByStudent, createGrade, updateGrade, deleteGrade, getClassSubjectSummary } from '@queries/grades';
+import { findAllStudents } from '@queries/students';
+import { findAllSubjects } from '@queries/subjects';
+import { findAllClasses } from '@queries/classes';
+import { findAllAcademicYears } from '@queries/academicYears';
 import { isAdmin, hasPermission } from '@queries/users';
 import { GradeSchema, zodToErrors } from '@validators';
 
@@ -10,13 +14,43 @@ const canManage = (userId: string): boolean => isAdmin(userId) || hasPermission(
 
 export const gradesPage = (req: NaraRequest, res: NaraResponse) => {
   const userId = req.user?.id;
+  const canViewFlag = userId ? canView(userId) : false;
   const permissions = {
-    canView: userId ? canView(userId) : false,
+    canView: canViewFlag,
     canCreate: userId ? canManage(userId) : false,
     canEdit: userId ? isAdmin(userId) || hasPermission(userId, 'grades.edit') : false,
     canDelete: userId ? isAdmin(userId) || hasPermission(userId, 'grades.delete') : false,
   };
-  return res.inertia('grades', { permissions });
+
+  const page = queryInt(req, 'page', 1);
+  const limit = queryInt(req, 'limit', 10);
+  const classId = queryString(req, 'class_id');
+  const subjectId = queryString(req, 'subject_id');
+
+  if (!canViewFlag) {
+    return res.inertia('grades', {
+      permissions,
+      grades: [], students: [], subjects: [], classes: [], years: [],
+      meta: undefined, summary: null,
+    });
+  }
+
+  const { data, total } = getGradesPaginated(page, limit, undefined, classId || undefined, subjectId || undefined);
+  const totalPages = Math.ceil(total / limit);
+  const summary = classId && subjectId ? getClassSubjectSummary(classId, subjectId) : null;
+
+  return res.inertia('grades', {
+    permissions,
+    grades: data,
+    students: findAllStudents(),
+    subjects: findAllSubjects(),
+    classes: findAllClasses(),
+    years: findAllAcademicYears(),
+    meta: { total, page, limit, totalPages, hasNext: page < totalPages, hasPrev: page > 1 },
+    summary,
+    classId: classId ?? '',
+    subjectId: subjectId ?? '',
+  });
 };
 
 export const listGrades = (req: NaraRequest, res: NaraResponse) => {

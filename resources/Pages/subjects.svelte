@@ -38,7 +38,7 @@
     if (result.success) { isDeleteOpen = false; router.visit('/subjects', { preserveScroll: true }); }
   }
 
-  const columns = [{ key: 'code', label: 'Kode' }, { key: 'name', label: 'Nama' }];
+  const columns = [{ key: 'code', label: 'Kode' }, { key: 'name', label: 'Nama' }, { key: 'kkm', label: 'KKM', align: 'center' as const }];
 </script>
 
 {#snippet rowActions(item: Subject)}
@@ -63,10 +63,11 @@
   <DataTable {columns} rows={subjects} rowAction={rowActions} />
 </div>
 
-<Modal bind:open={isOpen} title={selected ? 'Edit Mapel' : 'Tambah Mapel'} description="Tambah atau ubah mata pelajaran. Kode dan nama wajib diisi.">
+<Modal bind:open={isOpen} title={selected ? 'Edit Mapel' : 'Tambah Mapel'} description="Tambah atau ubah mata pelajaran. Kode, nama, dan KKM wajib diisi.">
   <form class="flex flex-col gap-4" onsubmit={(e) => { e.preventDefault(); submit(); }}>
     <div class="flex flex-col gap-0"><Label for="code" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Kode</Label><Input id="code" bind:value={form.code} required /></div>
     <div class="flex flex-col gap-0"><Label for="name" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Nama</Label><Input id="name" bind:value={form.name} required /></div>
+    <div class="flex flex-col gap-0"><Label for="kkm" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">KKM</Label><Input id="kkm" type="number" min={0} max={100} bind:value={form.kkm} required /></div>
     <div class="flex justify-end gap-2 pt-4 border-t border-border mt-2">
       <Button variant="outline" onclick={() => isOpen = false}>Batal</Button>
       <Button type="submit">{selected ? 'Perbarui' : 'Buat'}</Button>

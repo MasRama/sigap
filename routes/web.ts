@@ -63,6 +63,9 @@ Route.post('/academic-years', [Auth], academicYears.addAcademicYear);
 Route.put('/academic-years/:id', [Auth], academicYears.editAcademicYear);
 Route.delete('/academic-years/:id', [Auth], academicYears.removeAcademicYear);
 Route.post('/academic-years/:id/activate', [Auth], academicYears.activateAcademicYear);
+Route.get('/academic-years/:id/components', [Auth], academicYears.gradeComponentsData);
+Route.put('/academic-years/:id/components', [Auth], academicYears.saveGradeComponents);
+Route.post('/academic-years/:id/publish-grades', [Auth], academicYears.toggleGradesPublication);
 
 // Classes
 Route.get('/classes', [Auth], classes.classesPage);
@@ -173,7 +176,7 @@ Route.get('/reports/class-subject', [Auth], reports.classSubjectReport);
 Route.get('/parent/dashboard', [Auth], parent.parentDashboardPage);
 Route.get('/parent/dashboard/data', [Auth], parent.parentDashboardData);
 Route.get('/parent/child/:studentId/attendance', [Auth], parent.childAttendanceData);
-Route.get('/parent/child/:studentId/grades', [Auth], parent.childGradesData);
+Route.get('/parent/child/:studentId/grades', [Auth], parent.parentGradesPage);
 
 // Headmaster Dashboard
 Route.get('/headmaster/dashboard', [Auth], headmaster.headmasterDashboardPage);

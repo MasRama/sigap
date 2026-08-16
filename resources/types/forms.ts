@@ -32,6 +32,11 @@ export type {
   Journal,
   StudentAttendance,
   Grade,
+  GradeComponent,
+  GradeSummaryRow,
+  SubjectGradeSummary,
+  GradeSummaryComponent,
+  ClassSubjectSummary,
 } from '../../app/types/shared';
 
 import type {
@@ -49,6 +54,11 @@ import type {
   Journal,
   StudentAttendance,
   Grade,
+  GradeComponent,
+  GradeSummaryRow,
+  SubjectGradeSummary,
+  GradeSummaryComponent,
+  ClassSubjectSummary,
 } from '../../app/types/shared';
 
 // =============================================================================
@@ -150,6 +160,7 @@ export interface AcademicYearForm {
   start_at: number;
   end_at: number;
   is_active: boolean;
+  is_grades_published: boolean;
 }
 
 export interface ClassForm {
@@ -163,6 +174,7 @@ export interface SubjectForm {
   id: string | null;
   name: string;
   code: string;
+  kkm: number;
 }
 
 export interface StudentForm {
@@ -250,6 +262,7 @@ export function academicYearToForm(year: AcademicYear): AcademicYearForm {
     start_at: year.start_at,
     end_at: year.end_at,
     is_active: year.is_active === 1,
+    is_grades_published: year.is_grades_published === 1,
   };
 }
 
@@ -262,11 +275,11 @@ export function classToForm(cls: Class): ClassForm {
 }
 
 export function createEmptySubjectForm(): SubjectForm {
-  return { id: null, name: '', code: '' };
+  return { id: null, name: '', code: '', kkm: 75 };
 }
 
 export function subjectToForm(subject: Subject): SubjectForm {
-  return { id: subject.id, name: subject.name, code: subject.code };
+  return { id: subject.id, name: subject.name, code: subject.code, kkm: subject.kkm ?? 75 };
 }
 
 export function createEmptyStudentForm(): StudentForm {

@@ -138,14 +138,15 @@ Server (ultimate-express)
 | `user_roles` | id (uuid), user_id, role_id, created_at | junction: `users` ↔ `roles` |
 | `role_permissions` | id (uuid), role_id, permission_id, created_at | junction: `roles` ↔ `permissions` |
 | `assets` | id (uuid), name, type, url, mime_type, size, s3_key, user_id | belongs to `users` |
-| `academic_years` | id (uuid), name, start_at, end_at, is_active | has many `classes` |
+| `academic_years` | id (uuid), name, start_at, end_at, is_active, is_grades_published | has many `classes` |
 | `classes` | id (uuid), name, grade, academic_year_id | has many `students`, `schedules`, `class_subjects` |
-| `subjects` | id (uuid), name, code | has many `teacher_subjects`, `class_subjects` |
+| `subjects` | id (uuid), name, code, kkm | has many `teacher_subjects`, `class_subjects` |
 | `students` | id (uuid), nis, name, class_id, parent_user_id, phone, address | belongs to `classes` and `users` (parent) |
 | `teachers` | id (uuid), user_id, employee_id, phone | belongs to `users`; has many `teacher_subjects` |
 | `parents` | id (uuid), user_id, phone, address | belongs to `users` |
 | `teacher_subjects` | id (uuid), teacher_id, subject_id, academic_year_id | junction: `teachers` ↔ `subjects` |
-| `class_subjects` | id (uuid), class_id, subject_id, teacher_id, academic_year_id | junction: `classes` ↔ `subjects` |
+|`class_subjects`|id (uuid), class_id, subject_id, teacher_id, academic_year_id|junction: `classes` ↔ `subjects`|
+|`grade_components`|id (uuid), academic_year_id, type, name, weight|belongs to `academic_years`|
 | `schedules` | id (uuid), class_id, subject_id, teacher_user_id, day_of_week, start_time, end_time, academic_year_id | belongs to `classes`, `subjects`, `users`, `academic_years` |
 | `school_locations` | id (uuid), name, latitude, longitude, radius_meters, is_active | used for anti-cheat geofencing |
 | `teacher_confirmations` | id (uuid), schedule_id, teacher_user_id, photo_url, latitude, longitude, distance_meters, is_inside_school, confirmed_at | belongs to `schedules`, `users` |

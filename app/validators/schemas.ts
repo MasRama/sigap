@@ -70,10 +70,11 @@ export const AcademicYearSchema = z.object({
   start_at: z.number({ message: 'Start date is required' }),
   end_at: z.number({ message: 'End date is required' }),
   is_active: z.number().optional(),
+  is_grades_published: z.number().optional(),
 });
 
 export const UpdateAcademicYearSchema = AcademicYearSchema.partial().refine(
-  data => data.name !== undefined || data.start_at !== undefined || data.end_at !== undefined || data.is_active !== undefined,
+  data => data.name !== undefined || data.start_at !== undefined || data.end_at !== undefined || data.is_active !== undefined || data.is_grades_published !== undefined,
   { message: 'At least one field is required to update', path: ['_root'] }
 );
 
@@ -92,10 +93,11 @@ export const SubjectSchema = z.object({
   name: z.string().min(1, 'Name is required').max(100, 'Name must be at most 100 characters'),
   code: z.string().min(1, 'Code is required').max(50, 'Code must be at most 50 characters')
     .regex(/^[a-zA-Z0-9-]+$/, 'Code may only contain letters, numbers, and hyphens'),
+  kkm: z.number({ message: 'KKM is required' }).min(0, 'KKM must be at least 0').max(100, 'KKM must be at most 100').default(75),
 });
 
 export const UpdateSubjectSchema = SubjectSchema.partial().refine(
-  data => data.name !== undefined || data.code !== undefined,
+  data => data.name !== undefined || data.code !== undefined || data.kkm !== undefined,
   { message: 'At least one field is required to update', path: ['_root'] }
 );
 
@@ -203,6 +205,17 @@ export const GradeSchema = z.object({
   teacher_user_id: z.string().uuid('Invalid teacher user ID'),
 });
 
+export const GradeComponentsSchema = z.object({
+  components: z.array(z.object({
+    type: z.enum(['task', 'daily_quiz', 'midterm', 'final']),
+    name: z.string().min(1, 'Name is required').max(50, 'Name must be at most 50 characters'),
+    weight: z.number().min(0, 'Weight must be at least 0').max(100, 'Weight must be at most 100'),
+  })).min(1, 'At least one component is required'),
+}).refine(
+  data => Math.abs(data.components.reduce((sum, c) => sum + c.weight, 0) - 100) < 0.001,
+  { message: 'Weights must sum to 100', path: ['components'] }
+);
+
 export type LoginInput = z.infer<typeof LoginSchema>;
 export type RegisterInput = z.infer<typeof RegisterSchema>;
 export type ChangePasswordInput = z.infer<typeof ChangePasswordSchema>;
@@ -233,3 +246,4 @@ export type JournalInput = z.infer<typeof JournalSchema>;
 export type UpdateJournalInput = z.infer<typeof UpdateJournalSchema>;
 export type StudentAttendanceInput = z.infer<typeof StudentAttendanceSchema>;
 export type GradeInput = z.infer<typeof GradeSchema>;
+export type GradeComponentsInput = z.infer<typeof GradeComponentsSchema>;

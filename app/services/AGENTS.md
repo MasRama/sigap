@@ -19,6 +19,7 @@ Infrastructure code wrapped in functions. No classes, no singletons. Each servic
 | `CacheStore.ts` | In-memory LRU (`assetCache`, `templateCache`) | View, assets |
 | `CameraUpload.ts` | Save confirmation selfie images to local storage | teacher confirmation handler |
 | `Geolocation.ts` | Haversine distance and coordinate validation | teacher confirmation handler |
+| `GradeCalculator.ts` | Pure weighted final-score, predikat, and pass-status computation | grades queries |
 | `LoginThrottle.ts` | Per-IP + per-email login attempt limiter | auth handler |
 | `View.ts` | Inertia HTML shell renderer | renderer middleware |
 | `Migrator.ts` | Migration runner (up/down/status/fresh) | scripts/migrate.ts |

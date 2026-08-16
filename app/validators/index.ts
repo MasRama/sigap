@@ -43,6 +43,7 @@ export {
   UpdateJournalSchema,
   StudentAttendanceSchema,
   GradeSchema,
+  GradeComponentsSchema,
 } from './schemas';
 
 export type {
@@ -76,4 +77,5 @@ export type {
   UpdateJournalInput,
   StudentAttendanceInput,
   GradeInput,
+  GradeComponentsInput,
 } from './schemas';
