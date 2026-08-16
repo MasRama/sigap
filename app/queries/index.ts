@@ -17,4 +17,6 @@ export * from './grades';
 export * from './gradeComponents';
 export * from './gradeAuditLogs';
 export * from './headmaster';
+export * from './announcements';
+export * from './notifications';
 export * from './stats';

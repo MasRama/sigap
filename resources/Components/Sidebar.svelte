@@ -8,8 +8,9 @@
   import {
     Menu, LogOut, LayoutDashboard, CalendarCheck, BookOpen, GraduationCap,
     Users, ChartColumn, Calendar, School, BookMarked, UserCheck, UserCog,
-    CalendarClock, MapPin, Shield, User, History,
+    CalendarClock, MapPin, Shield, User, History, Bell, Megaphone,
   } from '@lucide/svelte';
+  import type { NotificationView } from '../types';
 
   interface User {
     id: string;
@@ -32,6 +33,26 @@
   let user = $derived(page.props.user as User | undefined);
   let isMenuOpen = $state(false);
 
+  let notifications = $state<NotificationView[]>([]);
+  let unreadCount = $state(0);
+  let isNotificationsOpen = $state(false);
+
+  $effect(() => {
+    api(() => axios.get('/notifications/data'), { showSuccessToast: false }).then(result => {
+      if (result.success && result.data) {
+        const data = result.data as { unread: number; notifications: NotificationView[] };
+        unreadCount = data.unread;
+        notifications = data.notifications;
+      }
+    });
+  });
+
+  async function markAllRead(): Promise<void> {
+    await api(() => axios.post('/notifications/read'), { showSuccessToast: false });
+    unreadCount = 0;
+    notifications = notifications.map(n => ({ ...n, read_at: Date.now() }));
+  }
+
   const sheetService = useMachine(dialog.machine, {
     id: "mobile-sidebar",
     get open() { return isMenuOpen; },
@@ -51,6 +72,7 @@
     { href: '/journals', label: 'Jurnal', group: 'journals', icon: BookOpen, show: hasPermission('journals.view') },
     { href: '/grades', label: 'Nilai', group: 'grades', icon: GraduationCap, show: hasPermission('grades.view') },
     { href: '/grade-audit', label: 'Audit Nilai', group: 'grade-audit', icon: History, show: hasPermission('grades.audit') },
+    { href: '/announcements', label: 'Pengumuman', group: 'announcements', icon: Megaphone, show: user?.roles?.includes('admin') ?? false },
     { href: '/parent/dashboard', label: 'Anak Saya', group: 'parent', icon: Users, show: hasPermission('students.view') && user?.roles?.includes('parent') },
     { href: '/headmaster/dashboard', label: 'Laporan', group: 'headmaster', icon: ChartColumn, show: hasPermission('headmaster.view') },
     { href: '/academic-years', label: 'Tahun Ajaran', group: 'academic-years', icon: Calendar, show: hasPermission('academic_years.view') },
@@ -74,6 +96,45 @@
   }
 </script>
 
+{#snippet notificationBell(direction = 'bottom-full')}
+  <div class="relative">
+    <button
+      onclick={() => isNotificationsOpen = !isNotificationsOpen}
+      aria-label="Notifikasi"
+      class="relative inline-flex items-center justify-center w-9 h-9 rounded-md border border-border text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-colors cursor-pointer"
+    >
+      <Bell class="h-4 w-4" />
+      {#if unreadCount > 0}
+        <span class="absolute -top-1 -right-1 min-w-[1.1rem] h-[1.1rem] px-0.5 rounded-full bg-destructive text-destructive-foreground text-[10px] font-medium flex items-center justify-center">{unreadCount}</span>
+      {/if}
+    </button>
+    {#if isNotificationsOpen}
+      <div class="absolute {direction === 'top-full' ? 'top-full mt-2' : 'bottom-full mb-2'} right-0 w-80 max-h-96 overflow-y-auto bg-card border border-border rounded-lg shadow-lg z-50">
+        <div class="flex items-center justify-between px-4 py-2.5 border-b border-border sticky top-0 bg-card">
+          <p class="font-heading text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground">Notifikasi</p>
+          {#if unreadCount > 0}
+            <button onclick={markAllRead} class="text-xs text-primary hover:text-primary/80 cursor-pointer">Tandai dibaca</button>
+          {/if}
+        </div>
+        {#if notifications.length === 0}
+          <p class="px-4 py-6 text-center text-sm text-muted-foreground">Tidak ada notifikasi.</p>
+        {:else}
+          {#each notifications as n (n.id)}
+            <div class="px-4 py-3 border-b border-border/60 last:border-b-0">
+              <div class="flex items-center gap-2">
+                {#if n.read_at === null}<span class="w-1.5 h-1.5 rounded-full bg-primary shrink-0"></span>{/if}
+                <p class="text-sm font-medium text-foreground">{n.title}</p>
+              </div>
+              {#if n.body}<p class="text-xs text-muted-foreground mt-0.5">{n.body}</p>{/if}
+              <p class="text-[10px] text-muted-foreground/70 mt-1">{new Date(n.created_at).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' })}</p>
+            </div>
+          {/each}
+        {/if}
+      </div>
+    {/if}
+  </div>
+{/snippet}
+
 <!-- ───────────── MOBILE TOP BAR ───────────── -->
 <div class="lg:hidden fixed inset-x-0 top-0 z-40 h-16 bg-background border-b border-border flex items-center justify-between px-4">
   <button {...sheetApi.getTriggerProps()} aria-label="Buka menu" class="p-2 -ml-2 text-muted-foreground hover:text-foreground transition-colors cursor-pointer">
@@ -85,7 +146,10 @@
     </span>
     <span class="font-heading font-semibold tracking-tight text-lg">SIGAP</span>
   </a>
-  <DarkModeToggle />
+  <div class="flex items-center gap-2">
+    {@render notificationBell('top-full')}
+    <DarkModeToggle />
+  </div>
 </div>
 
 <!-- ───────────── MOBILE DRAWER ───────────── -->
@@ -189,6 +253,7 @@
       </div>
     </div>
     <div class="flex items-center gap-2">
+      {@render notificationBell()}
       <button onclick={handleLogout} class="flex-1 inline-flex items-center justify-center gap-2 h-9 rounded-md border border-border text-xs text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-colors cursor-pointer">
         <LogOut class="h-3.5 w-3.5" />
         Keluar

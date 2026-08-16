@@ -42,6 +42,8 @@ export type {
   JournalCompletenessView,
   GradeProgressView,
   OutsideConfirmationView,
+  AnnouncementView,
+  NotificationView,
 } from '../../app/types/shared';
 
 import type {
@@ -69,6 +71,8 @@ import type {
   JournalCompletenessView,
   GradeProgressView,
   OutsideConfirmationView,
+  AnnouncementView,
+  NotificationView,
 } from '../../app/types/shared';
 
 // =============================================================================

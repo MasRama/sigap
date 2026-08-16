@@ -8,6 +8,9 @@ export const findAllClasses = (): Class[] =>
 export const findClassById = (id: string): Class | undefined =>
   SQLite.one<Class>`SELECT * FROM classes WHERE id = ${id}`;
 
+export const findClassByName = (name: string): Class | undefined =>
+  SQLite.one<Class>`SELECT * FROM classes WHERE name = ${name}`;
+
 export const findClassesByAcademicYear = (academicYearId: string): Class[] =>
   SQLite.many<Class>`SELECT * FROM classes WHERE academic_year_id = ${academicYearId} ORDER BY grade, name`;
 

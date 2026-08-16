@@ -44,6 +44,8 @@ export {
   StudentAttendanceSchema,
   GradeSchema,
   GradeComponentsSchema,
+  AnnouncementSchema,
+  UpdateAnnouncementSchema,
 } from './schemas';
 
 export type {
@@ -78,4 +80,6 @@ export type {
   StudentAttendanceInput,
   GradeInput,
   GradeComponentsInput,
+  AnnouncementInput,
+  UpdateAnnouncementInput,
 } from './schemas';

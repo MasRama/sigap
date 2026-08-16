@@ -20,6 +20,9 @@ Request handlers — functions that receive `NaraRequest` / `NaraResponse` and r
 | `dashboard.ts` | dashboard page + stats |
 | `grades.ts` | grade CRUD + audit logging on every change |
 | `gradeAudit.ts` | grade audit history page + data (grades.audit permission) |
+| `announcements.ts` | announcement CRUD (admin) + latest list for dashboards |
+| `notifications.ts` | in-app notifications data + mark read |
+| `rapor.ts` | printable student rapor page |
 | `headmaster.ts` | headmaster reports and dashboards |
 | `home.ts` | landing page |
 | `index.ts` | barrel export (`export * as X from './X'`) |
@@ -31,7 +34,7 @@ Request handlers — functions that receive `NaraRequest` / `NaraResponse` and r
 | `schedules.ts` | schedule CRUD |
 | `schoolLocations.ts` | school location CRUD + activation |
 | `studentAttendance.ts` | student attendance list |
-| `students.ts` | student CRUD |
+| `students.ts` | student CRUD + CSV bulk import |
 | `subjects.ts` | subject CRUD |
 | `teacherConfirmations.ts` | anti-fraud teacher confirmation + photo |
 | `teacherSchedule.ts` | teacher daily schedule |
@@ -91,7 +94,7 @@ See [`.agents/skills/auth-rbac.md`](../../.agents/skills/auth-rbac.md) and [`.ag
 ## Conventions
 
 - **No SQLite import** — go through `@queries` (L1, enforced)
-- **Allowed service imports**: `Authenticate`, `Logger`, `Storage`, `LoginThrottle`, `CacheStore` (L2, enforced)
+- **Allowed service imports**: `Authenticate`, `Logger`, `Storage`, `LoginThrottle`, `CacheStore`, `GradeCalculator`, `StudentCsvParser` (L2, enforced)
 - **try/catch only in mutations** — queries bubble errors, handlers catch
 - **Bahasa Indonesia for user-facing messages** (ADR 0010) — `'Produk berhasil dibuat'`, not `'Product created'`. English for code, comments, logs, and internal error codes only.
 - **No `console.log`** — use `Logger.info/warn/error` (L9, enforced)

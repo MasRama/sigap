@@ -3,6 +3,7 @@ import { jsonSuccess, jsonCreated, jsonError, jsonServerError, jsonValidationErr
 import Logger from '@services/Logger';
 import { findAllAcademicYears, findAcademicYearById, createAcademicYear, updateAcademicYear, deleteAcademicYear, setActiveAcademicYear } from '@queries/academicYears';
 import { findGradeComponentsByYear, upsertGradeComponents } from '@queries/gradeComponents';
+import { createGradePublishedNotifications } from '@queries/notifications';
 import { isAdmin, hasPermission } from '@queries/users';
 import { AcademicYearSchema, UpdateAcademicYearSchema, GradeComponentsSchema, zodToErrors } from '@validators';
 
@@ -152,5 +153,8 @@ export const toggleGradesPublication = (req: NaraRequest, res: NaraResponse) => 
   if (!year) return jsonError(res, 'Not found', 404);
 
   const updated = updateAcademicYear(id, { is_grades_published: year.is_grades_published ? 0 : 1 });
+  if (updated?.is_grades_published) {
+    createGradePublishedNotifications(updated.name);
+  }
   return jsonSuccess(res, updated?.is_grades_published ? 'Grades published' : 'Grades unpublished', updated);
 };

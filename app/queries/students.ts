@@ -8,6 +8,21 @@ export const findAllStudents = (): Student[] =>
 export const findStudentById = (id: string): Student | undefined =>
   SQLite.one<Student>`SELECT * FROM students WHERE id = ${id}`;
 
+export const findAllNis = (): string[] =>
+  SQLite.many<{ nis: string }>`SELECT nis FROM students`.map(row => row.nis);
+
+export const importStudents = (rows: { nis: string; name: string; class_id: string; phone: string | null; address: string | null }[]): void => {
+  SQLite.transaction(() => {
+    const now = Date.now();
+    for (const row of rows) {
+      SQLite.exec`
+        INSERT INTO students (id, nis, name, class_id, parent_user_id, phone, address, created_at, updated_at)
+        VALUES (${randomUUID()}, ${row.nis}, ${row.name}, ${row.class_id}, ${null}, ${row.phone}, ${row.address}, ${now}, ${now})
+      `;
+    }
+  });
+};
+
 export const findStudentsByClass = (classId: string): Student[] =>
   SQLite.many<Student>`SELECT * FROM students WHERE class_id = ${classId} ORDER BY name`;
 

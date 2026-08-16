@@ -216,6 +216,16 @@ export const GradeComponentsSchema = z.object({
   { message: 'Weights must sum to 100', path: ['components'] }
 );
 
+export const AnnouncementSchema = z.object({
+  title: z.string().min(1, 'Title is required').max(200, 'Title must be at most 200 characters'),
+  body: z.string().min(1, 'Body is required').max(5000, 'Body must be at most 5000 characters'),
+});
+
+export const UpdateAnnouncementSchema = AnnouncementSchema.partial().refine(
+  data => data.title !== undefined || data.body !== undefined,
+  { message: 'At least one field is required to update', path: ['_root'] }
+);
+
 export type LoginInput = z.infer<typeof LoginSchema>;
 export type RegisterInput = z.infer<typeof RegisterSchema>;
 export type ChangePasswordInput = z.infer<typeof ChangePasswordSchema>;
@@ -247,3 +257,5 @@ export type UpdateJournalInput = z.infer<typeof UpdateJournalSchema>;
 export type StudentAttendanceInput = z.infer<typeof StudentAttendanceSchema>;
 export type GradeInput = z.infer<typeof GradeSchema>;
 export type GradeComponentsInput = z.infer<typeof GradeComponentsSchema>;
+export type AnnouncementInput = z.infer<typeof AnnouncementSchema>;
+export type UpdateAnnouncementInput = z.infer<typeof UpdateAnnouncementSchema>;

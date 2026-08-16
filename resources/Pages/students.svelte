@@ -13,7 +13,7 @@
   import Pagination from '../Components/Pagination.svelte';
   import type { Student, StudentForm, Class, User } from '../types';
   import { createEmptyStudentForm, studentToForm } from '../types';
-  import { Pencil, Trash2 } from '@lucide/svelte';
+  import { Pencil, Trash2, Upload } from '@lucide/svelte';
   import { fly } from 'svelte/transition';
 
   let {
@@ -32,8 +32,31 @@
 
   let isOpen = $state(false);
   let isDeleteOpen = $state(false);
+  let isImportOpen = $state(false);
+  let importFile = $state<File | null>(null);
+  let importResult = $state<{ inserted: number; errors: { line: number; message: string }[] } | null>(null);
+  let isImporting = $state(false);
   let form: StudentForm = $state(createEmptyStudentForm());
   let selected: Student | null = $state(null);
+
+  function openImport(): void {
+    importFile = null;
+    importResult = null;
+    isImportOpen = true;
+  }
+
+  async function submitImport(): Promise<void> {
+    if (!importFile) return;
+    isImporting = true;
+    const formData = new FormData();
+    formData.append('file', importFile);
+    const result = await api(() => axios.post('/students/import', formData, { headers: { 'Content-Type': 'multipart/form-data' } }));
+    if (result.success && result.data) {
+      importResult = result.data as { inserted: number; errors: { line: number; message: string }[] };
+      importFile = null;
+    }
+    isImporting = false;
+  }
 
   function openCreate(): void { form = createEmptyStudentForm(); selected = null; isOpen = true; }
   function openEdit(item: Student): void { selected = item; form = studentToForm(item); isOpen = true; }
@@ -52,7 +75,17 @@
     if (result.success) { isDeleteOpen = false; router.visit('/students', { preserveScroll: true }); }
   }
 
-  const columns = [{ key: 'nis', label: 'NIS' }, { key: 'name', label: 'Nama' }, { key: 'class_id', label: 'Kelas' }, { key: 'parent_user_id', label: 'Orang Tua' }];
+  const classById = $derived(new Map(classes.map(c => [c.id, c.name])));
+
+  const displayRows = $derived(students.map(s => ({
+    id: s.id,
+    nis: s.nis,
+    name: s.name,
+    class_name: classById.get(s.class_id) ?? s.class_id,
+    parent: '-',
+  })));
+
+  const columns = [{ key: 'nis', label: 'NIS' }, { key: 'name', label: 'Nama' }, { key: 'class_name', label: 'Kelas' }, { key: 'parent', label: 'Orang Tua' }];
 </script>
 
 {#snippet rowActions(item: Student)}
@@ -72,9 +105,14 @@
         Daftar siswa terdaftar. Tambah, edit, atau hapus data siswa.
       </p>
     </div>
-    {#if permissions.canCreate}<Button onclick={openCreate} size="lg">Tambah Siswa</Button>{/if}
+    {#if permissions.canCreate}
+      <div class="flex gap-2">
+        <Button variant="outline" onclick={openImport}><Upload class="w-4 h-4 mr-1" /> Import CSV</Button>
+        <Button onclick={openCreate} size="lg">Tambah Siswa</Button>
+      </div>
+    {/if}
   </div>
-  <DataTable {columns} rows={students} rowAction={rowActions} />
+  <DataTable {columns} rows={displayRows} rowAction={rowActions} />
   {#if meta}<Pagination {meta} />{/if}
 </div>
 
@@ -98,6 +136,35 @@
     <div class="flex justify-end gap-2 pt-4 border-t border-border mt-2">
       <Button variant="outline" onclick={() => isOpen = false}>Batal</Button>
       <Button type="submit">{selected ? 'Perbarui' : 'Buat'}</Button>
+    </div>
+  </form>
+</Modal>
+
+<Modal bind:open={isImportOpen} title="Import Siswa (CSV)" description="Upload file CSV dengan kolom: nis,name,class,phone,address. Baris pertama opsional sebagai header. Kelas harus sesuai nama kelas yang sudah ada.">
+  <form class="flex flex-col gap-4" onsubmit={(e) => { e.preventDefault(); submitImport(); }}>
+    <input
+      type="file"
+      accept=".csv,text/csv"
+      class="block w-full text-sm text-muted-foreground file:mr-3 file:rounded-md file:border file:border-border file:bg-secondary/60 file:px-3 file:py-1.5 file:text-xs file:font-medium file:text-foreground hover:file:bg-secondary"
+      onchange={(e) => { importFile = (e.currentTarget as HTMLInputElement).files?.[0] ?? null; importResult = null; }}
+    />
+    <pre class="bg-secondary/40 rounded-md px-3 py-2 text-xs text-muted-foreground overflow-x-auto">10011,Andi Saputra,10A,08123456780,Jl. Melati No. 6
+10012,Budi Hartono,10B,,</pre>
+    {#if importResult}
+      <div class="bg-card border border-border rounded-md px-4 py-3 text-sm">
+        <p class="font-medium text-foreground">{importResult.inserted} siswa berhasil diimpor.</p>
+        {#if importResult.errors.length > 0}
+          <ul class="mt-2 flex flex-col gap-1 text-xs text-destructive max-h-40 overflow-y-auto">
+            {#each importResult.errors as err}
+              <li>Baris {err.line}: {err.message}</li>
+            {/each}
+          </ul>
+        {/if}
+      </div>
+    {/if}
+    <div class="flex justify-end gap-2 pt-4 border-t border-border mt-2">
+      <Button variant="outline" onclick={() => isImportOpen = false} type="button">Tutup</Button>
+      <Button type="submit" disabled={!importFile || isImporting}>{isImporting ? 'Mengimpor...' : 'Import'}</Button>
     </div>
   </form>
 </Modal>

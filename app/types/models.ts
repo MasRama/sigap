@@ -232,3 +232,22 @@ export interface GradeAuditLog {
   user_id: string;
   created_at: number;
 }
+
+export interface Announcement {
+  id: string;
+  title: string;
+  body: string;
+  author_user_id: string;
+  created_at: number;
+  updated_at: number;
+}
+
+export interface Notification {
+  id: string;
+  user_id: string;
+  type: string;
+  title: string;
+  body: string | null;
+  read_at: number | null;
+  created_at: number;
+}

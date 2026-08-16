@@ -134,8 +134,7 @@ export const getClassSubjectSummary = (classId: string, subjectId: string): Clas
   return { className: meta.className, subjectName: meta.subjectName, kkm: meta.kkm, components, rows };
 };
 
-export const getStudentGradeSummaries = (studentId: string): { published: boolean; summaries: SubjectGradeSummary[] } => {
-  const published = getGradesPublicationForStudent(studentId);
+export const getStudentGradeSummaries = (studentId: string): { published: boolean; summaries: SubjectGradeSummary[] } => {  const published = getGradesPublicationForStudent(studentId);
 
   const meta = SQLite.get<{ yearId: string }>(
     `SELECT c.academic_year_id AS yearId FROM students st JOIN classes c ON c.id = st.class_id WHERE st.id = ?`,
@@ -177,4 +176,16 @@ export const getStudentGradeSummaries = (studentId: string): { published: boolea
   }
 
   return { published, summaries: [...bySubject.values()] };
+};
+
+export const getStudentContext = (studentId: string): { class_name: string; year_name: string } | null => {
+  const row = SQLite.get<{ class_name: string; year_name: string }>(
+    `SELECT c.name AS class_name, ay.name AS year_name
+     FROM students st
+     JOIN classes c ON c.id = st.class_id
+     JOIN academic_years ay ON ay.id = c.academic_year_id
+     WHERE st.id = ?`,
+    [studentId]
+  );
+  return row ?? null;
 };

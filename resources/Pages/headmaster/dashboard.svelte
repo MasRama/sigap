@@ -7,7 +7,7 @@
   import { inertia } from '@inertiajs/svelte';
   import { fly } from 'svelte/transition';
   import { ArrowRight } from '@lucide/svelte';
-  import type { DashboardStats, SessionStatusView, JournalCompletenessView, GradeProgressView } from '../../types';
+  import type { DashboardStats, SessionStatusView, JournalCompletenessView, GradeProgressView, AnnouncementView } from '../../types';
 
   interface DashboardData {
     stats: DashboardStats;
@@ -21,10 +21,14 @@
   let { canView = false }: { canView?: boolean } = $props();
 
   let data = $state<DashboardData | null>(null);
+  let announcements = $state<AnnouncementView[]>([]);
 
   $effect(() => {
     api(() => axios.get('/headmaster/dashboard/data'), { showSuccessToast: false }).then(result => {
       if (result.success && result.data) data = result.data as DashboardData;
+    });
+    api(() => axios.get('/announcements/latest'), { showSuccessToast: false }).then(result => {
+      if (result.success && result.data) announcements = result.data as AnnouncementView[];
     });
   });
 
@@ -132,4 +136,22 @@
       Audit nilai <ArrowRight class="w-4 h-4" />
     </a>
   </div>
+
+  {#if announcements.length > 0}
+    <div class="mt-10" in:fly={{ y: 20, duration: 700, delay: 400 }}>
+      <h2 class="font-heading font-semibold tracking-[-0.02em] mb-3">Pengumuman</h2>
+      <div class="flex flex-col gap-3">
+        {#each announcements as announcement (announcement.id)}
+          <article class="bg-card border border-border rounded-lg px-5 py-4">
+            <div class="flex items-baseline justify-between gap-4">
+              <h3 class="font-heading text-sm font-semibold text-foreground">{announcement.title}</h3>
+              <span class="text-[10px] text-muted-foreground font-mono-accent shrink-0">{new Date(announcement.created_at).toLocaleDateString('id-ID', { dateStyle: 'medium' })}</span>
+            </div>
+            <p class="text-sm text-muted-foreground mt-1.5 whitespace-pre-line">{announcement.body}</p>
+            <p class="text-[10px] text-muted-foreground/70 mt-2">— {announcement.author_name}</p>
+          </article>
+        {/each}
+      </div>
+    </div>
+  {/if}
 </div>

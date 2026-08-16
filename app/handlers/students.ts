@@ -1,7 +1,11 @@
-import type { NaraRequest, NaraResponse } from '@core';
+import type { NaraRequest, NaraResponse, NaraMiddleware } from '@core';
 import { jsonSuccess, jsonCreated, jsonError, jsonServerError, jsonValidationError, jsonPaginated, queryInt, queryString } from '@core';
 import Logger from '@services/Logger';
-import { getStudentsPaginated, findStudentById, createStudent, updateStudent, deleteStudent, findStudentsByClass } from '@queries/students';
+import multer from 'multer';
+import { getStudentsPaginated, findStudentById, createStudent, updateStudent, deleteStudent, findStudentsByClass, findAllNis, importStudents } from '@queries/students';
+import { findAllClasses, findClassByName } from '@queries/classes';
+import { getUsersWithRole } from '@queries/roles';
+import { parseStudentCsv } from '@services/StudentCsvParser';
 import { isAdmin, hasPermission } from '@queries/users';
 import { StudentSchema, UpdateStudentSchema, zodToErrors } from '@validators';
 
@@ -10,13 +14,32 @@ const canManage = (userId: string): boolean => isAdmin(userId) || hasPermission(
 
 export const studentsPage = (req: NaraRequest, res: NaraResponse) => {
   const userId = req.user?.id;
+  const canViewFlag = userId ? canView(userId) : false;
   const permissions = {
-    canView: userId ? canView(userId) : false,
+    canView: canViewFlag,
     canCreate: userId ? canManage(userId) : false,
     canEdit: userId ? isAdmin(userId) || hasPermission(userId, 'students.edit') : false,
     canDelete: userId ? isAdmin(userId) || hasPermission(userId, 'students.delete') : false,
   };
-  return res.inertia('students', { permissions });
+
+  if (!canViewFlag) {
+    return res.inertia('students', { permissions, students: [], classes: [], parents: [], meta: undefined });
+  }
+
+  const page = queryInt(req, 'page', 1);
+  const limit = queryInt(req, 'limit', 10);
+  const search = queryString(req, 'search');
+  const classId = queryString(req, 'class_id');
+
+  const { data, total } = getStudentsPaginated(page, limit, search, classId || undefined);
+  const totalPages = Math.ceil(total / limit);
+  return res.inertia('students', {
+    permissions,
+    students: data,
+    classes: findAllClasses(),
+    parents: getUsersWithRole('parent'),
+    meta: { total, page, limit, totalPages, hasNext: page < totalPages, hasPrev: page > 1 },
+  });
 };
 
 export const listStudents = (req: NaraRequest, res: NaraResponse) => {
@@ -105,4 +128,50 @@ export const removeStudent = (req: NaraRequest, res: NaraResponse) => {
   const ok = deleteStudent(id);
   if (!ok) return jsonError(res, 'Not found', 404);
   return jsonSuccess(res, 'Student deleted');
+};
+
+const studentCsvUpload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 2 * 1024 * 1024 },
+  fileFilter: (_req, file, cb) => {
+    if (!['text/csv', 'application/vnd.ms-excel', 'text/plain'].includes(file.mimetype) && !file.originalname.endsWith('.csv')) {
+      return cb(new Error('INVALID_FILE_TYPE'));
+    }
+    cb(null, true);
+  },
+});
+
+export const importStudentsMiddleware = studentCsvUpload.single('file') as unknown as NaraMiddleware;
+
+export const importStudentsFromCsv = (req: NaraRequest, res: NaraResponse) => {
+  if (!req.user) return jsonError(res, 'Unauthorized', 401);
+  if (!canManage(req.user.id)) return jsonError(res, 'Forbidden', 403);
+
+  const file = (req as NaraRequest & { file?: { buffer: Buffer } }).file;
+  if (!file) return jsonError(res, 'CSV file is required', 400, 'FILE_REQUIRED');
+
+  try {
+    const csv = file.buffer.toString('utf-8');
+    const classNames = new Set(findAllClasses().map(c => c.name));
+    const existingNis = new Set(findAllNis());
+    const parsed = parseStudentCsv(csv, classNames, existingNis);
+
+    if (parsed.rows.length > 0) {
+      importStudents(parsed.rows.map(row => ({
+        nis: row.nis,
+        name: row.name,
+        class_id: findClassByName(row.class_name)!.id,
+        phone: row.phone,
+        address: row.address,
+      })));
+    }
+
+    return jsonSuccess(res, 'Import finished', {
+      inserted: parsed.rows.length,
+      errors: parsed.errors,
+    });
+  } catch (error: unknown) {
+    Logger.error('Failed to import students', error as Error);
+    return jsonServerError(res, 'Failed to import students');
+  }
 };

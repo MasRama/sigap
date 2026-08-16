@@ -23,6 +23,9 @@ import * as attendance from '@handlers/attendance';
 import * as reports from '@handlers/reports';
 import * as parent from '@handlers/parent';
 import * as headmaster from '@handlers/headmaster';
+import * as announcements from '@handlers/announcements';
+import * as notifications from '@handlers/notifications';
+import * as rapor from '@handlers/rapor';
 import Auth from '@middlewares/auth';
 import { strictRateLimit } from '@middlewares/rateLimit';
 
@@ -90,6 +93,7 @@ Route.get('/students/data', [Auth], students.listStudents);
 Route.get('/students/by-class/:id', [Auth], students.studentsByClass);
 Route.get('/students/:id', [Auth], students.studentData);
 Route.post('/students', [Auth], students.addStudent);
+Route.post('/students/import', [Auth, students.importStudentsMiddleware], students.importStudentsFromCsv);
 Route.put('/students/:id', [Auth], students.editStudent);
 Route.delete('/students/:id', [Auth], students.removeStudent);
 
@@ -165,6 +169,21 @@ Route.delete('/grades/:id', [Auth], grades.removeGrade);
 // Grade Audit
 Route.get('/grade-audit', [Auth], gradeAudit.gradeAuditPage);
 Route.get('/grade-audit/data', [Auth], gradeAudit.gradeAuditData);
+
+// Announcements
+Route.get('/announcements', [Auth], announcements.announcementsPage);
+Route.get('/announcements/data', [Auth], announcements.listAnnouncements);
+Route.get('/announcements/latest', [Auth], announcements.latestAnnouncementsData);
+Route.post('/announcements', [Auth], announcements.addAnnouncement);
+Route.put('/announcements/:id', [Auth], announcements.editAnnouncement);
+Route.delete('/announcements/:id', [Auth], announcements.removeAnnouncement);
+
+// Notifications
+Route.get('/notifications/data', [Auth], notifications.notificationsData);
+Route.post('/notifications/read', [Auth], notifications.markNotificationsRead);
+
+// Rapor
+Route.get('/reports/rapor/:studentId', [Auth], rapor.raporPage);
 
 // Teacher Schedule
 Route.get('/teacher/schedule', [Auth], teacherSchedule.teacherSchedulePage);

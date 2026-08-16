@@ -301,3 +301,20 @@ export interface OutsideConfirmationView {
   distance_meters: number;
   confirmed_at: number;
 }
+
+export interface AnnouncementView {
+  id: string;
+  title: string;
+  body: string;
+  author_name: string;
+  created_at: number;
+}
+
+export interface NotificationView {
+  id: string;
+  type: string;
+  title: string;
+  body: string | null;
+  read_at: number | null;
+  created_at: number;
+}
