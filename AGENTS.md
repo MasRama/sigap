@@ -161,6 +161,18 @@ Server (ultimate-express)
 - All timestamps: `biginteger` unix milliseconds via `Date.now()`
 - Foreign keys: `.onDelete('CASCADE')`
 
+## Demo Accounts (after `npm run seed`)
+
+|Role|Email|Password|Notes|
+|---|---|---|---|
+|Admin|admin@sigap.id|admin123|full access, manage master data|
+|Kepala Sekolah|kepala@sigap.id|kepala123|oversight dashboards, reports, audit|
+|Guru (Matematika + Biologi)|budi@sigap.id|teacher123|mengajar 10A MAT, 10B BIO|
+|Guru (Bahasa Inggris)|siti@sigap.id|teacher123|mengajar 10A & 10B ENG|
+|Orang Tua|andi@sigap.id|parent123|10 anak (NIS 10001–10010), lihat nilai + absensi|
+
+Demo data (`seeds/07_demo_data.ts`): 14 hari konfirmasi + jurnal guru (1 sesi sengaja tidak dikonfirmasi untuk demo alarm kepala sekolah, 1 konfirmasi di luar radius), nilai UAS untuk semua siswa, audit log, notifikasi parent, pengumuman, dan nilai terpublikasi.
+
 ## Middleware
 
 | Middleware | Import | Effect |
