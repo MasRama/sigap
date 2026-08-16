@@ -17,6 +17,7 @@ import * as teacherConfirmations from '@handlers/teacherConfirmations';
 import * as journals from '@handlers/journals';
 import * as studentAttendance from '@handlers/studentAttendance';
 import * as grades from '@handlers/grades';
+import * as gradeAudit from '@handlers/gradeAudit';
 import * as teacherSchedule from '@handlers/teacherSchedule';
 import * as attendance from '@handlers/attendance';
 import * as reports from '@handlers/reports';
@@ -160,6 +161,10 @@ Route.get('/grades/:id', [Auth], grades.gradeData);
 Route.post('/grades', [Auth], grades.addGrade);
 Route.put('/grades/:id', [Auth], grades.editGrade);
 Route.delete('/grades/:id', [Auth], grades.removeGrade);
+
+// Grade Audit
+Route.get('/grade-audit', [Auth], gradeAudit.gradeAuditPage);
+Route.get('/grade-audit/data', [Auth], gradeAudit.gradeAuditData);
 
 // Teacher Schedule
 Route.get('/teacher/schedule', [Auth], teacherSchedule.teacherSchedulePage);

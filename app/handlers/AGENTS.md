@@ -18,7 +18,8 @@ Request handlers — functions that receive `NaraRequest` / `NaraResponse` and r
 | `auth.ts` | login/logout/change-password (session + throttle) |
 | `classes.ts` | class CRUD |
 | `dashboard.ts` | dashboard page + stats |
-| `grades.ts` | grade CRUD |
+| `grades.ts` | grade CRUD + audit logging on every change |
+| `gradeAudit.ts` | grade audit history page + data (grades.audit permission) |
 | `headmaster.ts` | headmaster reports and dashboards |
 | `home.ts` | landing page |
 | `index.ts` | barrel export (`export * as X from './X'`) |

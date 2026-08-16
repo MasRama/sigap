@@ -254,3 +254,50 @@ export interface ClassSubjectSummary {
   components: GradeSummaryComponent[];
   rows: GradeSummaryRow[];
 }
+
+export interface GradeAuditLogRow {
+  id: string;
+  action: 'create' | 'update' | 'delete';
+  student_name: string;
+  subject_name: string;
+  class_name: string;
+  type: string;
+  old_score: number | null;
+  new_score: number | null;
+  user_name: string;
+  created_at: number;
+}
+
+export interface SessionStatusView {
+  schedule_id: string;
+  class_name: string;
+  subject_name: string;
+  teacher_name: string;
+  start_time: number;
+  end_time: number;
+  confirmed: boolean;
+  has_journal: boolean;
+}
+
+export interface JournalCompletenessView {
+  teacher_name: string;
+  expected: number;
+  filled: number;
+}
+
+export interface GradeProgressView {
+  class_name: string;
+  subject_name: string;
+  teacher_name: string;
+  total_students: number;
+  graded_students: number;
+}
+
+export interface OutsideConfirmationView {
+  schedule_id: string;
+  class_name: string;
+  subject_name: string;
+  teacher_name: string;
+  distance_meters: number;
+  confirmed_at: number;
+}

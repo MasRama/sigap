@@ -202,7 +202,7 @@ export const GradeSchema = z.object({
   type: z.enum(['task', 'daily_quiz', 'midterm', 'final']),
   score: z.number().min(0, 'Score must be at least 0').max(100, 'Score must be at most 100'),
   date: z.number({ message: 'Date is required' }),
-  teacher_user_id: z.string().uuid('Invalid teacher user ID'),
+  teacher_user_id: z.string().uuid('Invalid teacher user ID').optional(),
 });
 
 export const GradeComponentsSchema = z.object({

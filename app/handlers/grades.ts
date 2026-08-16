@@ -2,6 +2,7 @@ import type { NaraRequest, NaraResponse } from '@core';
 import { jsonSuccess, jsonCreated, jsonError, jsonServerError, jsonValidationError, jsonPaginated, queryInt, queryString } from '@core';
 import Logger from '@services/Logger';
 import { getGradesPaginated, findGradeById, findGradesByStudent, createGrade, updateGrade, deleteGrade, getClassSubjectSummary } from '@queries/grades';
+import { logGradeChange } from '@queries/gradeAuditLogs';
 import { findAllStudents } from '@queries/students';
 import { findAllSubjects } from '@queries/subjects';
 import { findAllClasses } from '@queries/classes';
@@ -95,7 +96,18 @@ export const addGrade = (req: NaraRequest, res: NaraResponse) => {
   if (!parsed.success) return jsonValidationError(res, 'Validation failed', zodToErrors(parsed.error));
 
   try {
-    const item = createGrade(parsed.data);
+    const item = createGrade({ ...parsed.data, teacher_user_id: parsed.data.teacher_user_id ?? req.user.id });
+    logGradeChange({
+      grade_id: item.id,
+      student_id: parsed.data.student_id,
+      subject_id: parsed.data.subject_id,
+      class_id: parsed.data.class_id,
+      type: parsed.data.type,
+      action: 'create',
+      old_score: null,
+      new_score: parsed.data.score,
+      user_id: req.user.id,
+    });
     return jsonCreated(res, 'Grade created', item);
   } catch (error: unknown) {
     Logger.error('Failed to create grade', error as Error);
@@ -114,8 +126,20 @@ export const editGrade = (req: NaraRequest, res: NaraResponse) => {
   if (!parsed.success) return jsonValidationError(res, 'Validation failed', zodToErrors(parsed.error));
 
   try {
+    const existing = findGradeById(id);
     const item = updateGrade(id, parsed.data);
     if (!item) return jsonError(res, 'Not found', 404);
+    logGradeChange({
+      grade_id: item.id,
+      student_id: item.student_id,
+      subject_id: item.subject_id,
+      class_id: item.class_id,
+      type: item.type,
+      action: 'update',
+      old_score: existing?.score ?? null,
+      new_score: parsed.data.score ?? existing?.score ?? null,
+      user_id: req.user.id,
+    });
     return jsonSuccess(res, 'Grade updated', item);
   } catch (error: unknown) {
     Logger.error('Failed to update grade', error as Error);
@@ -130,7 +154,21 @@ export const removeGrade = (req: NaraRequest, res: NaraResponse) => {
   const id = req.params.id;
   if (!id) return jsonError(res, 'ID required', 400);
 
+  const existing = findGradeById(id);
   const ok = deleteGrade(id);
   if (!ok) return jsonError(res, 'Not found', 404);
+  if (existing) {
+    logGradeChange({
+      grade_id: existing.id,
+      student_id: existing.student_id,
+      subject_id: existing.subject_id,
+      class_id: existing.class_id,
+      type: existing.type,
+      action: 'delete',
+      old_score: existing.score,
+      new_score: null,
+      user_id: req.user.id,
+    });
+  }
   return jsonSuccess(res, 'Grade deleted');
 };

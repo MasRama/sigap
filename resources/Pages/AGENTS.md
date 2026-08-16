@@ -17,7 +17,8 @@ Inertia.js pages rendered by Svelte 5. Each page is a route destination — the 
 | `academicYears.svelte` | Academic year CRUD |
 | `classes.svelte` | Class CRUD |
 | `dashboard.svelte` | Role-aware dashboard with stats |
-| `grades.svelte` | Grade CRUD |
+| `grades.svelte` | Grade CRUD + per class/subject recap with final scores |
+| `gradeAudit.svelte` | Grade change audit history |
 | `journals.svelte` | Journal CRUD |
 | `landing.svelte` | Public landing page |
 | `parents.svelte` | Parent record CRUD |
@@ -33,7 +34,7 @@ Inertia.js pages rendered by Svelte 5. Each page is a route destination — the 
 | `users.svelte` | User management (CRUD table + role assignment) |
 | `auth/login.svelte` | Login form |
 | `auth/register.svelte` | Registration form (legacy) |
-| `headmaster/dashboard.svelte` | Headmaster overview |
+| `headmaster/dashboard.svelte` | Headmaster overview: today sessions, missed sessions, grade progress, journal completeness |
 | `headmaster/reports.svelte` | Outside confirmations report |
 | `parent/attendance.svelte` | Parent view of child attendance |
 | `parent/dashboard.svelte` | Parent children summary |

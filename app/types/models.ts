@@ -218,3 +218,17 @@ export interface GradeComponent {
   created_at: number;
   updated_at: number;
 }
+
+export interface GradeAuditLog {
+  id: string;
+  grade_id: string | null;
+  student_id: string;
+  subject_id: string;
+  class_id: string;
+  type: string;
+  action: 'create' | 'update' | 'delete';
+  old_score: number | null;
+  new_score: number | null;
+  user_id: string;
+  created_at: number;
+}

@@ -37,6 +37,7 @@
   function confirmDelete(item: Grade): void { selected = item; isDeleteOpen = true; }
 
   async function submit(): Promise<void> {
+    form.date = selected ? form.date : Date.now();
     const result = selected
       ? await api(() => axios.put(`/grades/${selected!.id}`, form))
       : await api(() => axios.post('/grades', form));

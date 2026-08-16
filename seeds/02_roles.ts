@@ -48,7 +48,7 @@ export function run(SQLite: typeof SQLiteType): void {
     'school_locations.view', 'school_locations.edit',
     'confirmations.view',
     'journals.view', 'journals.edit',
-    'grades.view', 'grades.edit',
+    'grades.view', 'grades.edit', 'grades.audit',
     'attendance.view', 'attendance.edit',
     'headmaster.view',
   ];

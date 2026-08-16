@@ -1,13 +1,81 @@
 <script lang="ts">
+  import axios from 'axios';
+  import { api } from '$lib/api';
   import Sidebar from '../../Components/Sidebar.svelte';
   import StatCard from '../../Components/StatCard.svelte';
-  import BentoCard from '../../Components/BentoCard.svelte';
+  import DataTable from '../../Components/DataTable.svelte';
   import { inertia } from '@inertiajs/svelte';
   import { fly } from 'svelte/transition';
   import { ArrowRight } from '@lucide/svelte';
-  import type { DashboardStats } from '../../types';
+  import type { DashboardStats, SessionStatusView, JournalCompletenessView, GradeProgressView } from '../../types';
 
-  let { stats }: { stats?: DashboardStats } = $props();
+  interface DashboardData {
+    stats: DashboardStats;
+    today: SessionStatusView[];
+    confirmedToday: number;
+    missed: SessionStatusView[];
+    journals: JournalCompletenessView[];
+    progress: GradeProgressView[];
+  }
+
+  let { canView = false }: { canView?: boolean } = $props();
+
+  let data = $state<DashboardData | null>(null);
+
+  $effect(() => {
+    api(() => axios.get('/headmaster/dashboard/data'), { showSuccessToast: false }).then(result => {
+      if (result.success && result.data) data = result.data as DashboardData;
+    });
+  });
+
+  const missedRows = $derived((data?.missed ?? []).map(s => ({
+    id: s.schedule_id + s.start_time,
+    guru: s.teacher_name,
+    kelas: s.class_name,
+    mapel: s.subject_name,
+    waktu: new Date(s.start_time).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' }),
+    status: 'Tidak Konfirmasi',
+  })));
+
+  const progressRows = $derived((data?.progress ?? []).map(p => ({
+    id: p.class_name + p.subject_name,
+    kelas: p.class_name,
+    mapel: p.subject_name,
+    guru: p.teacher_name || '—',
+    dinilai: `${p.graded_students}/${p.total_students}`,
+    progres: p.total_students > 0 ? `${Math.round((p.graded_students / p.total_students) * 100)}%` : '0%',
+  })));
+
+  const journalRows = $derived((data?.journals ?? []).map(j => ({
+    id: j.teacher_name,
+    guru: j.teacher_name,
+    sesi: j.expected,
+    jurnal: j.filled,
+    kelengkapan: j.expected > 0 ? `${Math.round((j.filled / j.expected) * 100)}%` : '0%',
+  })));
+
+  const missedColumns = [
+    { key: 'guru', label: 'Guru' },
+    { key: 'kelas', label: 'Kelas' },
+    { key: 'mapel', label: 'Mapel' },
+    { key: 'waktu', label: 'Waktu' },
+    { key: 'status', label: 'Status', align: 'center' as const },
+  ];
+
+  const progressColumns = [
+    { key: 'kelas', label: 'Kelas' },
+    { key: 'mapel', label: 'Mapel' },
+    { key: 'guru', label: 'Guru' },
+    { key: 'dinilai', label: 'Dinilai', align: 'right' as const },
+    { key: 'progres', label: 'Progres', align: 'right' as const },
+  ];
+
+  const journalColumns = [
+    { key: 'guru', label: 'Guru' },
+    { key: 'sesi', label: 'Sesi', align: 'right' as const },
+    { key: 'jurnal', label: 'Jurnal', align: 'right' as const },
+    { key: 'kelengkapan', label: 'Kelengkapan', align: 'right' as const },
+  ];
 </script>
 
 <Sidebar group="headmaster" />
@@ -19,22 +87,49 @@
   </div>
 
   <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4" in:fly={{ y: 20, duration: 700, delay: 100 }}>
-    <StatCard label="Siswa" value={stats?.totalStudents ?? 0} />
-    <StatCard label="Guru" value={stats?.totalTeachers ?? 0} />
-    <StatCard label="Kelas" value={stats?.totalClasses ?? 0} />
-    <StatCard label="Mapel" value={stats?.totalSubjects ?? 0} />
+    <StatCard label="Siswa" value={data?.stats.totalStudents ?? 0} />
+    <StatCard label="Guru" value={data?.stats.totalTeachers ?? 0} />
+    <StatCard label="Kelas" value={data?.stats.totalClasses ?? 0} />
+    <StatCard label="Mapel" value={data?.stats.totalSubjects ?? 0} />
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-4" in:fly={{ y: 20, duration: 700, delay: 200 }}>
-    <BentoCard title="Konfirmasi di Luar Radius" description="Guru yang konfirmasi di luar radius sekolah.">
-      <a href="/headmaster/reports" use:inertia class="inline-flex items-center gap-1 text-sm text-primary hover:text-primary/80 mt-auto">
-        <ArrowRight class="w-4 h-4" /> Lihat laporan
-      </a>
-    </BentoCard>
-    <BentoCard title="Laporan Kelas" description="Bandingkan nilai dan kehadiran per kelas dan mapel.">
-      <a href="/reports/class-subject" use:inertia class="inline-flex items-center gap-1 text-sm text-primary hover:text-primary/80 mt-auto">
-        <ArrowRight class="w-4 h-4" /> Buka laporan
-      </a>
-    </BentoCard>
+  <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10" in:fly={{ y: 20, duration: 700, delay: 150 }}>
+    <StatCard label="Jadwal Hari Ini" value={data?.today.length ?? 0} />
+    <StatCard label="Konfirmasi" value={data?.confirmedToday ?? 0} />
+    <StatCard label="Belum Konfirmasi" value={(data?.today.length ?? 0) - (data?.confirmedToday ?? 0)} />
+    <StatCard label="Jurnal Hari Ini" value={data?.stats.todayJournals ?? 0} />
+  </div>
+
+  <div class="mb-10" in:fly={{ y: 20, duration: 700, delay: 200 }}>
+    <div class="flex items-baseline justify-between mb-3">
+      <h2 class="font-heading font-semibold tracking-[-0.02em]">Sesi Tanpa Konfirmasi (7 Hari Terakhir)</h2>
+      <p class="text-xs text-muted-foreground font-mono-accent">Indikasi guru tidak masuk kelas</p>
+    </div>
+    <DataTable columns={missedColumns} rows={missedRows} emptyMessage="Semua sesi terkonfirmasi. Tidak ada indikasi guru tidak masuk." />
+  </div>
+
+  <div class="mb-10" in:fly={{ y: 20, duration: 700, delay: 250 }}>
+    <div class="flex items-baseline justify-between mb-3">
+      <h2 class="font-heading font-semibold tracking-[-0.02em]">Progres Pengisian Nilai</h2>
+      <p class="text-xs text-muted-foreground font-mono-accent">Siswa dinilai per kelas dan mapel</p>
+    </div>
+    <DataTable columns={progressColumns} rows={progressRows} emptyMessage="Belum ada kelas dan mapel aktif." />
+  </div>
+
+  <div class="mb-10" in:fly={{ y: 20, duration: 700, delay: 300 }}>
+    <div class="flex items-baseline justify-between mb-3">
+      <h2 class="font-heading font-semibold tracking-[-0.02em]">Kelengkapan Jurnal Bulan Ini</h2>
+      <p class="text-xs text-muted-foreground font-mono-accent">Jurnal terisi vs sesi yang seharusnya terjadi</p>
+    </div>
+    <DataTable columns={journalColumns} rows={journalRows} emptyMessage="Belum ada data jurnal bulan ini." />
+  </div>
+
+  <div class="flex flex-wrap gap-4" in:fly={{ y: 20, duration: 700, delay: 350 }}>
+    <a href="/headmaster/reports" use:inertia class="inline-flex items-center gap-1 text-sm text-primary hover:text-primary/80 transition-colors">
+      Laporan konfirmasi luar radius <ArrowRight class="w-4 h-4" />
+    </a>
+    <a href="/grade-audit" use:inertia class="inline-flex items-center gap-1 text-sm text-primary hover:text-primary/80 transition-colors">
+      Audit nilai <ArrowRight class="w-4 h-4" />
+    </a>
   </div>
 </div>

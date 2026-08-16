@@ -66,6 +66,7 @@ export function run(SQLite: typeof SQLiteType): void {
     { name: 'Create Grades', slug: 'grades.create', resource: 'grades', action: 'create' },
     { name: 'Edit Grades', slug: 'grades.edit', resource: 'grades', action: 'edit' },
     { name: 'Delete Grades', slug: 'grades.delete', resource: 'grades', action: 'delete' },
+    { name: 'View Grade Audit', slug: 'grades.audit', resource: 'grades', action: 'audit' },
     { name: 'View Attendance', slug: 'attendance.view', resource: 'attendance', action: 'view' },
     { name: 'Create Attendance', slug: 'attendance.create', resource: 'attendance', action: 'create' },
     { name: 'Edit Attendance', slug: 'attendance.edit', resource: 'attendance', action: 'edit' },

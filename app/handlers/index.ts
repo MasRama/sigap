@@ -16,6 +16,7 @@ export * as teacherConfirmations from './teacherConfirmations';
 export * as journals from './journals';
 export * as studentAttendance from './studentAttendance';
 export * as grades from './grades';
+export * as gradeAudit from './gradeAudit';
 export * as teacherSchedule from './teacherSchedule';
 export * as attendance from './attendance';
 export * as reports from './reports';

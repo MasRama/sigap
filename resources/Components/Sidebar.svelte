@@ -8,7 +8,7 @@
   import {
     Menu, LogOut, LayoutDashboard, CalendarCheck, BookOpen, GraduationCap,
     Users, ChartColumn, Calendar, School, BookMarked, UserCheck, UserCog,
-    CalendarClock, MapPin, Shield, User,
+    CalendarClock, MapPin, Shield, User, History,
   } from '@lucide/svelte';
 
   interface User {
@@ -50,6 +50,7 @@
     { href: '/teacher/schedule', label: 'Jadwal Mengajar', group: 'teacher', icon: CalendarCheck, show: hasPermission('schedules.view') },
     { href: '/journals', label: 'Jurnal', group: 'journals', icon: BookOpen, show: hasPermission('journals.view') },
     { href: '/grades', label: 'Nilai', group: 'grades', icon: GraduationCap, show: hasPermission('grades.view') },
+    { href: '/grade-audit', label: 'Audit Nilai', group: 'grade-audit', icon: History, show: hasPermission('grades.audit') },
     { href: '/parent/dashboard', label: 'Anak Saya', group: 'parent', icon: Users, show: hasPermission('students.view') && user?.roles?.includes('parent') },
     { href: '/headmaster/dashboard', label: 'Laporan', group: 'headmaster', icon: ChartColumn, show: hasPermission('headmaster.view') },
     { href: '/academic-years', label: 'Tahun Ajaran', group: 'academic-years', icon: Calendar, show: hasPermission('academic_years.view') },

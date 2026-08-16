@@ -1,7 +1,8 @@
 import type { NaraRequest, NaraResponse } from '@core';
 import { jsonSuccess, jsonError } from '@core';
 import { getDashboardStats } from '@queries/stats';
-import { findAllSchoolLocations, findActiveSchoolLocation } from '@queries/schoolLocations';
+import { getTodaySessions, getMissedSessions, getJournalCompleteness, getGradeProgress, getOutsideConfirmations } from '@queries/headmaster';
+import { findActiveSchoolLocation } from '@queries/schoolLocations';
 import { findAllTeacherConfirmations } from '@queries/teacherConfirmations';
 import { isAdmin, hasPermission } from '@queries/users';
 
@@ -17,7 +18,15 @@ export const headmasterDashboardData = (req: NaraRequest, res: NaraResponse) => 
   if (!req.user) return jsonError(res, 'Unauthorized', 401);
   if (!isHeadmaster(req.user.id)) return jsonError(res, 'Forbidden', 403);
 
-  return jsonSuccess(res, 'OK', getDashboardStats());
+  const today = getTodaySessions();
+  return jsonSuccess(res, 'OK', {
+    stats: getDashboardStats(),
+    today,
+    confirmedToday: today.filter(s => s.confirmed).length,
+    missed: getMissedSessions(),
+    journals: getJournalCompleteness(),
+    progress: getGradeProgress(),
+  });
 };
 
 export const headmasterReportsPage = (req: NaraRequest, res: NaraResponse) => {
@@ -31,11 +40,10 @@ export const listOutsideConfirmations = (req: NaraRequest, res: NaraResponse) =>
 
   const location = findActiveSchoolLocation();
   const all = findAllTeacherConfirmations();
-  const outside = all.filter(c => c.is_inside_school === 0);
 
   return jsonSuccess(res, 'OK', {
     activeLocation: location,
     total: all.length,
-    outside,
+    outside: getOutsideConfirmations(),
   });
 };

@@ -147,6 +147,7 @@ Server (ultimate-express)
 | `teacher_subjects` | id (uuid), teacher_id, subject_id, academic_year_id | junction: `teachers` ↔ `subjects` |
 |`class_subjects`|id (uuid), class_id, subject_id, teacher_id, academic_year_id|junction: `classes` ↔ `subjects`|
 |`grade_components`|id (uuid), academic_year_id, type, name, weight|belongs to `academic_years`|
+|`grade_audit_logs`|id (uuid), grade_id, student_id, subject_id, class_id, type, action, old_score, new_score, user_id|append-only history of grade changes|
 | `schedules` | id (uuid), class_id, subject_id, teacher_user_id, day_of_week, start_time, end_time, academic_year_id | belongs to `classes`, `subjects`, `users`, `academic_years` |
 | `school_locations` | id (uuid), name, latitude, longitude, radius_meters, is_active | used for anti-cheat geofencing |
 | `teacher_confirmations` | id (uuid), schedule_id, teacher_user_id, photo_url, latitude, longitude, distance_meters, is_inside_school, confirmed_at | belongs to `schedules`, `users` |

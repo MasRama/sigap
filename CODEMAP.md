@@ -10,9 +10,9 @@
 
 ## Stats
 
-- Files indexed: 210
-- Total lines: 19638
-- Total exports: 665
+- Files indexed: 217
+- Total lines: 20489
+- Total exports: 686
 - Entry points (★): `app/core/index.ts`, `resources/app.ts`, `routes/web.ts`, `server.ts`
 
 ## File Tree
@@ -50,10 +50,11 @@
 - `auth.ts` (94L) — loginPage, submitLogin, logout, changePassword
 - `classes.ts` (98L) — classesPage, listClasses, classData, addClass, editClass, removeClass
 - `dashboard.ts` (23L) — dashboardPage
-- `grades.ts` (137L) — gradesPage, listGrades, gradesByStudent, gradeData, addGrade, editGrade, removeGrade
-- `headmaster.ts` (42L) — headmasterDashboardPage, headmasterDashboardData, headmasterReportsPage, listOutsideConfirmations
+- `gradeAudit.ts` (39L) — gradeAuditPage, gradeAuditData
+- `grades.ts` (175L) — gradesPage, listGrades, gradesByStudent, gradeData, addGrade, editGrade, removeGrade
+- `headmaster.ts` (50L) — headmasterDashboardPage, headmasterDashboardData, headmasterReportsPage, listOutsideConfirmations
 - `home.ts` (17L) — landingPage
-- `index.ts` (24L)
+- `index.ts` (25L)
 - `journals.ts` (127L) — journalsPage, listJournals, journalData, addJournal, editJournal, removeJournal
 - `parent.ts` (68L) — parentDashboardPage, parentDashboardData, childAttendanceData, parentGradesPage
 - `parents.ts` (103L) — parentsPage, listParents, parentData, parentByUser, addParent, editParent, removeParent
@@ -86,9 +87,11 @@
 - `academicYears.ts` (40L) — findAllAcademicYears, findAcademicYearById, findActiveAcademicYear, createAcademicYear, updateAcademicYear, deleteAcademicYear, setActiveAcademicYear
 - `assets.ts` (23L) — createAsset, findAssetsByUserId
 - `classes.ts` (43L) — findAllClasses, findClassById, findClassesByAcademicYear, findClassesByGrade, createClass, updateClass, deleteClass, deleteClasses
+- `gradeAuditLogs.ts` (39L) — logGradeChange, getGradeAuditLogsPaginated
 - `gradeComponents.ts` (20L) — findGradeComponentsByYear, upsertGradeComponents
 - `grades.ts` (181L) — findAllGrades, findGradeById, findGradesByStudent, findGradesByClassSubject, findGradesByTeacher, getGradesPaginated, createGrade, updateGrade, +5
-- `index.ts` (19L)
+- `headmaster.ts` (162L) — getTodaySessions, getMissedSessions, getJournalCompleteness, getGradeProgress, getOutsideConfirmations, SessionStatus, JournalCompletenessRow, GradeProgressRow, +1
+- `index.ts` (21L)
 - `journals.ts` (44L) — findAllJournals, findJournalById, findJournalsBySchedule, findJournalsByTeacher, findJournalsByDateRange, createJournal, updateJournal, deleteJournal
 - `parents.ts` (51L) — findAllParents, findParentById, findParentByUserId, getParentsPaginated, createParent, updateParent, deleteParent
 - `roles.ts` (123L) — findAllRoles, findRoleById, findRoleBySlug, createRole, updateRole, deleteRole, getRolePermissions, getPermissionsForRoles, +10
@@ -121,8 +124,8 @@
 
 ### app/types/
 
-- `models.ts` (221L) — User, Session, Role, Permission, Asset, UserRole, RolePermission, AcademicYear, +14
-- `shared.ts` (257L) — User, Role, RoleInfo, Permission, Session, PaginationMeta, PaginatedResponse, ApiSuccessResponse, +20
+- `models.ts` (235L) — User, Session, Role, Permission, Asset, UserRole, RolePermission, AcademicYear, +15
+- `shared.ts` (304L) — User, Role, RoleInfo, Permission, Session, PaginationMeta, PaginatedResponse, ApiSuccessResponse, +25
 
 ### app/validators/
 
@@ -156,6 +159,7 @@
 - `20260816000001_add_kkm_to_subjects.ts` (8L) — up, down
 - `20260816000002_create_grade_components.ts` (20L) — up, down
 - `20260816000003_add_grades_published_to_academic_years.ts` (8L) — up, down
+- `20260816000004_create_grade_audit_logs.ts` (28L) — up, down
 
 ### resources/
 
@@ -179,7 +183,7 @@
 - `Pagination.svelte` (69L)
 - `RoleModal.svelte` (153L)
 - `Select.svelte` (40L)
-- `Sidebar.svelte` (199L)
+- `Sidebar.svelte` (200L)
 - `SigapIcon.svelte` (32L)
 - `StatCard.svelte` (39L)
 - `Switch.svelte` (52L)
@@ -190,7 +194,8 @@
 - `academicYears.svelte` (188L)
 - `classes.svelte` (83L)
 - `dashboard.svelte` (116L)
-- `grades.svelte` (183L)
+- `gradeAudit.svelte` (85L)
+- `grades.svelte` (184L)
 - `journals.svelte` (91L)
 - `landing.svelte` (484L)
 - `parents.svelte` (85L)
@@ -212,8 +217,8 @@
 
 ### resources/Pages/headmaster/
 
-- `dashboard.svelte` (41L)
-- `reports.svelte` (29L)
+- `dashboard.svelte` (136L)
+- `reports.svelte` (64L)
 
 ### resources/Pages/parent/
 
@@ -252,12 +257,12 @@
 
 ### resources/types/
 
-- `forms.ts` (402L) — createEmptyUserForm, userToForm, isApiSuccess, isApiError, createEmptyRoleForm, roleToForm, createEmptyAcademicYearForm, academicYearToForm, +34
+- `forms.ts` (415L) — createEmptyUserForm, userToForm, isApiSuccess, isApiError, createEmptyRoleForm, roleToForm, createEmptyAcademicYearForm, academicYearToForm, +34
 - `index.ts` (15L)
 
 ### routes/
 
-- `web.ts` ★ (193L)
+- `web.ts` ★ (198L)
 
 ### scripts/
 
@@ -277,7 +282,7 @@
 
 ### seeds/
 
-- `01_permissions.ts` (85L) — run
+- `01_permissions.ts` (86L) — run
 - `02_roles.ts` (110L) — run
 - `03_admin.ts` (24L) — run
 - `04_demo.ts` (90L) — run
@@ -296,6 +301,8 @@
 
 ### tests/handlers/
 
+- `gradeAudit.test.ts` (115L)
+- `grades.test.ts` (122L)
 - `parent.test.ts` (107L)
 - `roles.test.ts` (135L)
 - `users.test.ts` (258L)
@@ -461,6 +468,11 @@
 ### `app/handlers/dashboard.ts`
 
 - `const` **dashboardPage**
+
+### `app/handlers/gradeAudit.ts`
+
+- `const` **gradeAuditPage**
+- `const` **gradeAuditData**
 
 ### `app/handlers/grades.ts`
 
@@ -672,6 +684,11 @@
 - `const` **deleteClass**
 - `const` **deleteClasses**
 
+### `app/queries/gradeAuditLogs.ts`
+
+- `const` **logGradeChange**
+- `const` **getGradeAuditLogsPaginated**
+
 ### `app/queries/gradeComponents.ts`
 
 - `const` **findGradeComponentsByYear**
@@ -692,6 +709,18 @@
 - `const` **getGradesPublicationForStudent**
 - `const` **getClassSubjectSummary**
 - `const` **getStudentGradeSummaries**
+
+### `app/queries/headmaster.ts`
+
+- `const` **getTodaySessions**
+- `const` **getMissedSessions**
+- `const` **getJournalCompleteness**
+- `const` **getGradeProgress**
+- `const` **getOutsideConfirmations**
+- `type` **SessionStatus**
+- `type` **JournalCompletenessRow**
+- `type` **GradeProgressRow**
+- `type` **OutsideConfirmationRow**
 
 ### `app/queries/journals.ts`
 
@@ -960,6 +989,7 @@
 - `iface` **StudentAttendance**
 - `iface` **Grade**
 - `iface` **GradeComponent**
+- `iface` **GradeAuditLog**
 
 ### `app/types/shared.ts`
 
@@ -989,6 +1019,11 @@
 - `iface` **SubjectGradeSummary**
 - `iface` **GradeSummaryComponent**
 - `iface` **ClassSubjectSummary**
+- `iface` **GradeAuditLogRow**
+- `iface` **SessionStatusView**
+- `iface` **JournalCompletenessView**
+- `iface` **GradeProgressView**
+- `iface` **OutsideConfirmationView**
 - `type` **GroupedPermissions**
 - `type` **ApiResponse**
 
@@ -1186,6 +1221,11 @@
 - `const` **up**
 - `const` **down**
 
+### `migrations/20260816000004_create_grade_audit_logs.ts`
+
+- `const` **up**
+- `const` **down**
+
 ### `resources/Components/Badge.svelte`
 
 - `const` **badgeVariants**
@@ -1361,8 +1401,9 @@
 - `app/handlers/auth.ts` → `@core`, `@queries`, `@services/Authenticate`, `@services/Logger`, `@services/LoginThrottle`, `@validators`
 - `app/handlers/classes.ts` → `@core`, `@queries/classes`, `@queries/users`, `@services/Logger`, `@validators`
 - `app/handlers/dashboard.ts` → `@core`, `@queries/academicYears`, `@queries/classes`, `@queries/stats`, `@queries/subjects`, `@queries/users`
-- `app/handlers/grades.ts` → `@core`, `@queries/academicYears`, `@queries/classes`, `@queries/grades`, `@queries/students`, `@queries/subjects`, `@queries/users`, `@services/Logger`, `@validators`
-- `app/handlers/headmaster.ts` → `@core`, `@queries/schoolLocations`, `@queries/stats`, `@queries/teacherConfirmations`, `@queries/users`
+- `app/handlers/gradeAudit.ts` → `@core`, `@queries/gradeAuditLogs`, `@queries/users`
+- `app/handlers/grades.ts` → `@core`, `@queries/academicYears`, `@queries/classes`, `@queries/gradeAuditLogs`, `@queries/grades`, `@queries/students`, `@queries/subjects`, `@queries/users`, `@services/Logger`, `@validators`
+- `app/handlers/headmaster.ts` → `@core`, `@queries/headmaster`, `@queries/schoolLocations`, `@queries/stats`, `@queries/teacherConfirmations`, `@queries/users`
 - `app/handlers/home.ts` → `@core`, `@queries`
 - `app/handlers/journals.ts` → `@core`, `@queries/journals`, `@queries/schedules`, `@queries/studentAttendance`, `@queries/users`, `@services/Logger`, `@validators`
 - `app/handlers/parent.ts` → `@core`, `@queries/grades`, `@queries/parents`, `@queries/studentAttendance`, `@queries/students`
@@ -1389,8 +1430,10 @@
 - `app/queries/academicYears.ts` → `@services/SQLite`, `@types`
 - `app/queries/assets.ts` → `@services/SQLite`, `@types`
 - `app/queries/classes.ts` → `@services/SQLite`, `@types`
+- `app/queries/gradeAuditLogs.ts` → `../types/shared`, `@services/SQLite`
 - `app/queries/gradeComponents.ts` → `@services/SQLite`, `@types`
 - `app/queries/grades.ts` → `../types/shared`, `@services/GradeCalculator`, `@services/SQLite`, `@types`
+- `app/queries/headmaster.ts` → `../types/shared`, `@services/SQLite`
 - `app/queries/journals.ts` → `@services/SQLite`, `@types`
 - `app/queries/parents.ts` → `@services/SQLite`, `@types`
 - `app/queries/roles.ts` → `@services/SQLite`, `@types`
@@ -1432,9 +1475,10 @@
 - `resources/Pages/auth/register.svelte` → `../../Components/Button.svelte`, `../../Components/DarkModeToggle.svelte`, `../../Components/Input.svelte`, `../../Components/Label.svelte`, `@inertiajs/svelte`, `@lucide/svelte`
 - `resources/Pages/classes.svelte` → `../Components/Button.svelte`, `../Components/ConfirmDialog.svelte`, `../Components/DataTable.svelte`, `../Components/Input.svelte`, `../Components/Label.svelte`, `../Components/Modal.svelte`, `../Components/Select.svelte`, `../Components/Sidebar.svelte`, `../types`, `@inertiajs/svelte`, `@lucide/svelte`
 - `resources/Pages/dashboard.svelte` → `../Components/BentoCard.svelte`, `../Components/Sidebar.svelte`, `../Components/StatCard.svelte`, `../types`, `@inertiajs/svelte`, `@lucide/svelte`
+- `resources/Pages/gradeAudit.svelte` → `../Components/DataTable.svelte`, `../Components/Pagination.svelte`, `../Components/Sidebar.svelte`, `../types`
 - `resources/Pages/grades.svelte` → `../Components/Button.svelte`, `../Components/ConfirmDialog.svelte`, `../Components/DataTable.svelte`, `../Components/Input.svelte`, `../Components/Label.svelte`, `../Components/Modal.svelte`, `../Components/Pagination.svelte`, `../Components/Select.svelte`, `../Components/Sidebar.svelte`, `../types`, `@inertiajs/svelte`, `@lucide/svelte`
-- `resources/Pages/headmaster/dashboard.svelte` → `../../Components/BentoCard.svelte`, `../../Components/Sidebar.svelte`, `../../Components/StatCard.svelte`, `../../types`, `@inertiajs/svelte`, `@lucide/svelte`
-- `resources/Pages/headmaster/reports.svelte` → `../../Components/DataTable.svelte`, `../../Components/Sidebar.svelte`, `../../types`
+- `resources/Pages/headmaster/dashboard.svelte` → `../../Components/DataTable.svelte`, `../../Components/Sidebar.svelte`, `../../Components/StatCard.svelte`, `../../types`, `@inertiajs/svelte`, `@lucide/svelte`
+- `resources/Pages/headmaster/reports.svelte` → `../../Components/DataTable.svelte`, `../../Components/Sidebar.svelte`, `../../Components/StatCard.svelte`, `../../types`
 - `resources/Pages/journals.svelte` → `../Components/Button.svelte`, `../Components/ConfirmDialog.svelte`, `../Components/DataTable.svelte`, `../Components/Input.svelte`, `../Components/Label.svelte`, `../Components/Modal.svelte`, `../Components/Select.svelte`, `../Components/Sidebar.svelte`, `../types`, `@inertiajs/svelte`, `@lucide/svelte`
 - `resources/Pages/landing.svelte` → `../Components/DarkModeToggle.svelte`, `@inertiajs/svelte`
 - `resources/Pages/parent/attendance.svelte` → `../../Components/DataTable.svelte`, `../../Components/Sidebar.svelte`, `../../types`
@@ -1454,7 +1498,7 @@
 - `resources/Pages/teachers.svelte` → `../Components/Button.svelte`, `../Components/ConfirmDialog.svelte`, `../Components/DataTable.svelte`, `../Components/Input.svelte`, `../Components/Label.svelte`, `../Components/Modal.svelte`, `../Components/Pagination.svelte`, `../Components/Select.svelte`, `../Components/Sidebar.svelte`, `../types`, `@inertiajs/svelte`, `@lucide/svelte`
 - `resources/Pages/users.svelte` → `../Components/Button.svelte`, `../Components/Pagination.svelte`, `../Components/Sidebar.svelte`, `../Components/UserModal.svelte`, `../types`, `@inertiajs/svelte`, `@lucide/svelte`
 - `resources/types/index.ts` → `./types`
-- `routes/web.ts` → `@core`, `@handlers/academicYears`, `@handlers/assets`, `@handlers/attendance`, `@handlers/auth`, `@handlers/classes`, `@handlers/dashboard`, `@handlers/grades`, `@handlers/headmaster`, `@handlers/home`, `@handlers/journals`, `@handlers/parent`, `@handlers/parents`, `@handlers/reports`, `@handlers/roles`, `@handlers/schedules`, `@handlers/schoolLocations`, `@handlers/studentAttendance`, `@handlers/students`, `@handlers/subjects`, `@handlers/teacherConfirmations`, `@handlers/teacherSchedule`, `@handlers/teachers`, `@handlers/users`, `@middlewares/auth`, `@middlewares/rateLimit`
+- `routes/web.ts` → `@core`, `@handlers/academicYears`, `@handlers/assets`, `@handlers/attendance`, `@handlers/auth`, `@handlers/classes`, `@handlers/dashboard`, `@handlers/gradeAudit`, `@handlers/grades`, `@handlers/headmaster`, `@handlers/home`, `@handlers/journals`, `@handlers/parent`, `@handlers/parents`, `@handlers/reports`, `@handlers/roles`, `@handlers/schedules`, `@handlers/schoolLocations`, `@handlers/studentAttendance`, `@handlers/students`, `@handlers/subjects`, `@handlers/teacherConfirmations`, `@handlers/teacherSchedule`, `@handlers/teachers`, `@handlers/users`, `@middlewares/auth`, `@middlewares/rateLimit`
 - `scripts/eval-agent.ts` → `@handlers/evaltests`
 - `scripts/gen-resource.ts` → `../../app/handlers/${camelPlural}`, `../Components/Button.svelte`, `../Components/Header.svelte`, `../helpers/mocks`, `../types`, `@core`, `@handlers/${camelPlural}`, `@inertiajs/svelte`, `@queries`, `@queries/${camelPlural}`, `@queries/users`, `@services/Logger`, `@services/SQLite`, `@types`, `@validators`
 - `scripts/migrate.ts` → `@services/Migrator`
@@ -1468,6 +1512,8 @@
 - `server.ts` → `@core`, `@routes/web`
 - `tests/core/response.test.ts` → `../helpers/mocks`
 - `tests/core/Router.test.ts` → `../../app/core/Router`
+- `tests/handlers/gradeAudit.test.ts` → `../../app/handlers/gradeAudit`, `../helpers/mocks`, `@queries/gradeAuditLogs`, `@queries/users`
+- `tests/handlers/grades.test.ts` → `../../app/handlers/grades`, `../helpers/mocks`, `@queries/gradeAuditLogs`, `@queries/grades`, `@queries/users`
 - `tests/handlers/parent.test.ts` → `../../app/handlers/parent`, `../helpers/mocks`, `@queries/grades`, `@queries/parents`, `@queries/students`
 - `tests/handlers/roles.test.ts` → `../../app/handlers/roles`, `../helpers/mocks`, `@queries/roles`, `@queries/users`
 - `tests/handlers/users.test.ts` → `../../app/handlers/users`, `../helpers/mocks`, `@queries`, `@queries/roles`, `@services/Authenticate`

@@ -37,6 +37,11 @@ export type {
   SubjectGradeSummary,
   GradeSummaryComponent,
   ClassSubjectSummary,
+  GradeAuditLogRow,
+  SessionStatusView,
+  JournalCompletenessView,
+  GradeProgressView,
+  OutsideConfirmationView,
 } from '../../app/types/shared';
 
 import type {
@@ -59,6 +64,11 @@ import type {
   SubjectGradeSummary,
   GradeSummaryComponent,
   ClassSubjectSummary,
+  GradeAuditLogRow,
+  SessionStatusView,
+  JournalCompletenessView,
+  GradeProgressView,
+  OutsideConfirmationView,
 } from '../../app/types/shared';
 
 // =============================================================================
@@ -146,8 +156,9 @@ export interface DashboardStats {
   totalTeachers: number;
   totalClasses: number;
   totalSubjects: number;
-  totalParents?: number;
-  totalAcademicYears?: number;
+  todayAttendance: number;
+  todayJournals: number;
+  pendingConfirmations: number;
 }
 
 // =============================================================================
@@ -238,6 +249,7 @@ export interface GradeForm {
   academic_year_id: string;
   type: string;
   score: number;
+  date: number;
 }
 
 export interface StudentAttendanceForm {
@@ -372,7 +384,7 @@ export function journalToForm(journal: Journal): JournalForm {
 }
 
 export function createEmptyGradeForm(): GradeForm {
-  return { id: null, student_id: '', subject_id: '', class_id: '', academic_year_id: '', type: 'assignment', score: 0 };
+  return { id: null, student_id: '', subject_id: '', class_id: '', academic_year_id: '', type: 'task', score: 0, date: 0 };
 }
 
 export function gradeToForm(grade: Grade): GradeForm {
@@ -384,6 +396,7 @@ export function gradeToForm(grade: Grade): GradeForm {
     academic_year_id: grade.academic_year_id,
     type: grade.type,
     score: grade.score,
+    date: grade.date,
   };
 }
 
