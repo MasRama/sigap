@@ -11,8 +11,8 @@
 ## Stats
 
 - Files indexed: 240
-- Total lines: 22778
-- Total exports: 748
+- Total lines: 22780
+- Total exports: 749
 - Entry points (★): `app/core/index.ts`, `resources/app.ts`, `routes/web.ts`, `server.ts`
 
 ## File Tree
@@ -137,8 +137,8 @@
 
 ### app/validators/
 
-- `index.ts` (87L) — zodToErrors
-- `schemas.ts` (285L) — LoginSchema, RegisterSchema, ChangePasswordSchema, CreateUserSchema, UpdateUserSchema, DeleteUsersSchema, ChangeProfileSchema, CreateRoleSchema, +59
+- `index.ts` (88L) — zodToErrors
+- `schemas.ts` (286L) — LoginSchema, RegisterSchema, ChangePasswordSchema, CreateUserSchema, UpdateUserSchema, DeleteUsersSchema, ChangeProfileSchema, CreateRoleSchema, +60
 
 ### migrations/
 
@@ -1183,6 +1183,7 @@
 - `type` **UpdateStudentInput**
 - `type` **TeacherInput**
 - `type` **UpdateTeacherInput**
+- `type` **ParentInput**
 - `type` **TeacherClassAssignmentsInput**
 - `type` **UpdateParentInput**
 - `type` **ScheduleInput**
