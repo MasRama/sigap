@@ -38,6 +38,9 @@ storage/
 .zenflow
 .sisyphus
 
+# Graphify cache
+graphify-out/cache/
+
 # Logs
 logs/
 *.log
