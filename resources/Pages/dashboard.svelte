@@ -38,7 +38,7 @@
 <Sidebar group="dashboard" />
 
 <div class="min-h-[100dvh] bg-background text-foreground font-body antialiased selection:bg-primary/20 selection:text-primary lg:pl-64">
-  <section class="px-6 sm:px-10 lg:px-16 pt-20 lg:pt-8 pb-12">
+  <section class="px-6 sm:px-10 lg:px-8 pt-20 lg:pt-8 pb-12">
     <div in:fly={{ y: 20, duration: 800 }}>
       <p class="font-mono-accent text-[10px] uppercase tracking-[0.25em] text-muted-foreground mb-4">{greeting}</p>
       <h1 class="font-heading font-semibold tracking-[-0.03em] leading-[1] text-[clamp(2rem,5vw,3.5rem)] text-foreground">
@@ -54,7 +54,7 @@
     </div>
   </section>
 
-  <section class="px-6 sm:px-10 lg:px-16 pb-16">
+  <section class="px-6 sm:px-10 lg:px-8 pb-16">
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4" in:fly={{ y: 20, duration: 800, delay: 150 }}>
       <StatCard label="Siswa" value={stats?.totalStudents ?? 0} />
       <StatCard label="Guru" value={stats?.totalTeachers ?? 0} />
