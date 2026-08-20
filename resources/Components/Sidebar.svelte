@@ -15,7 +15,7 @@
   interface User {
     id: string;
     name: string;
-    email: string;
+    username: string;
     roles: string[];
     permissions: string[];
   }
@@ -197,7 +197,7 @@
               </div>
               <div class="min-w-0 flex-1">
                 <p class="text-sm font-heading font-semibold tracking-tight truncate">{user.name}</p>
-                <p class="text-xs text-muted-foreground truncate">{user.email}</p>
+                <p class="text-xs text-muted-foreground truncate">@{user.username}</p>
               </div>
             </div>
             <button onclick={handleLogout} class="w-full inline-flex items-center justify-center gap-2 h-10 rounded-md border border-border text-sm text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-colors cursor-pointer">
@@ -250,7 +250,7 @@
       </div>
       <div class="min-w-0 flex-1">
         <p class="text-sm font-heading font-semibold tracking-tight truncate">{user?.name ?? ''}</p>
-        <p class="text-xs text-muted-foreground truncate">{user?.email ?? ''}</p>
+        <p class="text-xs text-muted-foreground truncate">@{user?.username ?? ''}</p>
       </div>
     </div>
     <div class="flex items-center gap-2">

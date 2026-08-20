@@ -12,11 +12,11 @@
   import Label from '../../Components/Label.svelte'
 
   interface LoginForm {
-    email: string
+    username: string
     password: string
   }
 
-  let form: LoginForm = $state({ email: '', password: '' })
+  let form: LoginForm = $state({ username: '', password: '' })
   let showPassword = $state(false)
   let isLoading = $state(false)
 
@@ -28,7 +28,7 @@
 
   async function submitForm(): Promise<void> {
     isLoading = true
-    const result = await api(() => axios.post('/login', { email: form.email, password: form.password }))
+    const result = await api(() => axios.post('/login', { username: form.username, password: form.password }))
     isLoading = false
     if (result.success) router.visit('/dashboard')
   }
@@ -88,18 +88,18 @@
           <!-- Form -->
           <form class="flex flex-col gap-5" onsubmit={(e) => { e.preventDefault(); submitForm() }}>
 
-            <!-- Email -->
+            <!-- Username -->
             <div class="flex flex-col gap-2">
-              <Label for="email" class="font-mono-accent text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
-                Email
+              <Label for="username" class="font-mono-accent text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
+                Username
               </Label>
               <Input
-                bind:value={form.email}
+                bind:value={form.username}
                 required
                 type="text"
-                name="email"
-                id="email"
-                placeholder="anda@sekolah.id"
+                name="username"
+                id="username"
+                placeholder="username Anda"
                 class="h-11 rounded-md text-sm"
               />
             </div>

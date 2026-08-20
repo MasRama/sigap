@@ -3,7 +3,7 @@ import { jsonSuccess, jsonError, jsonValidationError, isUniqueConstraintError } 
 import { hashPassword, comparePassword, processLogin as loginSession, logout as endSession } from '@services/Authenticate';
 import LoginThrottle from '@services/LoginThrottle';
 import Logger from '@services/Logger';
-import { findUserByEmail, findUserById, updatePassword, deleteSessionsByUserId } from '@queries';
+import { findUserByUsername, findUserById, updatePassword, deleteSessionsByUserId } from '@queries';
 import { LoginSchema, ChangePasswordSchema, zodToErrors } from '@validators';
 
 export const loginPage = (req: NaraRequest, res: NaraResponse) => {
@@ -23,8 +23,8 @@ export const submitLogin = (req: NaraRequest, res: NaraResponse) => {
     return jsonValidationError(res, msg, errors);
   }
 
-  const { email, password } = parsed.data;
-  const identifier = email;
+  const { username, password } = parsed.data;
+  const identifier = username;
   const ip = req.ip || 'unknown';
 
   if (LoginThrottle.isLockedOut(identifier, ip)) {
@@ -33,7 +33,7 @@ export const submitLogin = (req: NaraRequest, res: NaraResponse) => {
     return jsonError(res, `Terlalu banyak percobaan. Coba lagi dalam ${mins} menit.`, 429, 'RATE_LIMITED');
   }
 
-  const user = findUserByEmail(email);
+  const user = findUserByUsername(username);
 
   // Always run password comparison to prevent timing-based user enumeration
   // Format: salt:hash (PBKDF2-SHA512, 100k iterations, 64-byte key)
@@ -45,7 +45,7 @@ export const submitLogin = (req: NaraRequest, res: NaraResponse) => {
     Logger.logSecurity('Login failed', { identifier, ip, reason: user ? 'bad_password' : 'not_found' });
     const msg = result.isLocked
       ? `Terlalu banyak percobaan. Coba lagi dalam ${Math.ceil(result.lockoutMs / 60000)} menit.`
-      : 'Email atau password salah';
+      : 'Username atau kata sandi salah';
     return jsonError(res, msg, 401, 'INVALID_CREDENTIALS');
   }
 

@@ -44,8 +44,8 @@ export function run(SQLite: typeof SQLiteType): void {
   const classBy = (name: string): ClassRow | undefined => classes.find(c => c.name === name);
   const subjectBy = (code: string): SubjectRow | undefined => subjects.find(s => s.code === code);
 
-  const budiUser = SQLite.one<{ id: string }>`SELECT id FROM users WHERE email = ${'budi@sigap.id'}`;
-  const sitiUser = SQLite.one<{ id: string }>`SELECT id FROM users WHERE email = ${'siti@sigap.id'}`;
+  const budiUser = SQLite.one<{ id: string }>`SELECT id FROM users WHERE username = ${'budi'}`;
+  const sitiUser = SQLite.one<{ id: string }>`SELECT id FROM users WHERE username = ${'siti'}`;
   if (!budiUser || !sitiUser) return;
 
   const budiTeacher = SQLite.one<TeacherRow>`SELECT id, user_id FROM teachers WHERE user_id = ${budiUser.id}`;
@@ -81,6 +81,10 @@ export function run(SQLite: typeof SQLiteType): void {
     SQLite.exec`
       INSERT OR IGNORE INTO class_subjects (id, class_id, subject_id, teacher_id, academic_year_id, created_at)
       VALUES (${randomUUID()}, ${cls.id}, ${subj.id}, ${teacher.id}, ${year.id}, ${now})
+    `;
+    SQLite.exec`
+      INSERT OR IGNORE INTO teacher_class_assignments (id, teacher_id, class_id, academic_year_id, is_homeroom, created_at)
+      VALUES (${randomUUID()}, ${teacher.id}, ${cls.id}, ${year.id}, 0, ${now})
     `;
   };
 

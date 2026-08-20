@@ -41,16 +41,16 @@ export function run(SQLite: typeof SQLiteType): void {
   const parentRole = SQLite.one<{ id: string }>`SELECT id FROM roles WHERE slug = ${'parent'}`;
 
   const teacherUsers = [
-    { id: randomUUID(), name: 'Budi Santoso', email: 'budi@sigap.id', password: hashPassword('teacher123') },
-    { id: randomUUID(), name: 'Siti Rahayu', email: 'siti@sigap.id', password: hashPassword('teacher123') },
+    { id: randomUUID(), name: 'Budi Santoso', username: 'budi', password: hashPassword('teacher123') },
+    { id: randomUUID(), name: 'Siti Rahayu', username: 'siti', password: hashPassword('teacher123') },
   ];
 
-  const parentUser = { id: randomUUID(), name: 'Andi Wijaya', email: 'andi@sigap.id', password: hashPassword('parent123') };
+  const parentUser = { id: randomUUID(), name: 'Andi Wijaya', username: 'andi', password: hashPassword('parent123') };
 
   for (const user of teacherUsers) {
     SQLite.exec`
-      INSERT INTO users (id, name, email, password, phone, is_active, created_at, updated_at)
-      VALUES (${user.id}, ${user.name}, ${user.email}, ${user.password}, ${'08123456789'}, ${1}, ${now}, ${now})
+      INSERT INTO users (id, name, username, password, phone, is_active, created_at, updated_at)
+      VALUES (${user.id}, ${user.name}, ${user.username}, ${user.password}, ${'08123456789'}, ${1}, ${now}, ${now})
     `;
     if (teacherRole) {
       SQLite.exec`
@@ -65,8 +65,8 @@ export function run(SQLite: typeof SQLiteType): void {
   }
 
   SQLite.exec`
-    INSERT INTO users (id, name, email, password, phone, is_active, created_at, updated_at)
-    VALUES (${parentUser.id}, ${parentUser.name}, ${parentUser.email}, ${parentUser.password}, ${'08123456790'}, ${1}, ${now}, ${now})
+    INSERT INTO users (id, name, username, password, phone, is_active, created_at, updated_at)
+    VALUES (${parentUser.id}, ${parentUser.name}, ${parentUser.username}, ${parentUser.password}, ${'08123456790'}, ${1}, ${now}, ${now})
   `;
   if (parentRole) {
     SQLite.exec`

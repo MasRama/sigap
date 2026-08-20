@@ -13,14 +13,14 @@
   import Label from '../../Components/Label.svelte'
 
   interface RegisterForm {
-    email: string
+    username: string
     password: string
     name: string
     password_confirmation: string
   }
 
   let form: RegisterForm = $state({
-    email: '',
+    username: '',
     password: '',
     name: '',
     password_confirmation: '',
@@ -109,8 +109,8 @@
         </div>
 
         <div class="flex flex-col gap-2">
-          <Label for="email" class="text-xs uppercase tracking-[0.2em] font-heading text-white/50">Email</Label>
-          <Input bind:value={form.email} required type="text" name="email" id="email" placeholder="you@example.com" class="rounded-xl h-12 text-base text-white bg-white/5 border-white/15 backdrop-blur-md placeholder:text-white/30 focus-visible:border-primary focus-visible:ring-primary/30" />
+          <Label for="username" class="text-xs uppercase tracking-[0.2em] font-heading text-white/50">Username</Label>
+          <Input bind:value={form.username} required type="text" name="username" id="username" placeholder="username Anda" class="rounded-xl h-12 text-base text-white bg-white/5 border-white/15 backdrop-blur-md placeholder:text-white/30 focus-visible:border-primary focus-visible:ring-primary/30" />
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">

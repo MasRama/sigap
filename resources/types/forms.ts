@@ -25,12 +25,14 @@ export type {
   Subject,
   Student,
   Teacher,
+  TeacherClassAssignment,
   Parent,
   Schedule,
   SchoolLocation,
   TeacherConfirmation,
   Journal,
   StudentAttendance,
+
   Grade,
   GradeComponent,
   GradeSummaryRow,
@@ -54,6 +56,7 @@ import type {
   Subject,
   Student,
   Teacher,
+  TeacherClassAssignment,
   Parent,
   Schedule,
   SchoolLocation,
@@ -82,7 +85,7 @@ import type {
 export interface UserForm {
   id: string | null;
   name: string;
-  email: string;
+  username: string;
   roles: string[];
   password: string;
 }
@@ -103,7 +106,7 @@ export function createEmptyUserForm(): UserForm {
   return {
     id: null,
     name: '',
-    email: '',
+    username: '',
     roles: ['user'],
     password: ''
   };
@@ -113,7 +116,7 @@ export function userToForm(user: User): UserForm {
   return {
     id: user.id,
     name: user.name || '',
-    email: user.email || '',
+    username: user.username || '',
     roles: user.roles || ['user'],
     password: ''
   };

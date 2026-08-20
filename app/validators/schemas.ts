@@ -1,46 +1,53 @@
 import { z } from 'zod';
 
+const usernameSchema = z.string()
+  .trim()
+  .min(3, 'Username minimal 3 karakter')
+  .max(50, 'Username maksimal 50 karakter')
+  .regex(/^[a-zA-Z0-9._-]+$/, 'Username hanya boleh berisi huruf, angka, titik, garis bawah, dan tanda hubung')
+  .transform(value => value.toLowerCase());
+
 export const LoginSchema = z.object({
-  email: z.string().email('Invalid email format'),
-  password: z.string().min(1, 'Password is required'),
+  username: usernameSchema,
+  password: z.string().min(1, 'Kata sandi wajib diisi'),
 });
 
 export const RegisterSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters').max(100, 'Name must be at most 100 characters'),
-  email: z.string().email('Invalid email format').transform(v => v.toLowerCase()),
-  password: z.string().min(8, 'Password must be at least 8 characters').max(100, 'Password must be at most 100 characters'),
+  name: z.string().min(2, 'Nama minimal 2 karakter').max(100, 'Nama maksimal 100 karakter'),
+  username: usernameSchema,
+  password: z.string().min(8, 'Kata sandi minimal 8 karakter').max(100, 'Kata sandi maksimal 100 karakter'),
 });
 
 export const ChangePasswordSchema = z.object({
-  current_password: z.string().min(1, 'Current password is required'),
-  new_password: z.string().min(8, 'Password must be at least 8 characters').max(100, 'Password must be at most 100 characters'),
+  current_password: z.string().min(1, 'Kata sandi saat ini wajib diisi'),
+  new_password: z.string().min(8, 'Kata sandi minimal 8 karakter').max(100, 'Kata sandi maksimal 100 karakter'),
 });
 
 export const CreateUserSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters').max(100, 'Name must be at most 100 characters'),
-  email: z.string().email('Invalid email format').transform(v => v.toLowerCase()),
-  password: z.string().min(8, 'Password must be at least 8 characters').optional().or(z.literal('')),
+  name: z.string().min(2, 'Nama minimal 2 karakter').max(100, 'Nama maksimal 100 karakter'),
+  username: usernameSchema,
+  password: z.string().min(8, 'Kata sandi minimal 8 karakter').max(100, 'Kata sandi maksimal 100 karakter'),
   roles: z.array(z.string()).optional(),
 });
 
 export const UpdateUserSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters').max(100, 'Name must be at most 100 characters').optional(),
-  email: z.string().email('Invalid email format').transform(v => v.toLowerCase()).optional(),
-  password: z.string().min(8, 'Password must be at least 8 characters').optional().or(z.literal('')),
+  name: z.string().min(2, 'Nama minimal 2 karakter').max(100, 'Nama maksimal 100 karakter').optional(),
+  username: usernameSchema.optional(),
+  password: z.string().min(8, 'Kata sandi minimal 8 karakter').max(100, 'Kata sandi maksimal 100 karakter').optional().or(z.literal('')),
   roles: z.array(z.string()).optional(),
 }).refine(
-  data => data.name !== undefined || data.email !== undefined ||
+  data => data.name !== undefined || data.username !== undefined ||
           data.password !== undefined || data.roles !== undefined,
-  { message: 'At least one field is required to update', path: ['_root'] }
+  { message: 'Minimal satu kolom wajib diubah', path: ['_root'] }
 );
 
 export const DeleteUsersSchema = z.object({
-  ids: z.array(z.string().uuid('Invalid ID format')).min(1, 'At least one ID must be selected'),
+  ids: z.array(z.string().uuid('Format ID tidak valid')).min(1, 'Pilih minimal satu pengguna'),
 });
 
 export const ChangeProfileSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters').max(100, 'Name must be at most 100 characters'),
-  email: z.string().email('Invalid email format').transform(v => v.toLowerCase()),
+  name: z.string().min(2, 'Nama minimal 2 karakter').max(100, 'Nama maksimal 100 karakter'),
+  username: usernameSchema,
 });
 
 export const CreateRoleSchema = z.object({

@@ -3,14 +3,14 @@ import { randomUUID } from 'crypto';
 import { hashPassword } from '../app/services/Authenticate';
 
 export function run(SQLite: typeof SQLiteType): void {
-  const existing = SQLite.one<{ id: string }>`SELECT id FROM users WHERE email = ${'admin@sigap.id'}`;
+  const existing = SQLite.one<{ id: string }>`SELECT id FROM users WHERE username = ${'admin'}`;
   if (existing) return;
 
   const id = randomUUID();
   const now = Date.now();
   SQLite.exec`
-    INSERT INTO users (id, name, email, password, created_at, updated_at)
-    VALUES (${id}, ${'Admin'}, ${'admin@sigap.id'}, ${hashPassword('admin123')}, ${now}, ${now})
+    INSERT INTO users (id, name, username, password, created_at, updated_at)
+    VALUES (${id}, ${'Admin'}, ${'admin'}, ${hashPassword('admin123')}, ${now}, ${now})
   `;
 
   const adminRole = SQLite.one<{ id: string }>`SELECT id FROM roles WHERE slug = ${'admin'}`;

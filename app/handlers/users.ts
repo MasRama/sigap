@@ -4,7 +4,7 @@ import { hashPassword } from '@services/Authenticate';
 import Logger from '@services/Logger';
 import {
   getUsersPaginated, createUser, updateUser, deleteUsers,
-  getUserRoles, getRolesForUsers, isAdmin, hasPermission, syncRoles, findUserById
+  getUserRoles, getRolesForUsers, isAdmin, hasPermission, syncRoles
 } from '@queries';
 import { findAllRoles, findRoleBySlug, getUsersWithRole } from '@queries/roles';
 import { randomUUID } from 'crypto';
@@ -20,7 +20,7 @@ export const dashboardPage = (req: NaraRequest, res: NaraResponse) => {
   const rolesMap = getRolesForUsers(result.data.map(u => u.id));
 
   const users = result.data.map(u => ({
-    id: u.id, name: u.name, email: admin ? u.email : undefined,
+    id: u.id, name: u.name, username: admin ? u.username : undefined,
     avatar: u.avatar,
     roles: (rolesMap.get(u.id) || []).map(r => r.slug),
   }));
@@ -56,7 +56,7 @@ export const usersPage = (req: NaraRequest, res: NaraResponse) => {
 
   const users = result.data.map(u => ({
     id: u.id, name: u.name,
-    email: (admin || canEdit) ? u.email : undefined,
+    username: (admin || canEdit) ? u.username : undefined,
     avatar: u.avatar,
     roles: (rolesMap.get(u.id) || []).map(r => r.slug),
   }));
@@ -80,17 +80,17 @@ export const changeProfile = (req: NaraRequest, res: NaraResponse) => {
   const parsed = ChangeProfileSchema.safeParse(req.body);
   if (!parsed.success) return jsonValidationError(res, 'Validation failed', zodToErrors(parsed.error));
 
-  const { name, email } = parsed.data;
+  const { name, username } = parsed.data;
 
   try {
-    updateUser(req.user.id, { name, email });
-    return jsonSuccess(res, 'Profile updated');
+    updateUser(req.user.id, { name, username });
+    return jsonSuccess(res, 'Profil diperbarui');
   } catch (error: unknown) {
     if (isUniqueConstraintError(error)) {
-      return jsonError(res, 'Email already in use', 400, 'DUPLICATE_EMAIL');
+      return jsonError(res, 'Username sudah digunakan', 400, 'DUPLICATE_USERNAME');
     }
     Logger.error('Failed to update profile', error as Error);
-    return jsonServerError(res, 'Failed to update profile');
+    return jsonServerError(res, 'Gagal memperbarui profil');
   }
 };
 
@@ -103,7 +103,7 @@ export const addUser = (req: NaraRequest, res: NaraResponse) => {
   const parsed = CreateUserSchema.safeParse(req.body);
   if (!parsed.success) return jsonValidationError(res, 'Validation failed', zodToErrors(parsed.error));
 
-  const { name, email, password, roles } = parsed.data;
+  const { name, username, password, roles } = parsed.data;
 
   // Only admins can assign roles
   const canAssignRoles = isAdmin(req.user.id);
@@ -111,8 +111,8 @@ export const addUser = (req: NaraRequest, res: NaraResponse) => {
   try {
     const user = createUser({
       id: randomUUID(),
-      name, email,
-      password: hashPassword(password || email),
+      name, username,
+      password: hashPassword(password),
     });
 
     if (roles?.length && canAssignRoles) {
@@ -122,15 +122,15 @@ export const addUser = (req: NaraRequest, res: NaraResponse) => {
     }
 
     const userRoles = getUserRoles(user.id);
-    return jsonCreated(res, 'User created', {
-      user: { id: user.id, name: user.name, email: user.email, roles: userRoles.map(r => r.slug) }
+    return jsonCreated(res, 'Pengguna dibuat', {
+      user: { id: user.id, name: user.name, username: user.username, roles: userRoles.map(r => r.slug) }
     });
   } catch (error: unknown) {
     if (isUniqueConstraintError(error)) {
-      return jsonError(res, 'Email already in use', 400, 'DUPLICATE_EMAIL');
+      return jsonError(res, 'Username sudah digunakan', 400, 'DUPLICATE_USERNAME');
     }
     Logger.error('Failed to create user', error as Error);
-    return jsonServerError(res, 'Failed to create user');
+    return jsonServerError(res, 'Gagal membuat pengguna');
   }
 };
 
@@ -174,15 +174,15 @@ export const editUser = (req: NaraRequest, res: NaraResponse) => {
     }
 
     const userRoles = getUserRoles(id);
-    return jsonSuccess(res, 'User updated', {
-      user: { id, name: user?.name, email: user?.email, roles: userRoles.map(r => r.slug) }
+    return jsonSuccess(res, 'Pengguna diperbarui', {
+      user: { id, name: user?.name, username: user?.username, roles: userRoles.map(r => r.slug) }
     });
   } catch (error: unknown) {
     if (isUniqueConstraintError(error)) {
-      return jsonError(res, 'Email already in use', 400, 'DUPLICATE_EMAIL');
+      return jsonError(res, 'Username sudah digunakan', 400, 'DUPLICATE_USERNAME');
     }
     Logger.error('Failed to update user', error as Error);
-    return jsonServerError(res, 'Failed to update user');
+    return jsonServerError(res, 'Gagal memperbarui pengguna');
   }
 };
 

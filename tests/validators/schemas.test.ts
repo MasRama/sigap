@@ -10,40 +10,40 @@ import {
 } from '../../app/validators/schemas';
 
 describe('LoginSchema', () => {
-  it('accepts valid email + password', () => {
-    const result = LoginSchema.safeParse({ email: 'user@example.com', password: 'secret123' });
+  it('accepts valid username + password', () => {
+    const result = LoginSchema.safeParse({ username: 'user_01', password: 'secret123' });
     expect(result.success).toBe(true);
     if (result.success) {
-      expect(result.data.email).toBe('user@example.com');
+      expect(result.data.username).toBe('user_01');
     }
   });
 
-  it('accepts uppercase email (LoginSchema does not lowercase)', () => {
-    const result = LoginSchema.safeParse({ email: 'USER@EXAMPLE.COM', password: 'secret123' });
+  it('lowercases uppercase username', () => {
+    const result = LoginSchema.safeParse({ username: 'USER_01', password: 'secret123' });
     expect(result.success).toBe(true);
-    if (result.success) expect(result.data.email).toBe('USER@EXAMPLE.COM');
+    if (result.success) expect(result.data.username).toBe('user_01');
   });
 
-  it('fails when email is missing', () => {
+  it('fails when username is missing', () => {
     const result = LoginSchema.safeParse({ password: 'secret' });
     expect(result.success).toBe(false);
   });
 
   it('fails when password is empty', () => {
-    const result = LoginSchema.safeParse({ email: 'user@example.com', password: '' });
+    const result = LoginSchema.safeParse({ username: 'user_01', password: '' });
     expect(result.success).toBe(false);
   });
 });
 
 describe('RegisterSchema', () => {
-  const valid = { name: 'John Doe', email: 'john@example.com', password: 'password123' };
+  const valid = { name: 'John Doe', username: 'john_doe', password: 'password123' };
 
   it('accepts valid registration data', () => {
     const result = RegisterSchema.safeParse(valid);
     expect(result.success).toBe(true);
     if (result.success) {
       expect(result.data.name).toBe('John Doe');
-      expect(result.data.email).toBe('john@example.com');
+      expect(result.data.username).toBe('john_doe');
     }
   });
 
@@ -52,8 +52,8 @@ describe('RegisterSchema', () => {
     expect(result.success).toBe(false);
   });
 
-  it('fails with invalid email', () => {
-    const result = RegisterSchema.safeParse({ ...valid, email: 'not-an-email' });
+  it('fails with invalid username', () => {
+    const result = RegisterSchema.safeParse({ ...valid, username: 'not valid' });
     expect(result.success).toBe(false);
   });
 
@@ -81,9 +81,9 @@ describe('ChangePasswordSchema', () => {
 });
 
 describe('CreateUserSchema', () => {
-  const valid = { name: 'Alice', email: 'alice@example.com' };
+  const valid = { name: 'Alice', username: 'alice', password: 'password123' };
 
-  it('accepts minimal valid data', () => {
+  it('accepts valid user data', () => {
     const result = CreateUserSchema.safeParse(valid);
     expect(result.success).toBe(true);
   });
@@ -128,13 +128,13 @@ describe('DeleteUsersSchema', () => {
 
 describe('ChangeProfileSchema', () => {
   it('accepts valid profile data', () => {
-    const result = ChangeProfileSchema.safeParse({ name: 'Bob', email: 'bob@example.com' });
+    const result = ChangeProfileSchema.safeParse({ name: 'Bob', username: 'bob_user' });
     expect(result.success).toBe(true);
   });
 
-  it('lowercases email', () => {
-    const result = ChangeProfileSchema.safeParse({ name: 'Bob', email: 'BOB@EXAMPLE.COM' });
+  it('lowercases username', () => {
+    const result = ChangeProfileSchema.safeParse({ name: 'Bob', username: 'BOB_USER' });
     expect(result.success).toBe(true);
-    if (result.success) expect(result.data.email).toBe('bob@example.com');
+    if (result.success) expect(result.data.username).toBe('bob_user');
   });
 });

@@ -71,8 +71,8 @@
 
   async function handleSubmit(event: CustomEvent<UserForm>): Promise<void> {
     const formData = event.detail;
-    if (!formData.name || !formData.email) {
-      Toast('Nama dan email wajib diisi', 'error');
+    if (!formData.name || !formData.username) {
+      Toast('Nama dan username wajib diisi', 'error');
       return;
     }
 
@@ -80,7 +80,7 @@
 
     const payload = {
       name: formData.name,
-      email: formData.email,
+      username: formData.username,
       roles: formData.roles || [],
       password: formData.password || undefined
     };
@@ -169,7 +169,7 @@
                         </div>
                         <div class="min-w-0">
                           <div class="text-sm font-heading font-semibold tracking-tight text-foreground truncate">{userItem.name}</div>
-                          <div class="text-xs text-muted-foreground truncate">{userItem.email}</div>
+                          <div class="text-xs text-muted-foreground truncate">@{userItem.username}</div>
                         </div>
                       </div>
                     </td>

@@ -5,20 +5,20 @@ import { randomUUID } from 'crypto';
 export const findUserById = (id: string): User | undefined =>
   SQLite.one<User>`SELECT * FROM users WHERE id = ${id}`;
 
-export const findUserByEmail = (email: string): User | undefined =>
-  SQLite.one<User>`SELECT * FROM users WHERE email = ${email}`;
+export const findUserByUsername = (username: string): User | undefined =>
+  SQLite.one<User>`SELECT * FROM users WHERE username = ${username}`;
 
 export const createUser = (data: {
   id: string;
   name?: string | null;
-  email: string;
+  username: string;
   password: string;
   avatar?: string | null;
 }): User => {
   const now = Date.now();
   SQLite.exec`
-    INSERT INTO users (id, name, email, avatar, password, created_at, updated_at)
-    VALUES (${data.id}, ${data.name ?? null}, ${data.email}, ${data.avatar ?? null}, ${data.password}, ${now}, ${now})
+    INSERT INTO users (id, name, username, avatar, password, created_at, updated_at)
+    VALUES (${data.id}, ${data.name ?? null}, ${data.username}, ${data.avatar ?? null}, ${data.password}, ${now}, ${now})
   `;
   return findUserById(data.id)!;
 };
@@ -41,18 +41,18 @@ export const deleteUsers = (ids: string[]): number => {
   return result.changes;
 };
 
-export const emailExists = (email: string, excludeId?: string): boolean => {
+export const usernameExists = (username: string, excludeId?: string): boolean => {
   if (excludeId) {
-    const row = SQLite.one<{ id: string }>`SELECT id FROM users WHERE email = ${email} AND id != ${excludeId}`;
+    const row = SQLite.one<{ id: string }>`SELECT id FROM users WHERE username = ${username} AND id != ${excludeId}`;
     return !!row;
   }
-  const row = SQLite.one<{ id: string }>`SELECT id FROM users WHERE email = ${email}`;
+  const row = SQLite.one<{ id: string }>`SELECT id FROM users WHERE username = ${username}`;
   return !!row;
 };
 
 export const searchUsers = (search: string): User[] => {
   const pattern = `%${search.replace(/[%_]/g, '')}%`;
-  const query = `SELECT * FROM users WHERE (name LIKE ? OR email LIKE ?) ORDER BY created_at DESC`;
+  const query = `SELECT * FROM users WHERE (name LIKE ? OR username LIKE ?) ORDER BY created_at DESC`;
   return SQLite.all<User>(query, [pattern, pattern]);
 };
 
@@ -62,7 +62,7 @@ export const getUsersPaginated = (
   search = ''
 ): { data: User[]; total: number } => {
   const pattern = `%${search.replace(/[%_]/g, '')}%`;
-  const whereClause = `(name LIKE ? OR email LIKE ?)`;
+  const whereClause = `(name LIKE ? OR username LIKE ?)`;
   const params: unknown[] = [pattern, pattern];
 
   const countRow = SQLite.get<{ count: number }>(

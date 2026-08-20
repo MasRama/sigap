@@ -9,7 +9,7 @@
 export interface User {
   id: string;
   name: string | null;
-  email: string;
+  username: string;
   avatar?: string | null;
   roles: string[];
   permissions: string[];

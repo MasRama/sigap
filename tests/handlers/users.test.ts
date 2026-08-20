@@ -59,7 +59,7 @@ describe('users handler', () => {
 
   describe('addUser', () => {
     it('returns 401 if no user', () => {
-      const req = mockRequest({ body: { name: 'Alice', email: 'alice@test.com', password: 'password123' } });
+      const req = mockRequest({ body: { name: 'Alice', username: 'alice', password: 'password123' } });
       const res = mockResponse();
       addUser(req as any, res as any);
       expect(res._status).toBe(401);
@@ -67,7 +67,7 @@ describe('users handler', () => {
     });
 
     it('returns 403 if user lacks users.create and is not admin', () => {
-      const req = mockRequest({ user: mockUser(), body: { name: 'Alice', email: 'alice@test.com', password: 'password123' } });
+      const req = mockRequest({ user: mockUser(), body: { name: 'Alice', username: 'alice', password: 'password123' } });
       const res = mockResponse();
       (isAdmin as any).mockReturnValue(false);
       (hasPermission as any).mockReturnValue(false);
@@ -76,7 +76,7 @@ describe('users handler', () => {
     });
 
     it('returns 422 if validation fails', () => {
-      const req = mockRequest({ user: mockUser(), body: { name: '', email: 'bad' } });
+      const req = mockRequest({ user: mockUser(), body: { name: '', username: 'alice' } });
       const res = mockResponse();
       (isAdmin as any).mockReturnValue(true);
       addUser(req as any, res as any);
@@ -87,25 +87,25 @@ describe('users handler', () => {
     it('creates user with hashed password and returns 201', () => {
       const req = mockRequest({
         user: mockUser(),
-        body: { name: 'Alice', email: 'alice@test.com', password: 'password123' },
+        body: { name: 'Alice', username: 'alice', password: 'password123' },
       });
       const res = mockResponse();
       (isAdmin as any).mockReturnValue(true);
       (createUser as any).mockReturnValue({
-        id: 'user-1', name: 'Alice', email: 'alice@test.com',
+        id: 'user-1', name: 'Alice', username: 'alice',
         created_at: Date.now(), updated_at: Date.now(),
       });
       addUser(req as any, res as any);
       expect(hashPassword).toHaveBeenCalledWith('password123');
       expect(res._status).toBe(201);
       expect(res._body.success).toBe(true);
-      expect(res._body.data.user.email).toBe('alice@test.com');
+      expect(res._body.data.user.username).toBe('alice');
     });
 
-    it('returns 400 DUPLICATE_EMAIL on unique constraint', () => {
+    it('returns 400 DUPLICATE_USERNAME on unique constraint', () => {
       const req = mockRequest({
         user: mockUser(),
-        body: { name: 'Alice', email: 'alice@test.com', password: 'password123' },
+        body: { name: 'Alice', username: 'alice', password: 'password123' },
       });
       const res = mockResponse();
       (isAdmin as any).mockReturnValue(true);
@@ -116,7 +116,7 @@ describe('users handler', () => {
       });
       addUser(req as any, res as any);
       expect(res._status).toBe(400);
-      expect(res._body.code).toBe('DUPLICATE_EMAIL');
+      expect(res._body.code).toBe('DUPLICATE_USERNAME');
     });
   });
 
@@ -149,7 +149,7 @@ describe('users handler', () => {
       const res = mockResponse();
       (isAdmin as any).mockReturnValue(false);
       (hasPermission as any).mockReturnValue(false);
-      (updateUser as any).mockReturnValue({ id: 'me', name: 'New Me', email: 'me@test.com' });
+      (updateUser as any).mockReturnValue({ id: 'me', name: 'New Me', username: 'me' });
       editUser(req as any, res as any);
       expect(res._status).toBe(200);
     });
@@ -232,23 +232,23 @@ describe('users handler', () => {
 
   describe('changeProfile', () => {
     it('returns 401 if no user', () => {
-      const req = mockRequest({ body: { name: 'New', email: 'new@test.com' } });
+      const req = mockRequest({ body: { name: 'New', username: 'newuser' } });
       const res = mockResponse();
       changeProfile(req as any, res as any);
       expect(res._status).toBe(401);
     });
 
     it('returns 422 if validation fails', () => {
-      const req = mockRequest({ user: mockUser(), body: { name: '', email: 'bad' } });
+      const req = mockRequest({ user: mockUser(), body: { name: '', username: 'bad' } });
       const res = mockResponse();
       changeProfile(req as any, res as any);
       expect(res._status).toBe(422);
     });
 
     it('updates and returns success', () => {
-      const req = mockRequest({ user: mockUser(), body: { name: 'New Name', email: 'new@test.com' } });
+      const req = mockRequest({ user: mockUser(), body: { name: 'New Name', username: 'newuser' } });
       const res = mockResponse();
-      (updateUser as any).mockReturnValue({ id: 'me', name: 'New Name', email: 'new@test.com' });
+      (updateUser as any).mockReturnValue({ id: 'me', name: 'New Name', username: 'newuser' });
       changeProfile(req as any, res as any);
       expect(res._status).toBe(200);
       expect(res._body.success).toBe(true);

@@ -13,8 +13,7 @@
 
   interface User {
     id: string;
-    name: string;
-    email: string;
+    username: string;
     avatar?: string;
     roles: string[];
     permissions: string[];
@@ -110,7 +109,7 @@
               </div>
               <div class="min-w-0">
                 <h2 class="text-lg font-heading font-semibold tracking-tight text-foreground truncate">{user.name}</h2>
-                <p class="text-sm text-muted-foreground truncate">{user.email}</p>
+                <p class="text-sm text-muted-foreground truncate">@{user.username}</p>
               </div>
             </div>
             <div class="flex flex-wrap gap-2">
@@ -160,8 +159,8 @@
                     <Input id="name" type="text" bind:value={user.name} placeholder="Your full name" class="h-12 rounded-xl" />
                   </div>
                   <div class="flex flex-col gap-2">
-                    <Label for="email" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground">Email</Label>
-                    <Input id="email" type="email" bind:value={user.email} placeholder="you@example.com" class="h-12 rounded-xl" />
+                    <Label for="username" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground">Username</Label>
+                    <Input id="username" type="text" bind:value={user.username} placeholder="username Anda" class="h-12 rounded-xl" />
                   </div>
                   <div class="flex justify-end pt-2">
                     <Button type="submit" disabled={isLoading} size="lg">

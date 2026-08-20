@@ -67,13 +67,13 @@
         <div class="px-6 pt-6 pb-5 border-b border-border flex items-start justify-between gap-4">
           <div>
             <p class="font-heading text-[11px] uppercase tracking-[0.25em] text-muted-foreground mb-2">
-              {mode === 'create' ? 'New user' : 'Edit user'}
+              {mode === 'create' ? 'Pengguna baru' : 'Edit pengguna'}
             </p>
             <h2 {...dialogApi.getTitleProps()} class="font-heading font-semibold text-xl tracking-tight text-foreground">
-              {mode === 'create' ? 'Create a user' : 'Update user'}
+              {mode === 'create' ? 'Tambah pengguna' : 'Perbarui pengguna'}
             </h2>
             <p {...dialogApi.getDescriptionProps()} class="text-sm text-muted-foreground font-body mt-1">
-              {mode === 'create' ? 'Add a new person to the system.' : 'Make changes to this account.'}
+              {mode === 'create' ? 'Tambahkan akun baru ke sistem.' : 'Perbarui data akun pengguna.'}
             </p>
           </div>
           <button {...dialogApi.getCloseTriggerProps()} class="text-muted-foreground hover:text-foreground transition-colors p-1 -mt-1 -mr-1 shrink-0">
@@ -85,18 +85,18 @@
         <form id="user-form" onsubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
           <div class="px-6 py-5 flex flex-col gap-5 max-h-[70vh] overflow-y-auto">
             <div class="flex flex-col gap-2">
-              <Label for="name" class="text-xs uppercase tracking-widest font-heading text-muted-foreground">Full name</Label>
-              <Input id="name" type="text" bind:value={form.name} placeholder="Enter full name" class="h-11" required />
+              <Label for="name" class="text-xs uppercase tracking-widest font-heading text-muted-foreground">Nama lengkap</Label>
+              <Input id="name" type="text" bind:value={form.name} placeholder="Nama lengkap" class="h-11" required />
             </div>
             <div class="flex flex-col gap-2">
-              <Label for="email" class="text-xs uppercase tracking-widest font-heading text-muted-foreground">Email</Label>
-              <Input id="email" type="email" bind:value={form.email} placeholder="user@example.com" class="h-11" required />
+              <Label for="username" class="text-xs uppercase tracking-widest font-heading text-muted-foreground">Username</Label>
+              <Input id="username" type="text" bind:value={form.username} placeholder="Username pengguna" class="h-11" required />
             </div>
             <div class="flex flex-col gap-2">
               <Label for="password" class="text-xs uppercase tracking-widest font-heading text-muted-foreground">
-                {mode === 'create' ? 'Password' : 'New password'} <span class="normal-case tracking-normal text-muted-foreground/70">(optional)</span>
+                {mode === 'create' ? 'Kata sandi' : 'Kata sandi baru'} <span class="normal-case tracking-normal text-muted-foreground/70">{mode === 'edit' ? '(opsional)' : ''}</span>
               </Label>
-              <Input id="password" type="password" bind:value={form.password} placeholder={mode === 'create' ? 'Leave empty to use email' : 'Leave empty to keep current'} class="h-11" />
+              <Input id="password" type="password" bind:value={form.password} placeholder={mode === 'create' ? 'Minimal 8 karakter' : 'Kosongkan jika tidak diubah'} class="h-11" required={mode === 'create'} />
             </div>
 
             <div class="flex flex-col gap-3">
@@ -122,10 +122,10 @@
         </form>
 
         <div class="px-6 py-4 border-t border-border flex gap-2 justify-end">
-          <Button variant="outline" onclick={handleClose} disabled={isSubmitting}>Cancel</Button>
+          <Button variant="outline" onclick={handleClose} disabled={isSubmitting}>Batal</Button>
           <Button type="submit" form="user-form" disabled={isSubmitting}>
             {#if isSubmitting}<Loader2 class="w-4 h-4 animate-spin" />{/if}
-            {mode === 'create' ? 'Create user' : 'Save changes'}
+            {mode === 'create' ? 'Buat pengguna' : 'Simpan perubahan'}
           </Button>
         </div>
       </div>

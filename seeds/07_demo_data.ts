@@ -56,12 +56,12 @@ export function run(SQLite: typeof SQLiteType): void {
 
   // ── Headmaster account ────────────────────────────────────────────────────
   const headmasterRole = SQLite.one<{ id: string }>`SELECT id FROM roles WHERE slug = ${'headmaster'}`;
-  const existingKepala = SQLite.one<{ id: string }>`SELECT id FROM users WHERE email = ${'kepala@sigap.id'}`;
+  const existingKepala = SQLite.one<{ id: string }>`SELECT id FROM users WHERE username = ${'kepala'}`;
   if (!existingKepala && headmasterRole) {
     const id = randomUUID();
     SQLite.exec`
-      INSERT INTO users (id, name, email, password, phone, is_active, created_at, updated_at)
-      VALUES (${id}, ${'Kepala Sekolah'}, ${'kepala@sigap.id'}, ${hashPassword('kepala123')}, ${'08123456791'}, ${1}, ${now}, ${now})
+      INSERT INTO users (id, name, username, password, phone, is_active, created_at, updated_at)
+      VALUES (${id}, ${'Kepala Sekolah'}, ${'kepala'}, ${hashPassword('kepala123')}, ${'08123456791'}, ${1}, ${now}, ${now})
     `;
     SQLite.exec`
       INSERT INTO user_roles (id, user_id, role_id, created_at)
@@ -152,7 +152,7 @@ export function run(SQLite: typeof SQLiteType): void {
   // ── Audit log entries (only when the table is empty) ─────────────────────
   const auditCount = SQLite.get<{ count: number }>('SELECT COUNT(*) as count FROM grade_audit_logs')?.count ?? 0;
   if (auditCount === 0) {
-    const adminUser = SQLite.one<{ id: string }>`SELECT id FROM users WHERE email = ${'admin@sigap.id'}`;
+    const adminUser = SQLite.one<{ id: string }>`SELECT id FROM users WHERE username = ${'admin'}`;
     const sampleGrades = SQLite.many<{ id: string; student_id: string; subject_id: string; class_id: string; type: string; score: number }>`
       SELECT id, student_id, subject_id, class_id, type, score FROM grades LIMIT 6
     `;
@@ -171,7 +171,7 @@ export function run(SQLite: typeof SQLiteType): void {
   }
 
   // ── One parent notification (only when the parent has no unread) ─────────
-  const parentUser = SQLite.one<{ id: string }>`SELECT id FROM users WHERE email = ${'andi@sigap.id'}`;
+  const parentUser = SQLite.one<{ id: string }>`SELECT id FROM users WHERE username = ${'andi'}`;
   if (parentUser) {
     const unreadCount = SQLite.get<{ count: number }>(
       'SELECT COUNT(*) as count FROM notifications WHERE user_id = ? AND read_at IS NULL',
@@ -187,7 +187,7 @@ export function run(SQLite: typeof SQLiteType): void {
 
   // ── One announcement (only when empty) ────────────────────────────────────
   const announcementCount = SQLite.get<{ count: number }>('SELECT COUNT(*) as count FROM announcements')?.count ?? 0;
-  const adminUser = SQLite.one<{ id: string }>`SELECT id FROM users WHERE email = ${'admin@sigap.id'}`;
+  const adminUser = SQLite.one<{ id: string }>`SELECT id FROM users WHERE username = ${'admin'}`;
   if (announcementCount === 0 && adminUser) {
     SQLite.exec`
       INSERT INTO announcements (id, title, body, author_user_id, created_at, updated_at)

@@ -114,9 +114,9 @@ export const findPermissionBySlug = (slug: string): Permission | undefined =>
 export const findPermissionsByResource = (resource: string): Permission[] =>
   SQLite.many<Permission>`SELECT * FROM permissions WHERE resource = ${resource} ORDER BY action ASC`;
 
-export const getUsersWithRole = (roleId: string): { id: string; name: string | null; email: string }[] =>
-  SQLite.many<{ id: string; name: string | null; email: string }>`
-    SELECT u.id, u.name, u.email FROM users u
+export const getUsersWithRole = (roleId: string): { id: string; name: string | null; username: string }[] =>
+  SQLite.many<{ id: string; name: string | null; username: string }>`
+    SELECT u.id, u.name, u.username FROM users u
     INNER JOIN user_roles ur ON u.id = ur.user_id
     WHERE ur.role_id = ${roleId}
   `;

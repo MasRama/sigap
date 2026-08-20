@@ -14,7 +14,7 @@ export const renderer = (): NaraMiddleware => {
           ? {
               id: req.user.id,
               name: req.user.name,
-              email: req.user.email,
+              username: req.user.username,
               avatar: req.user.avatar,
               roles: req.user.roles || [],
               permissions: req.user.permissions || [],

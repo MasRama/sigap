@@ -111,7 +111,7 @@ export function mockUser(overrides: Partial<AuthUser> = {}): AuthUser {
   return {
     id: 'user-123',
     name: 'Test User',
-    email: 'test@example.com',
+    username: 'testuser',
     avatar: null,
     roles: ['user'],
     permissions: [],

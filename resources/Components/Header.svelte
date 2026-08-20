@@ -11,7 +11,7 @@
   interface User {
     id: string;
     name: string;
-    email: string;
+    username: string;
     roles: string[];
     permissions: string[];
   }
@@ -121,7 +121,7 @@
             <div {...menuApi.getContentProps()} class="bg-background text-foreground z-50 min-w-[12rem] rounded-sm border border-border p-1.5 shadow-lg outline-none font-body">
               <div class="px-3 py-2.5">
                 <p class="text-sm font-heading font-semibold tracking-tight">{user.name}</p>
-                <p class="text-xs text-muted-foreground mt-0.5">{user.email}</p>
+                <p class="text-xs text-muted-foreground mt-0.5">@{user.username}</p>
               </div>
               <div class="h-px bg-border my-1"></div>
               <div {...menuApi.getItemProps({ value: "logout" })} onclick={handleLogout} class="data-[highlighted]:bg-muted relative flex cursor-pointer items-center gap-2 rounded-sm px-3 py-2 text-sm transition-colors duration-150 outline-hidden select-none text-muted-foreground hover:text-foreground">
@@ -187,7 +187,7 @@
                         </div>
                         <div class="min-w-0">
                           <p class="text-sm font-heading font-semibold tracking-tight truncate">{user.name}</p>
-                          <p class="text-xs text-muted-foreground truncate">{user.email}</p>
+                          <p class="text-xs text-muted-foreground truncate">@{user.username}</p>
                         </div>
                       </div>
                       <button onclick={handleLogout} class="w-full inline-flex items-center justify-center gap-2 h-10 rounded-sm border border-border text-sm text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-colors cursor-pointer">
