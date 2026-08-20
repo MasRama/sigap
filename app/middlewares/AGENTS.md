@@ -61,7 +61,7 @@ Route.get('/dashboard', [Auth], users.dashboardPage);
 // — defensive, in case route is misconfigured
 ```
 
-`Auth` loads `req.user` with: `id`, `name`, `email`, `avatar`, `roles` (string[]), `permissions` (string[]).
+`Auth` loads `req.user` with: `id`, `name`, `username`, `avatar`, `roles` (string[]), `permissions` (string[]).
 
 ## Rate Limit Variants
 

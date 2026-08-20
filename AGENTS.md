@@ -131,7 +131,7 @@ Server (ultimate-express)
 
 | Table | Key Columns | Relations |
 |---|---|---|
-| `users` | id (uuid), email, name, password, phone, avatar, is_active | has many roles via `user_roles` |
+| `users` | id (uuid), username, name, password, phone, avatar, is_active | has many roles via `user_roles` |
 | `sessions` | id (uuid), user_id, user_agent, expires_at | belongs to `users` |
 | `roles` | id (uuid), name, slug, description | has many permissions via `role_permissions` |
 | `permissions` | id (uuid), name, slug, resource, action, description | belongs to roles via `role_permissions` |
@@ -146,6 +146,7 @@ Server (ultimate-express)
 | `parents` | id (uuid), user_id, phone, address | belongs to `users` |
 | `teacher_subjects` | id (uuid), teacher_id, subject_id, academic_year_id | junction: `teachers` ↔ `subjects` |
 |`class_subjects`|id (uuid), class_id, subject_id, teacher_id, academic_year_id|junction: `classes` ↔ `subjects`|
+| `teacher_class_assignments` | id (uuid), teacher_id, class_id, academic_year_id, is_homeroom | junction: `teachers` ↔ `classes`, one homeroom per class/year |
 |`grade_components`|id (uuid), academic_year_id, type, name, weight|belongs to `academic_years`|
 |`grade_audit_logs`|id (uuid), grade_id, student_id, subject_id, class_id, type, action, old_score, new_score, user_id|append-only history of grade changes|
 |`announcements`|id (uuid), title, body, author_user_id|belongs to `users`|
@@ -163,13 +164,13 @@ Server (ultimate-express)
 
 ## Demo Accounts (after `npm run seed`)
 
-|Role|Email|Password|Notes|
+|Role|Username|Password|Notes|
 |---|---|---|---|
-|Admin|admin@sigap.id|admin123|full access, manage master data|
-|Kepala Sekolah|kepala@sigap.id|kepala123|oversight dashboards, reports, audit|
-|Guru (Matematika + Biologi)|budi@sigap.id|teacher123|mengajar 10A MAT, 10B BIO|
-|Guru (Bahasa Inggris)|siti@sigap.id|teacher123|mengajar 10A & 10B ENG|
-|Orang Tua|andi@sigap.id|parent123|10 anak (NIS 10001–10010), lihat nilai + absensi|
+|Admin|admin|admin123|full access, manage master data|
+|Kepala Sekolah|kepala|kepala123|oversight dashboards, reports, audit|
+|Guru (Matematika + Biologi)|budi|teacher123|mengajar 10A MAT, 10B BIO|
+|Guru (Bahasa Inggris)|siti|teacher123|mengajar 10A & 10B ENG|
+|Orang Tua|andi|parent123|10 anak (NIS 10001–10010), lihat nilai + absensi|
 
 Demo data (`seeds/07_demo_data.ts`): 14 hari konfirmasi + jurnal guru (1 sesi sengaja tidak dikonfirmasi untuk demo alarm kepala sekolah, 1 konfirmasi di luar radius), nilai UAS untuk semua siswa, audit log, notifikasi parent, pengumuman, dan nilai terpublikasi.
 

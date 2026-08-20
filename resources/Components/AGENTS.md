@@ -108,7 +108,7 @@ Svelte 5 `$bindable()` rune enables parent-child two-way binding via props:
 
 <!-- Usage in parent: -->
 <Switch bind:checked={isActive} />
-<Input bind:value={email} type="email" />
+<Input bind:value={username} type="text" />
 ```
 
 ### Svelte 5 snippets (`{@render}`) — replaces `<slot />`

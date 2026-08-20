@@ -65,6 +65,6 @@ Mistakes AI agents make in Nara. Read before coding.
 
 ### 10. Using English for user-facing messages
 
-**Wrong:** `jsonError(res, 'Email already in use', 400)` — inconsistent with ADR 0010 (revised 2026-07-28).
+**Wrong:** `jsonError(res, 'Username already in use', 400)` — inconsistent with ADR 0010 (revised 2026-07-28).
 
-**Fix:** `jsonError(res, 'Email sudah digunakan', 400, 'DUPLICATE_EMAIL')` — Bahasa Indonesia for all user-facing messages. The internal error code (`DUPLICATE_EMAIL`) stays English.
+**Fix:** `jsonError(res, 'Username sudah digunakan', 400, 'DUPLICATE_USERNAME')` — Bahasa Indonesia for all user-facing messages. The internal error code (`DUPLICATE_USERNAME`) stays English.

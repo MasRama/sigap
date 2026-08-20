@@ -91,16 +91,16 @@ import { zodToErrors } from '../../app/validators';
 
 describe('CreateUserSchema', () => {
   it('validates correct data', () => {
-    const result = CreateUserSchema.safeParse({ name: 'John', email: 'john@test.com' });
+    const result = CreateUserSchema.safeParse({ name: 'John', username: 'john', password: 'password123' });
     expect(result.success).toBe(true);
   });
 
-  it('rejects invalid email', () => {
-    const result = CreateUserSchema.safeParse({ name: 'John', email: 'invalid' });
+  it('rejects invalid username', () => {
+    const result = CreateUserSchema.safeParse({ name: 'John', username: 'not valid', password: 'password123' });
     expect(result.success).toBe(false);
     if (!result.success) {
       const errors = zodToErrors(result.error);
-      expect(errors).toHaveProperty('email');
+      expect(errors).toHaveProperty('username');
     }
   });
 });
@@ -115,7 +115,7 @@ import { mockRequest, mockResponse, mockUser } from '../helpers/mocks';
 
 const req = mockRequest({ user: mockUser(), params: { id: '123' }, body: { name: 'Test' } });
 const res = mockResponse();
-const user = mockUser({ id: 'custom-id', email: 'custom@test.com' });
+const user = mockUser({ id: 'custom-id', username: 'customuser' });
 ```
 
 ## Conventions

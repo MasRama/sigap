@@ -21,6 +21,7 @@ Raw SQL functions in `app/queries/`. The only layer that touches `SQLite`. Handl
 | `subjects.ts` | CRUD + code lookup |
 | `students.ts` | CRUD + search + class/parent filters + pagination + bulk delete |
 | `teachers.ts` | CRUD + user/subject lookups + subject sync |
+| `teacherClassAssignments.ts` | teacher class assignments, homeroom sync, and grade authorization |
 | `parents.ts` | CRUD + user lookup + pagination |
 | `schedules.ts` | CRUD + class/teacher/day filters |
 | `schoolLocations.ts` | CRUD + active location + activation |
@@ -48,7 +49,7 @@ export const findUserById = (id: string): User | undefined =>
 export const findAllRoles = (): Role[] =>
   SQLite.many<Role>`SELECT * FROM roles ORDER BY created_at ASC`;
 
-SQLite.exec`INSERT INTO users (id, email) VALUES (${id}, ${email})`;
+SQLite.exec`INSERT INTO users (id, username) VALUES (${id}, ${username})`;
 ```
 
 ## Dynamic SQL → String Params (IN clauses, variable columns)
@@ -93,8 +94,8 @@ export const getProductsPaginated = (page: number, limit: number, search = ''): 
 ## Dynamic Update (skips undefined, converts booleans, sets updated_at)
 
 ```typescript
-SQLite.update('users', { id }, { name, email, avatar: undefined });
-// → UPDATE users SET name = ?, email = ?, updated_at = ? WHERE id = ?
+SQLite.update('users', { id }, { name, username, avatar: undefined });
+// → UPDATE users SET name = ?, username = ?, updated_at = ? WHERE id = ?
 // undefined fields skipped, booleans → 0/1, updated_at auto-set
 ```
 

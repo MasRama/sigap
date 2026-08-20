@@ -47,7 +47,7 @@ import { mockRequest, mockResponse, mockUser, runMiddleware } from '../helpers/m
 
 const req = mockRequest({ user: mockUser(), params: { id: '123' }, body: { name: 'Test' } });
 const res = mockResponse();
-const user = mockUser({ id: 'custom-id', email: 'custom@test.com' });
+const user = mockUser({ id: 'custom-id', username: 'customuser' });
 ```
 
 Never construct mock req/res inline — use the factories so test shape stays consistent.

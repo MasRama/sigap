@@ -29,11 +29,11 @@ English for:
 - Code (variables, functions, types)
 - Comments (if any)
 - Log messages (Logger.info/warn/error)
-- Internal error codes (DUPLICATE_EMAIL, FORBIDDEN, etc.) — these are machine-readable identifiers, not user-facing strings
+- Internal error codes (DUPLICATE_USERNAME, FORBIDDEN, etc.) — these are machine-readable identifiers, not user-facing strings
 - ADRs, AGENTS.md, docs aimed at developers
 
 Examples:
-- `"Email sudah digunakan"` (not "Email already in use")
+- `"Username sudah digunakan"` (not "Username already in use")
 - `"User berhasil dibuat"` (not "User created successfully")
 - `"Gagal membuat user"` (not "Failed to create user")
 

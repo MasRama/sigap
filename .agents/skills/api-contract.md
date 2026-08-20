@@ -17,7 +17,7 @@ Every JSON endpoint returns one of two shapes. No exceptions.
 { success: false, message: string, code?: string, errors?: Record<string, string[]> }
 ```
 
-Messages: Bahasa Indonesia for user-facing (ADR 0010, revised 2026-07-28). Internal error codes (`DUPLICATE_EMAIL`, `FORBIDDEN`) stay English.
+Messages: Bahasa Indonesia for user-facing (ADR 0010, revised 2026-07-28). Internal error codes (`DUPLICATE_USERNAME`, `FORBIDDEN`) stay English.
 
 ## Response Helpers (handlers)
 
@@ -73,10 +73,10 @@ Don't invent new codes — use these.
 | `NOT_FOUND` | 404 | `jsonNotFound(res)` |
 | `BAD_REQUEST` | 400 | `throw badRequestError('Invalid')` |
 | `VALIDATION_ERROR` | 422 | `jsonValidationError(res, msg, errors)` |
-| `CONFLICT` | 409 | `throw conflictError('Email exists')` |
+| `CONFLICT` | 409 | `throw conflictError('Username exists')` |
 | `TOO_MANY_REQUESTS` | 429 | `throw tooManyRequestsError('Slow down', 60)` |
 | `INTERNAL_ERROR` | 500 | `jsonServerError(res)` |
-| `DUPLICATE_EMAIL` | 400 | `jsonError(res, 'Email already in use', 400, 'DUPLICATE_EMAIL')` |
+| `DUPLICATE_USERNAME` | 400 | `jsonError(res, 'Username sudah digunakan', 400, 'DUPLICATE_USERNAME')` |
 | `DUPLICATE_ROLE` | 400 | `jsonError(res, 'Role already exists', 400, 'DUPLICATE_ROLE')` |
 | `RATE_LIMIT_EXCEEDED` | 429 | Auto-set by rateLimit middleware |
 

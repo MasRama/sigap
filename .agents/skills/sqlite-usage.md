@@ -16,7 +16,7 @@ import SQLite from '@services/SQLite';
 
 const user = SQLite.one<User>`SELECT * FROM users WHERE id = ${id}`;       // single row or undefined
 const users = SQLite.many<User>`SELECT * FROM users WHERE active = 1`;     // array (never undefined)
-SQLite.exec`INSERT INTO users (id, email) VALUES (${id}, ${email})`;       // run (returns RunResult)
+SQLite.exec`INSERT INTO users (id, username) VALUES (${id}, ${username})`;       // run (returns RunResult)
 ```
 
 Template literals auto-parameterize interpolated values — safe from SQL injection.
@@ -48,8 +48,8 @@ Auto-rollback on throw. Use for any multi-statement write that must be atomic.
 ## Dynamic Update (auto-skips undefined, converts booleans, sets updated_at)
 
 ```typescript
-SQLite.update('users', { id }, { name, email, avatar: undefined });
-// → UPDATE users SET name = ?, email = ? WHERE id = ?
+SQLite.update('users', { id }, { name, username, avatar: undefined });
+// → UPDATE users SET name = ?, username = ? WHERE id = ?
 // undefined fields are skipped, booleans converted to 0/1, updated_at auto-set
 ```
 

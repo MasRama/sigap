@@ -39,12 +39,12 @@ Open [http://localhost:5555](http://localhost:5555).
 
 After `npm run migrate:fresh` the seeders create these accounts:
 
-| Email | Password | Role |
+| Username | Password | Role |
 |---|---|---|
-| `admin@sigap.id` | `admin123` | admin |
-| `budi@sigap.id` | `teacher123` | teacher |
-| `siti@sigap.id` | `teacher123` | teacher |
-| `andi@sigap.id` | `parent123` | parent |
+| `admin` | `admin123` | admin |
+| `budi` | `teacher123` | teacher |
+| `siti` | `teacher123` | teacher |
+| `andi` | `parent123` | parent |
 
 The demo also seeds:
 - 1 academic year (`2025/2026`)

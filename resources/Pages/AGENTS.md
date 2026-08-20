@@ -32,6 +32,7 @@ Inertia.js pages rendered by Svelte 5. Each page is a route destination — the 
 | `subjects.svelte` | Subject CRUD |
 | `teacherConfirmations.svelte` | Teacher confirmation list |
 | `teachers.svelte` | Teacher CRUD |
+| `teacherAssignments.svelte` | Admin teacher-to-class and homeroom assignment screen |
 | `users.svelte` | User management (CRUD table + role assignment) |
 | `auth/login.svelte` | Login form |
 | `auth/register.svelte` | Registration form (legacy) |

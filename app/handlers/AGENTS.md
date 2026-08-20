@@ -39,6 +39,7 @@ Request handlers — functions that receive `NaraRequest` / `NaraResponse` and r
 | `teacherConfirmations.ts` | anti-fraud teacher confirmation + photo |
 | `teacherSchedule.ts` | teacher daily schedule |
 | `teachers.ts` | teacher CRUD |
+| `teacherAssignments.ts` | admin teacher-to-class and homeroom assignments |
 | `users.ts` | users/profile pages + user CRUD |
 
 ## The Two Route Types (critical)
