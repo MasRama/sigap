@@ -28,6 +28,7 @@ export const CreateUserSchema = z.object({
   username: usernameSchema,
   password: z.string().min(8, 'Kata sandi minimal 8 karakter').max(100, 'Kata sandi maksimal 100 karakter'),
   roles: z.array(z.string()).optional(),
+  student_id: z.string().uuid('ID siswa tidak valid').optional().nullable(),
 });
 
 export const UpdateUserSchema = z.object({
@@ -176,10 +177,11 @@ export const UpdateScheduleSchema = ScheduleSchema.partial().refine(
 );
 
 export const SchoolLocationSchema = z.object({
-  name: z.string().min(1, 'Name is required').max(100, 'Name must be at most 100 characters'),
-  latitude: z.number({ message: 'Latitude is required' }),
-  longitude: z.number({ message: 'Longitude is required' }),
-  radius_meters: z.number().int().positive('Radius must be positive'),
+  name: z.string().min(1, 'Nama sekolah wajib diisi').max(100, 'Nama maksimal 100 karakter'),
+  address: z.string().max(500, 'Alamat maksimal 500 karakter').optional().nullable(),
+  latitude: z.number().optional().nullable(),
+  longitude: z.number().optional().nullable(),
+  radius_meters: z.number().int().positive('Radius harus positif').optional().nullable(),
   is_active: z.number().optional(),
 });
 
@@ -188,14 +190,19 @@ export const UpdateSchoolLocationSchema = SchoolLocationSchema.partial().refine(
   { message: 'At least one field is required to update', path: ['_root'] }
 );
 
+export const QrSettingsSchema = z.object({
+  qr_refresh_interval: z.number().int().min(1, 'Interval minimal 1 menit').max(1440, 'Interval maksimal 1440 menit (24 jam)'),
+});
+
 export const TeacherConfirmationSchema = z.object({
-  schedule_id: z.string().uuid('Invalid schedule ID'),
+  schedule_id: z.string().uuid('Invalid schedule ID').optional().nullable(),
   teacher_user_id: z.string().uuid('Invalid teacher user ID'),
-  photo_url: z.string().min(1, 'Photo is required'),
+  photo_url: z.string().min(1, 'Photo is required').optional().nullable(),
   latitude: z.number().optional().nullable(),
   longitude: z.number().optional().nullable(),
   distance_meters: z.number().optional().nullable(),
   is_inside_school: z.number().optional(),
+  confirmation_date: z.number().optional().nullable(),
   confirmed_at: z.number({ message: 'Confirmed at is required' }),
 });
 
@@ -275,6 +282,7 @@ export type ScheduleInput = z.infer<typeof ScheduleSchema>;
 export type UpdateScheduleInput = z.infer<typeof UpdateScheduleSchema>;
 export type SchoolLocationInput = z.infer<typeof SchoolLocationSchema>;
 export type UpdateSchoolLocationInput = z.infer<typeof UpdateSchoolLocationSchema>;
+export type QrSettingsInput = z.infer<typeof QrSettingsSchema>;
 export type TeacherConfirmationInput = z.infer<typeof TeacherConfirmationSchema>;
 export type JournalInput = z.infer<typeof JournalSchema>;
 export type UpdateJournalInput = z.infer<typeof UpdateJournalSchema>;

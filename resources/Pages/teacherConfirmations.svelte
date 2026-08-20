@@ -1,17 +1,22 @@
 <script lang="ts">
   import Sidebar from '../Components/Sidebar.svelte';
   import DataTable from '../Components/DataTable.svelte';
-  import type { TeacherConfirmation } from '../types';
+  import type { TeacherConfirmationLogView } from '../types';
   import { fly } from 'svelte/transition';
 
-  let { records = [] }: { records?: TeacherConfirmation[] } = $props();
+  let { records = [] }: { records?: TeacherConfirmationLogView[] } = $props();
+
+  const displayRows = $derived(records.map(r => ({
+    id: r.id,
+    guru: r.teacher_name,
+    tanggal: new Date(r.confirmation_date).toLocaleDateString('id-ID', { dateStyle: 'medium' }),
+    waktu: new Date(r.confirmed_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }),
+  })));
 
   const columns = [
-    { key: 'teacher_user_id', label: 'Guru' },
-    { key: 'schedule_id', label: 'Jadwal' },
-    { key: 'distance_meters', label: 'Jarak (m)' },
-    { key: 'is_inside_school', label: 'Di Dalam' },
-    { key: 'confirmed_at', label: 'Konfirmasi' },
+    { key: 'guru', label: 'Guru' },
+    { key: 'tanggal', label: 'Tanggal' },
+    { key: 'waktu', label: 'Waktu Konfirmasi' },
   ];
 </script>
 
@@ -20,11 +25,11 @@
   <div class="mb-12" in:fly={{ y: 20, duration: 800 }}>
     <p class="font-mono-accent text-[10px] uppercase tracking-[0.25em] text-muted-foreground mb-4">Konfirmasi Guru</p>
     <h1 class="font-heading font-semibold tracking-[-0.03em] leading-[1] text-[clamp(2rem,5vw,3.5rem)] text-foreground">
-      Konfirmasi Kehadiran.
+      Log Kehadiran Guru.
     </h1>
     <p class="mt-4 text-base text-muted-foreground leading-relaxed max-w-[52ch]">
-      Riwayat konfirmasi kehadiran guru beserta jarak dan status lokasi.
+      Riwayat konfirmasi kehadiran guru berdasarkan scan QR absen harian.
     </p>
   </div>
-  <DataTable {columns} rows={records} />
+  <DataTable {columns} rows={displayRows} emptyMessage="Belum ada konfirmasi kehadiran." />
 </div>

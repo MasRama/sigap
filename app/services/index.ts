@@ -13,3 +13,4 @@ export * from './Geolocation';
 export * from './CameraUpload';
 export * from './GradeCalculator';
 export * from './StudentCsvParser';
+export * from './QrCode';

@@ -15,6 +15,7 @@ import * as parents from '@handlers/parents';
 import * as schedules from '@handlers/schedules';
 import * as schoolLocations from '@handlers/schoolLocations';
 import * as teacherConfirmations from '@handlers/teacherConfirmations';
+import * as qrSettings from '@handlers/qrSettings';
 import * as journals from '@handlers/journals';
 import * as studentAttendance from '@handlers/studentAttendance';
 import * as grades from '@handlers/grades';
@@ -144,6 +145,12 @@ Route.get('/teacher/confirmations/data', [Auth], teacherConfirmations.listTeache
 Route.get('/teacher/confirmations/:id', [Auth], teacherConfirmations.teacherConfirmationData);
 Route.get('/teacher/confirmations/outside', [Auth], teacherConfirmations.outsideConfirmationsData);
 Route.post('/teacher/confirmations', [Auth], teacherConfirmations.submitTeacherConfirmation);
+
+// QR Absen Settings & Display
+Route.get('/qr-settings', [Auth], qrSettings.qrSettingsPage);
+Route.post('/qr-settings', [Auth], qrSettings.saveQrSettings);
+Route.get('/qr-display', [Auth], qrSettings.qrDisplayPage);
+Route.get('/qr-settings/qr-data', [Auth], qrSettings.qrCodeData);
 
 // Journals
 Route.get('/journals', [Auth], journals.journalsPage);

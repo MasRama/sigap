@@ -21,6 +21,7 @@ Infrastructure code wrapped in functions. No classes, no singletons. Each servic
 | `Geolocation.ts` | Haversine distance and coordinate validation | teacher confirmation handler |
 | `GradeCalculator.ts` | Pure weighted final-score, predikat, and pass-status computation | grades queries |
 | `StudentCsvParser.ts` | Pure CSV parsing + validation for student bulk imports | students handler |
+| `QrCode.ts` | QR code generation + HMAC token signing/verification for teacher attendance | qrSettings handler |
 | `LoginThrottle.ts` | Per-IP + per-username login attempt limiter | auth handler |
 | `View.ts` | Inertia HTML shell renderer | renderer middleware |
 | `Migrator.ts` | Migration runner (up/down/status/fresh) | scripts/migrate.ts |

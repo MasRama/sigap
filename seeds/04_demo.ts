@@ -33,8 +33,8 @@ export function run(SQLite: typeof SQLiteType): void {
 
   const locationId = randomUUID();
   SQLite.exec`
-    INSERT INTO school_locations (id, name, latitude, longitude, radius_meters, is_active, created_at)
-    VALUES (${locationId}, ${'Main Campus'}, ${-6.2}, ${106.8}, ${200}, ${1}, ${now})
+    INSERT INTO school_locations (id, name, address, latitude, longitude, radius_meters, is_active, created_at)
+    VALUES (${locationId}, ${'SMA Negeria 1 Jakarta'}, ${'Jl. Budi Utomo No. 7, Jakarta Pusat'}, ${-6.2}, ${106.8}, ${200}, ${1}, ${now})
   `;
 
   const teacherRole = SQLite.one<{ id: string }>`SELECT id FROM roles WHERE slug = ${'teacher'}`;

@@ -15,7 +15,7 @@
   import { Pencil, Trash2 } from '@lucide/svelte';
   import { fly } from 'svelte/transition';
 
-  let { permissions, classes = [], years = [] }: { permissions: { canCreate?: boolean; canEdit?: boolean; canDelete?: boolean }; classes?: Class[]; years?: AcademicYear[] } = $props();
+  let { permissions, classes = [], years = [] }: { permissions: { canCreate?: boolean; canEdit?: boolean; canDelete?: boolean }; classes?: (Class & { academic_year_name?: string; homeroom_teacher_name?: string | null; homeroom_teacher_username?: string | null })[]; years?: AcademicYear[] } = $props();
 
   let isOpen = $state(false);
   let isDeleteOpen = $state(false);
@@ -38,7 +38,7 @@
     if (result.success) { isDeleteOpen = false; router.visit('/classes', { preserveScroll: true }); }
   }
 
-  const columns = [{ key: 'name', label: 'Nama' }, { key: 'grade', label: 'Tingkat' }, { key: 'academic_year_name', label: 'Tahun Ajaran' }];
+  const columns = [{ key: 'name', label: 'Nama' }, { key: 'grade', label: 'Tingkat' }, { key: 'homeroom_teacher_name', label: 'Wali Kelas' }, { key: 'academic_year_name', label: 'Tahun Ajaran' }];
 </script>
 
 {#snippet rowActions(item: Class)}

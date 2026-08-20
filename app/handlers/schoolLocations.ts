@@ -50,7 +50,14 @@ export const addSchoolLocation = (req: NaraRequest, res: NaraResponse) => {
   if (!parsed.success) return jsonValidationError(res, 'Validation failed', zodToErrors(parsed.error));
 
   try {
-    const item = createSchoolLocation({ ...parsed.data, is_active: parsed.data.is_active ?? 0 });
+    const item = createSchoolLocation({
+      name: parsed.data.name,
+      address: parsed.data.address ?? null,
+      latitude: parsed.data.latitude ?? null,
+      longitude: parsed.data.longitude ?? null,
+      radius_meters: parsed.data.radius_meters ?? null,
+      is_active: parsed.data.is_active ?? 0,
+    });
     return jsonCreated(res, 'School location created', item);
   } catch (error: unknown) {
     Logger.error('Failed to create school location', error as Error);

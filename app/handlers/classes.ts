@@ -1,7 +1,7 @@
 import type { NaraRequest, NaraResponse } from '@core';
 import { jsonSuccess, jsonCreated, jsonError, jsonServerError, jsonValidationError, queryInt, queryString } from '@core';
 import Logger from '@services/Logger';
-import { findAllClasses, findClassById, createClass, updateClass, deleteClass, findClassesByAcademicYear, findClassesByGrade } from '@queries/classes';
+import { findAllClasses, findClassById, createClass, updateClass, deleteClass, findClassesByAcademicYear, findClassesByGrade, findAllClassesWithHomeroom, findClassesByAcademicYearWithHomeroom } from '@queries/classes';
 import { findAllAcademicYears } from '@queries/academicYears';
 import { isAdmin, hasPermission } from '@queries/users';
 import { ClassSchema, UpdateClassSchema, zodToErrors } from '@validators';
@@ -21,7 +21,7 @@ export const classesPage = (req: NaraRequest, res: NaraResponse) => {
   };
   const years = canViewFlag ? findAllAcademicYears() : [];
   const classes = canViewFlag
-    ? (academicYearId ? findClassesByAcademicYear(academicYearId) : findAllClasses()).map(item => ({
+    ? (academicYearId ? findClassesByAcademicYearWithHomeroom(academicYearId) : findAllClassesWithHomeroom()).map(item => ({
       ...item,
       academic_year_name: years.find(year => year.id === item.academic_year_id)?.name ?? item.academic_year_id,
     }))

@@ -74,6 +74,10 @@ export function run(SQLite: typeof SQLiteType): void {
 
     // Headmaster & Reports
     { name: 'Headmaster View', slug: 'headmaster.view', resource: 'headmaster', action: 'view' },
+
+    // QR Settings
+    { name: 'View QR Settings', slug: 'qr_settings.view', resource: 'qr_settings', action: 'view' },
+    { name: 'Edit QR Settings', slug: 'qr_settings.edit', resource: 'qr_settings', action: 'edit' },
   ];
 
   for (const p of permissions) {

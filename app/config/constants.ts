@@ -33,3 +33,10 @@ export const CACHE = {
 export const LOGGING = {
   LEVELS: ['trace', 'debug', 'info', 'warn', 'error', 'fatal'] as const,
 } as const;
+
+export const QR = {
+  REFRESH_INTERVAL_DEFAULT: 5,
+  SETTING_KEY: 'qr_refresh_interval',
+} as const;
+
+export const QR_REFRESH_INTERVAL_DEFAULT = QR.REFRESH_INTERVAL_DEFAULT;

@@ -8,7 +8,7 @@
   import {
     Menu, LogOut, LayoutDashboard, CalendarCheck, BookOpen, GraduationCap,
     Users, ChartColumn, Calendar, School, BookMarked, UserCheck, UserCog,
-    CalendarClock, MapPin, Shield, User, History, Bell, Megaphone,
+    CalendarClock, MapPin, Shield, User, History, Bell, Megaphone, QrCode,
   } from '@lucide/svelte';
   import type { NotificationView } from '../types';
 
@@ -83,7 +83,8 @@
     { href: '/teacher-assignments', label: 'Penugasan Guru', group: 'teacher-assignments', icon: UserCog, show: user?.roles?.includes('admin') ?? false },
     { href: '/parents', label: 'Orang Tua', group: 'parents', icon: Users, show: hasPermission('parents.view') },
     { href: '/schedules', label: 'Jadwal Sekolah', group: 'schedules', icon: CalendarClock, show: hasPermission('schedules.view') },
-    { href: '/school-locations', label: 'Lokasi', group: 'school-locations', icon: MapPin, show: hasPermission('school_locations.view') },
+    { href: '/school-locations', label: 'Profil Sekolah', group: 'school-locations', icon: MapPin, show: hasPermission('school_locations.view') },
+    { href: '/qr-settings', label: 'Pengaturan QR Absen', group: 'qr-settings', icon: QrCode, show: hasPermission('qr_settings.view') || (user?.roles?.includes('admin') ?? false) },
     { href: '/users', label: 'Pengguna', group: 'users', icon: Users, show: hasPermission('users.view') },
     { href: '/roles', label: 'Peran', group: 'roles', icon: Shield, show: hasPermission('roles.view') },
     { href: '/profile', label: 'Profil', group: 'profile', icon: User, show: !!user },

@@ -7,7 +7,7 @@
   import axios from 'axios';
   import { api } from '$lib/api';
   import { Toast } from '$lib/toast';
-  import type { User, UserForm, PaginationMeta, RoleInfo } from '../types';
+  import type { User, UserForm, PaginationMeta, RoleInfo, StudentSelectOption } from '../types';
   import { createEmptyUserForm, userToForm } from '../types';
   import Button from '../Components/Button.svelte';
   import { Users, Plus, Pencil, Trash2, ArrowUpRight } from '@lucide/svelte';
@@ -15,6 +15,7 @@
   interface Props {
     users?: User[];
     availableRoles?: RoleInfo[];
+    students?: StudentSelectOption[];
     permissions?: { canCreate: boolean; canEdit: boolean; canDelete: boolean };
     total?: number;
     page?: number;
@@ -28,6 +29,7 @@
   let {
     users = [],
     availableRoles = [],
+    students = [],
     permissions = { canCreate: false, canEdit: false, canDelete: false },
     total = 0,
     page = 1,
@@ -82,7 +84,8 @@
       name: formData.name,
       username: formData.username,
       roles: formData.roles || [],
-      password: formData.password || undefined
+      password: formData.password || undefined,
+      student_id: formData.roles?.includes('parent') ? formData.student_id : undefined
     };
 
     const result = mode === 'create'
@@ -238,6 +241,7 @@
     {form}
     {isSubmitting}
     {availableRoles}
+    {students}
     on:close={closeUserModal}
     on:submit={handleSubmit}
   />

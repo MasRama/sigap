@@ -14,6 +14,7 @@ export * as parents from './parents';
 export * as schedules from './schedules';
 export * as schoolLocations from './schoolLocations';
 export * as teacherConfirmations from './teacherConfirmations';
+export * as qrSettings from './qrSettings';
 export * as journals from './journals';
 export * as studentAttendance from './studentAttendance';
 export * as grades from './grades';

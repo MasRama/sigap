@@ -31,7 +31,13 @@ export const findTeachersBySubject = (subjectId: string): Teacher[] =>
     ORDER BY t.created_at DESC
   `;
 
-export const getTeachersPaginated = (page: number, limit: number, search = ''): { data: Array<Teacher & { user_name: string | null; user_username: string }>; total: number } => {
+export interface TeacherWithHomeroom extends Teacher {
+  user_name: string | null;
+  user_username: string;
+  homeroom_class_name: string | null;
+}
+
+export const getTeachersPaginated = (page: number, limit: number, search = ''): { data: TeacherWithHomeroom[]; total: number } => {
   const pattern = `%${search.replace(/[%_]/g, '')}%`;
   const countRow = SQLite.get<{ count: number }>(
     `SELECT COUNT(*) as count FROM teachers t
@@ -39,10 +45,14 @@ export const getTeachersPaginated = (page: number, limit: number, search = ''): 
      WHERE u.name LIKE ? OR t.employee_id LIKE ?`,
     [pattern, pattern]
   );
-  const data = SQLite.all<Teacher & { user_name: string | null; user_username: string }>(
-    `SELECT t.*, u.name AS user_name, u.username AS user_username
+  const data = SQLite.all<TeacherWithHomeroom>(
+    `SELECT t.*, u.name AS user_name, u.username AS user_username,
+            hc.name AS homeroom_class_name
      FROM teachers t
      INNER JOIN users u ON t.user_id = u.id
+     LEFT JOIN teacher_class_assignments tca
+       ON tca.teacher_id = t.id AND tca.is_homeroom = 1
+     LEFT JOIN classes hc ON hc.id = tca.class_id
      WHERE u.name LIKE ? OR t.employee_id LIKE ?
      ORDER BY COALESCE(u.name, u.username) ASC
      LIMIT ? OFFSET ?`,

@@ -28,6 +28,18 @@ export const findStudentsByClass = (classId: string): Student[] =>
 
 export const findStudentsByParent = (parentUserId: string): Student[] =>
   SQLite.many<Student>`SELECT * FROM students WHERE parent_user_id = ${parentUserId} ORDER BY name`;
+
+export const findStudentsForParentSelect = (): Array<Student & { class_name: string | null }> =>
+  SQLite.many<Student & { class_name: string | null }>`
+    SELECT s.*, c.name AS class_name
+    FROM students s
+    LEFT JOIN classes c ON c.id = s.class_id
+    ORDER BY s.name
+  `;
+
+export const linkStudentToParent = (studentId: string, parentUserId: string): void => {
+  SQLite.exec`UPDATE students SET parent_user_id = ${parentUserId}, updated_at = ${Date.now()} WHERE id = ${studentId}`;
+};
 export const findStudentsByTeacherUser = (teacherUserId: string): Student[] =>
   SQLite.many<Student>`
     SELECT DISTINCT st.*

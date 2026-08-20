@@ -4,23 +4,26 @@
   import Label from './Label.svelte';
   import Button from './Button.svelte';
   import Switch from './Switch.svelte';
+  import Select from './Select.svelte';
   import * as dialog from "@zag-js/dialog";
   import { useMachine, normalizeProps, portal } from "@zag-js/svelte";
   import { Loader2, X } from '@lucide/svelte';
-  import type { UserForm, RoleInfo } from '../types';
+  import type { UserForm, RoleInfo, StudentSelectOption } from '../types';
 
   let {
     show = false,
     mode = 'create',
     form,
     isSubmitting = false,
-    availableRoles = []
+    availableRoles = [],
+    students = []
   }: {
     show?: boolean;
     mode?: 'create' | 'edit';
     form: UserForm;
     isSubmitting?: boolean;
     availableRoles?: RoleInfo[];
+    students?: StudentSelectOption[];
   } = $props();
 
   const dispatch = createEventDispatcher<{
@@ -50,11 +53,25 @@
       form.roles = [...(form.roles || []), slug];
     } else {
       form.roles = (form.roles || []).filter(r => r !== slug);
+      if (slug === 'parent') {
+        form.student_id = null;
+        form.username = '';
+      }
     }
   }
 
   function hasRole(slug: string): boolean {
     return form.roles?.includes(slug) ?? false;
+  }
+
+  const isParent = $derived(hasRole('parent'));
+
+  function onStudentChange(studentId: string): void {
+    form.student_id = studentId || null;
+    const student = students.find(s => s.id === studentId);
+    if (student) {
+      form.username = student.nis;
+    }
   }
 </script>
 
@@ -89,8 +106,11 @@
               <Input id="name" type="text" bind:value={form.name} placeholder="Nama lengkap" class="h-11" required />
             </div>
             <div class="flex flex-col gap-2">
-              <Label for="username" class="text-xs uppercase tracking-widest font-heading text-muted-foreground">Username</Label>
-              <Input id="username" type="text" bind:value={form.username} placeholder="Username pengguna" class="h-11" required />
+              <Label for="username" class="text-xs uppercase tracking-widest font-heading text-muted-foreground">
+                Username
+                {#if isParent}<span class="normal-case tracking-normal text-muted-foreground/70 ml-1">(NIS siswa — otomatis)</span>{/if}
+              </Label>
+              <Input id="username" type="text" bind:value={form.username} placeholder="Username pengguna" class="h-11" required disabled={isParent} readonly={isParent} />
             </div>
             <div class="flex flex-col gap-2">
               <Label for="password" class="text-xs uppercase tracking-widest font-heading text-muted-foreground">
@@ -118,6 +138,19 @@
                 {/if}
               </div>
             </div>
+
+            {#if isParent}
+              <div class="flex flex-col gap-2">
+                <Label for="student_id" class="text-xs uppercase tracking-widest font-heading text-muted-foreground">Siswa yang diwakili</Label>
+                <Select id="student_id" value={form.student_id ?? ''} onchange={(e: Event) => onStudentChange((e.currentTarget as HTMLSelectElement).value)} class="h-11">
+                  <option value="">— Pilih siswa —</option>
+                  {#each students as student}
+                    <option value={student.id}>{student.nis} — {student.name} ({student.class_name ?? '—'})</option>
+                  {/each}
+                </Select>
+                <p class="text-[11px] text-muted-foreground">Username akan otomatis terisi dengan NIS siswa yang dipilih.</p>
+              </div>
+            {/if}
           </div>
         </form>
 

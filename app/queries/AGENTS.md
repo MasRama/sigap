@@ -35,6 +35,7 @@ Raw SQL functions in `app/queries/`. The only layer that touches `SQLite`. Handl
 | `announcements.ts` | Announcement CRUD + latest list with author names |
 | `notifications.ts` | In-app notifications (create on grade publish, list, unread count, mark read) |
 | `stats.ts` | Dashboard + class-subject aggregated metrics |
+| `appSettings.ts` | Key-value application settings (find, findNumber, upsert) — used for QR refresh interval |
 | `index.ts` | barrel export (`export * from './X'`) |
 
 ## Static SQL → Template Literals (auto-parameterized, safe)

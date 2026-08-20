@@ -2,8 +2,40 @@ import SQLite from '@services/SQLite';
 import type { Class } from '@types';
 import { randomUUID } from 'crypto';
 
+export interface ClassWithHomeroom extends Class {
+  homeroom_teacher_name: string | null;
+  homeroom_teacher_username: string | null;
+}
+
 export const findAllClasses = (): Class[] =>
   SQLite.many<Class>`SELECT * FROM classes ORDER BY grade, name`;
+
+export const findAllClassesWithHomeroom = (): ClassWithHomeroom[] =>
+  SQLite.many<ClassWithHomeroom>`
+    SELECT c.*,
+           u.name AS homeroom_teacher_name,
+           u.username AS homeroom_teacher_username
+    FROM classes c
+    LEFT JOIN teacher_class_assignments tca
+      ON tca.class_id = c.id AND tca.academic_year_id = c.academic_year_id AND tca.is_homeroom = 1
+    LEFT JOIN teachers t ON t.id = tca.teacher_id
+    LEFT JOIN users u ON u.id = t.user_id
+    ORDER BY c.grade, c.name
+  `;
+
+export const findClassesByAcademicYearWithHomeroom = (academicYearId: string): ClassWithHomeroom[] =>
+  SQLite.many<ClassWithHomeroom>`
+    SELECT c.*,
+           u.name AS homeroom_teacher_name,
+           u.username AS homeroom_teacher_username
+    FROM classes c
+    LEFT JOIN teacher_class_assignments tca
+      ON tca.class_id = c.id AND tca.academic_year_id = c.academic_year_id AND tca.is_homeroom = 1
+    LEFT JOIN teachers t ON t.id = tca.teacher_id
+    LEFT JOIN users u ON u.id = t.user_id
+    WHERE c.academic_year_id = ${academicYearId}
+    ORDER BY c.grade, c.name
+  `;
 
 export const findClassById = (id: string): Class | undefined =>
   SQLite.one<Class>`SELECT * FROM classes WHERE id = ${id}`;

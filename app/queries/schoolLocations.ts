@@ -15,8 +15,8 @@ export const createSchoolLocation = (data: Omit<SchoolLocation, 'id' | 'created_
   const now = Date.now();
   const id = randomUUID();
   SQLite.exec`
-    INSERT INTO school_locations (id, name, latitude, longitude, radius_meters, is_active, created_at)
-    VALUES (${id}, ${data.name}, ${data.latitude}, ${data.longitude}, ${data.radius_meters}, ${data.is_active ?? 0}, ${now})
+    INSERT INTO school_locations (id, name, address, latitude, longitude, radius_meters, is_active, created_at)
+    VALUES (${id}, ${data.name}, ${data.address ?? null}, ${data.latitude ?? null}, ${data.longitude ?? null}, ${data.radius_meters ?? null}, ${data.is_active ?? 0}, ${now})
   `;
   return findSchoolLocationById(id)!;
 };

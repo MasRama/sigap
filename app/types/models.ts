@@ -165,24 +165,40 @@ export interface Schedule {
 export interface SchoolLocation {
   id: string;
   name: string;
-  latitude: number;
-  longitude: number;
-  radius_meters: number;
+  address: string | null;
+  latitude: number | null;
+  longitude: number | null;
+  radius_meters: number | null;
   is_active: number;
   created_at: number;
 }
 
 export interface TeacherConfirmation {
   id: string;
-  schedule_id: string;
+  schedule_id: string | null;
   teacher_user_id: string;
-  photo_url: string;
+  photo_url: string | null;
   latitude: number | null;
   longitude: number | null;
   distance_meters: number | null;
   is_inside_school: number;
+  confirmation_date: number | null;
   confirmed_at: number;
   created_at: number;
+}
+
+export interface AppSetting {
+  key: string;
+  value: string;
+  updated_at: number;
+}
+
+export interface TeacherConfirmationLogView {
+  id: string;
+  teacher_name: string;
+  teacher_username: string;
+  confirmation_date: number;
+  confirmed_at: number;
 }
 
 export interface Journal {

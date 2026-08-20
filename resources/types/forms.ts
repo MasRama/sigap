@@ -30,6 +30,8 @@ export type {
   Schedule,
   SchoolLocation,
   TeacherConfirmation,
+  TeacherConfirmationLogView,
+  AppSetting,
   Journal,
   StudentAttendance,
 
@@ -88,6 +90,7 @@ export interface UserForm {
   username: string;
   roles: string[];
   password: string;
+  student_id: string | null;
 }
 
 export interface RoleForm {
@@ -108,7 +111,8 @@ export function createEmptyUserForm(): UserForm {
     name: '',
     username: '',
     roles: ['user'],
-    password: ''
+    password: '',
+    student_id: null,
   };
 }
 
@@ -118,7 +122,8 @@ export function userToForm(user: User): UserForm {
     name: user.name || '',
     username: user.username || '',
     roles: user.roles || ['user'],
-    password: ''
+    password: '',
+    student_id: null,
   };
 }
 
@@ -234,10 +239,18 @@ export interface SchoolLocationForm {
   id: string | null;
   name: string;
   address: string;
-  latitude: number;
-  longitude: number;
-  radius_meters: number;
   is_active: boolean;
+}
+
+export interface QrSettingsForm {
+  qr_refresh_interval: number;
+}
+
+export interface StudentSelectOption {
+  id: string;
+  nis: string;
+  name: string;
+  class_name: string | null;
 }
 
 export interface JournalForm {
@@ -361,7 +374,7 @@ export function scheduleToForm(schedule: Schedule): ScheduleForm {
 }
 
 export function createEmptySchoolLocationForm(): SchoolLocationForm {
-  return { id: null, name: '', address: '', latitude: 0, longitude: 0, radius_meters: 100, is_active: false };
+  return { id: null, name: '', address: '', is_active: false };
 }
 
 export function schoolLocationToForm(location: SchoolLocation): SchoolLocationForm {
@@ -369,9 +382,6 @@ export function schoolLocationToForm(location: SchoolLocation): SchoolLocationFo
     id: location.id,
     name: location.name,
     address: location.address || '',
-    latitude: location.latitude,
-    longitude: location.longitude,
-    radius_meters: location.radius_meters,
     is_active: location.is_active === 1,
   };
 }

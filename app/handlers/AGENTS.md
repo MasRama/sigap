@@ -30,6 +30,7 @@ Request handlers — functions that receive `NaraRequest` / `NaraResponse` and r
 | `parent.ts` | parent dashboard, child attendance/grades |
 | `parents.ts` | parent record CRUD |
 | `reports.ts` | class/subject reports |
+| `qrSettings.ts` | QR absen settings page + save + QR display page + QR code data endpoint |
 | `roles.ts` | roles page + role CRUD + permissions data |
 | `schedules.ts` | schedule CRUD |
 | `schoolLocations.ts` | school location CRUD + activation |
