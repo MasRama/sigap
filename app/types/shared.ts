@@ -98,6 +98,7 @@ export interface Class {
   name: string;
   grade: string;
   academic_year_id: string;
+  academic_year_name?: string;
   created_at?: number;
   updated_at?: number;
 }
@@ -128,8 +129,19 @@ export interface Teacher {
   user_id: string;
   employee_id: string | null;
   phone: string | null;
+  user_name?: string | null;
+  user_username?: string;
   created_at?: number;
   updated_at?: number;
+}
+
+export interface TeacherClassAssignment {
+  id: string;
+  teacher_id: string;
+  class_id: string;
+  academic_year_id: string;
+  is_homeroom: number;
+  created_at?: number;
 }
 
 export interface Parent {

@@ -24,6 +24,11 @@ vi.mock('@queries/users', () => ({
   isAdmin: vi.fn(() => true),
   hasPermission: vi.fn(() => false),
 }));
+vi.mock('@queries/teacherClassAssignments', () => ({
+  isTeacherUser: vi.fn(() => false),
+  isTeacherAssignedToClass: vi.fn(() => false),
+  isTeacherAssignedToStudent: vi.fn(() => false),
+}));
 
 vi.mock('@services/Logger', () => ({
   default: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
@@ -32,7 +37,8 @@ vi.mock('@services/Logger', () => ({
 import { addGrade, editGrade, removeGrade } from '../../app/handlers/grades';
 import { createGrade, updateGrade, deleteGrade, findGradeById } from '@queries/grades';
 import { logGradeChange } from '@queries/gradeAuditLogs';
-import { isAdmin } from '@queries/users';
+import { isAdmin, hasPermission } from '@queries/users';
+import { isTeacherUser, isTeacherAssignedToClass } from '@queries/teacherClassAssignments';
 
 const uuid = (n: number) => `00000000-0000-4000-8000-${String(n).padStart(12, '0')}`;
 
@@ -117,5 +123,18 @@ describe('grades handler audit hooks', () => {
 
     expect(logGradeChange).not.toHaveBeenCalled();
     expect(res._status).toBe(404);
+  });
+  it('denies a teacher who is not assigned to the grade class', () => {
+    vi.mocked(isAdmin).mockReturnValue(false);
+    vi.mocked(hasPermission).mockReturnValue(true);
+    vi.mocked(isTeacherUser).mockReturnValue(true);
+    vi.mocked(isTeacherAssignedToClass).mockReturnValue(false);
+    const req = mockRequest({ body: gradeBody, user: mockUser({ id: 'teacher-1' }) });
+    const res = mockResponse();
+
+    addGrade(req, res);
+
+    expect(res._status).toBe(403);
+    expect(createGrade).not.toHaveBeenCalled();
   });
 });

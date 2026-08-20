@@ -19,7 +19,14 @@ export const findGradesByClassSubject = (classId: string, subjectId: string): Gr
 export const findGradesByTeacher = (teacherUserId: string): Grade[] =>
   SQLite.many<Grade>`SELECT * FROM grades WHERE teacher_user_id = ${teacherUserId} ORDER BY date DESC`;
 
-export const getGradesPaginated = (page: number, limit: number, studentId?: string, classId?: string, subjectId?: string): { data: Grade[]; total: number } => {
+export const getGradesPaginated = (
+  page: number,
+  limit: number,
+  studentId?: string,
+  classId?: string,
+  subjectId?: string,
+  teacherUserId?: string,
+): { data: Grade[]; total: number } => {
   const conditions: string[] = ['1=1'];
   const params: (string | number)[] = [];
 
@@ -34,6 +41,16 @@ export const getGradesPaginated = (page: number, limit: number, studentId?: stri
   if (subjectId) {
     conditions.push('subject_id = ?');
     params.push(subjectId);
+  }
+  if (teacherUserId) {
+    conditions.push(`class_id IN (
+      SELECT tca.class_id
+      FROM teacher_class_assignments tca
+      INNER JOIN teachers t ON t.id = tca.teacher_id
+      INNER JOIN classes c ON c.id = tca.class_id AND c.academic_year_id = tca.academic_year_id
+      WHERE t.user_id = ?
+    )`);
+    params.push(teacherUserId);
   }
 
   const where = conditions.join(' AND ');

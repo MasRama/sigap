@@ -28,6 +28,17 @@ export const findStudentsByClass = (classId: string): Student[] =>
 
 export const findStudentsByParent = (parentUserId: string): Student[] =>
   SQLite.many<Student>`SELECT * FROM students WHERE parent_user_id = ${parentUserId} ORDER BY name`;
+export const findStudentsByTeacherUser = (teacherUserId: string): Student[] =>
+  SQLite.many<Student>`
+    SELECT DISTINCT st.*
+    FROM students st
+    INNER JOIN classes c ON c.id = st.class_id
+    INNER JOIN teacher_class_assignments tca
+      ON tca.class_id = c.id AND tca.academic_year_id = c.academic_year_id
+    INNER JOIN teachers t ON t.id = tca.teacher_id
+    WHERE t.user_id = ${teacherUserId}
+    ORDER BY st.name
+  `;
 
 export const searchStudents = (search: string, classId?: string): Student[] => {
   const pattern = `%${search.replace(/[%_]/g, '')}%`;

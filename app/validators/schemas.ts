@@ -125,6 +125,22 @@ export const UpdateTeacherSchema = TeacherSchema.partial().refine(
   data => data.user_id !== undefined || data.employee_id !== undefined || data.phone !== undefined,
   { message: 'At least one field is required to update', path: ['_root'] }
 );
+export const TeacherClassAssignmentsSchema = z.object({
+  academic_year_id: z.string().uuid('ID tahun ajaran tidak valid'),
+  assignments: z.array(z.object({
+    class_id: z.string().uuid('ID kelas tidak valid'),
+    is_homeroom: z.boolean(),
+  })).max(100, 'Maksimal 100 penugasan kelas'),
+}).superRefine((data, context) => {
+  const homeroomCount = data.assignments.filter(assignment => assignment.is_homeroom).length;
+  if (homeroomCount > 1) {
+    context.addIssue({
+      code: 'custom',
+      path: ['assignments'],
+      message: 'Satu guru hanya dapat memiliki satu kelas wali per tahun ajaran',
+    });
+  }
+});
 
 export const ParentSchema = z.object({
   user_id: z.string().uuid('Invalid user ID'),
@@ -246,6 +262,7 @@ export type UpdateStudentInput = z.infer<typeof UpdateStudentSchema>;
 export type TeacherInput = z.infer<typeof TeacherSchema>;
 export type UpdateTeacherInput = z.infer<typeof UpdateTeacherSchema>;
 export type ParentInput = z.infer<typeof ParentSchema>;
+export type TeacherClassAssignmentsInput = z.infer<typeof TeacherClassAssignmentsSchema>;
 export type UpdateParentInput = z.infer<typeof UpdateParentSchema>;
 export type ScheduleInput = z.infer<typeof ScheduleSchema>;
 export type UpdateScheduleInput = z.infer<typeof UpdateScheduleSchema>;

@@ -16,6 +16,16 @@ export const findClassesByAcademicYear = (academicYearId: string): Class[] =>
 
 export const findClassesByGrade = (grade: string): Class[] =>
   SQLite.many<Class>`SELECT * FROM classes WHERE grade = ${grade} ORDER BY name`;
+export const findClassesByTeacherUser = (teacherUserId: string): Class[] =>
+  SQLite.many<Class>`
+    SELECT DISTINCT c.*
+    FROM classes c
+    INNER JOIN teacher_class_assignments tca
+      ON tca.class_id = c.id AND tca.academic_year_id = c.academic_year_id
+    INNER JOIN teachers t ON t.id = tca.teacher_id
+    WHERE t.user_id = ${teacherUserId}
+    ORDER BY c.academic_year_id DESC, c.grade, c.name
+  `;
 
 export const createClass = (data: Omit<Class, 'id' | 'created_at' | 'updated_at'>): Class => {
   const now = Date.now();

@@ -9,6 +9,7 @@ export * as classes from './classes';
 export * as subjects from './subjects';
 export * as students from './students';
 export * as teachers from './teachers';
+export * as teacherAssignments from './teacherAssignments';
 export * as parents from './parents';
 export * as schedules from './schedules';
 export * as schoolLocations from './schoolLocations';

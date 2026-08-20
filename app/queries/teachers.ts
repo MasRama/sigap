@@ -4,6 +4,18 @@ import { randomUUID } from 'crypto';
 
 export const findAllTeachers = (): Teacher[] =>
   SQLite.many<Teacher>`SELECT * FROM teachers ORDER BY created_at DESC`;
+export const findAllTeachersForAssignment = (): Array<Teacher & { user_name: string | null; user_username: string }> =>
+  SQLite.many<Teacher & { user_name: string | null; user_username: string }>`
+    SELECT t.*, u.name AS user_name, u.username AS user_username
+    FROM teachers t
+    INNER JOIN users u ON u.id = t.user_id
+    ORDER BY COALESCE(u.name, u.username)
+  `;
+export const findUsersForTeacherSelect = (): { id: string; name: string | null; username: string }[] =>
+  SQLite.many<{ id: string; name: string | null; username: string }>`
+    SELECT id, name, username FROM users ORDER BY COALESCE(name, username)
+  `;
+
 
 export const findTeacherById = (id: string): Teacher | undefined =>
   SQLite.one<Teacher>`SELECT * FROM teachers WHERE id = ${id}`;
@@ -19,7 +31,7 @@ export const findTeachersBySubject = (subjectId: string): Teacher[] =>
     ORDER BY t.created_at DESC
   `;
 
-export const getTeachersPaginated = (page: number, limit: number, search = ''): { data: Teacher[]; total: number } => {
+export const getTeachersPaginated = (page: number, limit: number, search = ''): { data: Array<Teacher & { user_name: string | null; user_username: string }>; total: number } => {
   const pattern = `%${search.replace(/[%_]/g, '')}%`;
   const countRow = SQLite.get<{ count: number }>(
     `SELECT COUNT(*) as count FROM teachers t
@@ -27,11 +39,13 @@ export const getTeachersPaginated = (page: number, limit: number, search = ''): 
      WHERE u.name LIKE ? OR t.employee_id LIKE ?`,
     [pattern, pattern]
   );
-  const data = SQLite.all<Teacher>(
-    `SELECT t.* FROM teachers t
+  const data = SQLite.all<Teacher & { user_name: string | null; user_username: string }>(
+    `SELECT t.*, u.name AS user_name, u.username AS user_username
+     FROM teachers t
      INNER JOIN users u ON t.user_id = u.id
      WHERE u.name LIKE ? OR t.employee_id LIKE ?
-     ORDER BY t.created_at DESC LIMIT ? OFFSET ?`,
+     ORDER BY COALESCE(u.name, u.username) ASC
+     LIMIT ? OFFSET ?`,
     [pattern, pattern, limit, (page - 1) * limit]
   );
   return { data, total: countRow?.count ?? 0 };

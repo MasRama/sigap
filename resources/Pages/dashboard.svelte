@@ -78,6 +78,13 @@
           </a>
         </BentoCard>
       {/if}
+      {#if currentUser?.roles?.includes('admin')}
+        <BentoCard title="Penugasan Guru" description="Atur kelas yang diampu dan wali kelas.">
+          <a href="/teacher-assignments" use:inertia class="mt-auto inline-flex items-center gap-1.5 text-sm text-primary hover:text-primary/80 transition-colors">
+            Atur penugasan <ArrowRight class="w-4 h-4" />
+          </a>
+        </BentoCard>
+      {/if}
 
       {#if hasPermission('schedules.view')}
         <BentoCard title="Jadwal Hari Ini" description="Lihat kelas yang sedang berlangsung.">

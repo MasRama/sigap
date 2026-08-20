@@ -2,6 +2,7 @@ import type { NaraRequest, NaraResponse } from '@core';
 import { jsonSuccess, jsonCreated, jsonError, jsonServerError, jsonValidationError, queryInt, queryString } from '@core';
 import Logger from '@services/Logger';
 import { findAllClasses, findClassById, createClass, updateClass, deleteClass, findClassesByAcademicYear, findClassesByGrade } from '@queries/classes';
+import { findAllAcademicYears } from '@queries/academicYears';
 import { isAdmin, hasPermission } from '@queries/users';
 import { ClassSchema, UpdateClassSchema, zodToErrors } from '@validators';
 
@@ -10,13 +11,22 @@ const canManage = (userId: string): boolean => isAdmin(userId) || hasPermission(
 
 export const classesPage = (req: NaraRequest, res: NaraResponse) => {
   const userId = req.user?.id;
+  const canViewFlag = userId ? canView(userId) : false;
+  const academicYearId = queryString(req, 'academic_year_id');
   const permissions = {
-    canView: userId ? canView(userId) : false,
+    canView: canViewFlag,
     canCreate: userId ? canManage(userId) : false,
     canEdit: userId ? isAdmin(userId) || hasPermission(userId, 'classes.edit') : false,
     canDelete: userId ? isAdmin(userId) || hasPermission(userId, 'classes.delete') : false,
   };
-  return res.inertia('classes', { permissions });
+  const years = canViewFlag ? findAllAcademicYears() : [];
+  const classes = canViewFlag
+    ? (academicYearId ? findClassesByAcademicYear(academicYearId) : findAllClasses()).map(item => ({
+      ...item,
+      academic_year_name: years.find(year => year.id === item.academic_year_id)?.name ?? item.academic_year_id,
+    }))
+    : [];
+  return res.inertia('classes', { permissions, classes, years });
 };
 
 export const listClasses = (req: NaraRequest, res: NaraResponse) => {

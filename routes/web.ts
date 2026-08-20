@@ -10,6 +10,7 @@ import * as classes from '@handlers/classes';
 import * as subjects from '@handlers/subjects';
 import * as students from '@handlers/students';
 import * as teachers from '@handlers/teachers';
+import * as teacherAssignments from '@handlers/teacherAssignments';
 import * as parents from '@handlers/parents';
 import * as schedules from '@handlers/schedules';
 import * as schoolLocations from '@handlers/schoolLocations';
@@ -106,6 +107,8 @@ Route.post('/teachers', [Auth], teachers.addTeacher);
 Route.put('/teachers/:id', [Auth], teachers.editTeacher);
 Route.delete('/teachers/:id', [Auth], teachers.removeTeacher);
 Route.post('/teachers/:id/subjects', [Auth], teachers.assignTeacherSubjects);
+Route.get('/teacher-assignments', [Auth], teacherAssignments.teacherAssignmentsPage);
+Route.post('/teacher-assignments/:teacherId', [Auth], teacherAssignments.saveTeacherAssignments);
 
 // Parents
 Route.get('/parents', [Auth], parents.parentsPage);

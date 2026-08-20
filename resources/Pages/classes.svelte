@@ -38,7 +38,7 @@
     if (result.success) { isDeleteOpen = false; router.visit('/classes', { preserveScroll: true }); }
   }
 
-  const columns = [{ key: 'name', label: 'Nama' }, { key: 'grade', label: 'Tingkat' }, { key: 'academic_year_id', label: 'Tahun Ajaran' }];
+  const columns = [{ key: 'name', label: 'Nama' }, { key: 'grade', label: 'Tingkat' }, { key: 'academic_year_name', label: 'Tahun Ajaran' }];
 </script>
 
 {#snippet rowActions(item: Class)}

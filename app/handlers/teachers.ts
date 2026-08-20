@@ -1,7 +1,7 @@
 import type { NaraRequest, NaraResponse } from '@core';
 import { jsonSuccess, jsonCreated, jsonError, jsonServerError, jsonValidationError, jsonPaginated, queryInt, queryString } from '@core';
 import Logger from '@services/Logger';
-import { getTeachersPaginated, findTeacherById, findTeacherByUserId, createTeacher, updateTeacher, deleteTeacher, getTeacherSubjects, syncTeacherSubjects } from '@queries/teachers';
+import { getTeachersPaginated, findTeacherById, findTeacherByUserId, createTeacher, updateTeacher, deleteTeacher, getTeacherSubjects, syncTeacherSubjects, findUsersForTeacherSelect } from '@queries/teachers';
 import { isAdmin, hasPermission } from '@queries/users';
 import { TeacherSchema, UpdateTeacherSchema, zodToErrors } from '@validators';
 
@@ -10,13 +10,24 @@ const canManage = (userId: string): boolean => isAdmin(userId) || hasPermission(
 
 export const teachersPage = (req: NaraRequest, res: NaraResponse) => {
   const userId = req.user?.id;
+  const canViewFlag = userId ? canView(userId) : false;
+  const page = queryInt(req, 'page', 1);
+  const limit = queryInt(req, 'limit', 10);
+  const search = queryString(req, 'search');
+  const result = canViewFlag ? getTeachersPaginated(page, limit, search) : { data: [], total: 0 };
+  const totalPages = Math.ceil(result.total / limit);
   const permissions = {
-    canView: userId ? canView(userId) : false,
+    canView: canViewFlag,
     canCreate: userId ? canManage(userId) : false,
     canEdit: userId ? isAdmin(userId) || hasPermission(userId, 'teachers.edit') : false,
     canDelete: userId ? isAdmin(userId) || hasPermission(userId, 'teachers.delete') : false,
   };
-  return res.inertia('teachers', { permissions });
+  return res.inertia('teachers', {
+    permissions,
+    teachers: result.data,
+    users: canViewFlag ? findUsersForTeacherSelect() : [],
+    meta: { total: result.total, page, limit, totalPages, hasNext: page < totalPages, hasPrev: page > 1 },
+  });
 };
 
 export const listTeachers = (req: NaraRequest, res: NaraResponse) => {

@@ -39,7 +39,7 @@
     if (result.success) { isDeleteOpen = false; router.visit('/teachers', { preserveScroll: true }); }
   }
 
-  const columns = [{ key: 'employee_id', label: 'NIP' }, { key: 'user_id', label: 'Pengguna' }, { key: 'phone', label: 'Telepon' }];
+  const columns = [{ key: 'employee_id', label: 'NIP' }, { key: 'user_name', label: 'Nama Guru' }, { key: 'user_username', label: 'Username' }, { key: 'phone', label: 'Telepon' }];
 </script>
 
 {#snippet rowActions(item: Teacher)}

@@ -8,6 +8,7 @@ export * from './subjects';
 export * from './students';
 export * from './teachers';
 export * from './parents';
+export * from './teacherClassAssignments';
 export * from './schedules';
 export * from './schoolLocations';
 export * from './teacherConfirmations';

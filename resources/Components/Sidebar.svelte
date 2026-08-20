@@ -80,6 +80,7 @@
     { href: '/subjects', label: 'Mapel', group: 'subjects', icon: BookMarked, show: hasPermission('subjects.view') },
     { href: '/students', label: 'Siswa', group: 'students', icon: UserCheck, show: hasPermission('students.view') },
     { href: '/teachers', label: 'Guru', group: 'teachers', icon: UserCog, show: hasPermission('teachers.view') },
+    { href: '/teacher-assignments', label: 'Penugasan Guru', group: 'teacher-assignments', icon: UserCog, show: user?.roles?.includes('admin') ?? false },
     { href: '/parents', label: 'Orang Tua', group: 'parents', icon: Users, show: hasPermission('parents.view') },
     { href: '/schedules', label: 'Jadwal Sekolah', group: 'schedules', icon: CalendarClock, show: hasPermission('schedules.view') },
     { href: '/school-locations', label: 'Lokasi', group: 'school-locations', icon: MapPin, show: hasPermission('school_locations.view') },

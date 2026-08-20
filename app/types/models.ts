@@ -113,6 +113,15 @@ export interface Teacher {
   created_at: number;
   updated_at: number;
 }
+export interface TeacherClassAssignment {
+  id: string;
+  teacher_id: string;
+  class_id: string;
+  academic_year_id: string;
+  is_homeroom: number;
+  created_at: number;
+}
+
 
 export interface Parent {
   id: string;
