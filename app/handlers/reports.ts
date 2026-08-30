@@ -5,7 +5,7 @@ import { isAdmin, hasPermission } from '@queries/users';
 
 export const classSubjectReport = (req: NaraRequest, res: NaraResponse) => {
   if (!req.user) return jsonError(res, 'Unauthorized', 401);
-  if (!isAdmin(req.user.id) && !hasPermission(req.user.id, 'grades.view') && !hasPermission(req.user.id, 'attendance.view')) {
+  if (isAdmin(req.user.id) || (!hasPermission(req.user.id, 'grades.view') && !hasPermission(req.user.id, 'attendance.view'))) {
     return jsonError(res, 'Forbidden', 403);
   }
 

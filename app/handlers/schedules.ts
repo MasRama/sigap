@@ -2,21 +2,38 @@ import type { NaraRequest, NaraResponse } from '@core';
 import { jsonSuccess, jsonCreated, jsonError, jsonServerError, jsonValidationError } from '@core';
 import Logger from '@services/Logger';
 import { findAllSchedules, findScheduleById, findSchedulesByClass, findSchedulesByTeacher, createSchedule, updateSchedule, deleteSchedule } from '@queries/schedules';
+import { findAllClasses } from '@queries/classes';
+import { findAllSubjects } from '@queries/subjects';
+import { findAllAcademicYears } from '@queries/academicYears';
+import { findTeacherUsersForSchedule } from '@queries/teachers';
+import { isTeacherUser } from '@queries/teacherClassAssignments';
 import { isAdmin, hasPermission } from '@queries/users';
 import { ScheduleSchema, UpdateScheduleSchema, zodToErrors } from '@validators';
 
+const isTeacherActor = (userId: string): boolean =>
+  !isAdmin(userId) && isTeacherUser(userId) && hasPermission(userId, 'schedules.view');
 const canView = (userId: string): boolean => isAdmin(userId) || hasPermission(userId, 'schedules.view');
-const canManage = (userId: string): boolean => isAdmin(userId) || hasPermission(userId, 'schedules.create');
+const canManage = (userId: string): boolean => isAdmin(userId);
 
 export const schedulesPage = (req: NaraRequest, res: NaraResponse) => {
   const userId = req.user?.id;
+  const canViewFlag = userId ? canView(userId) : false;
   const permissions = {
-    canView: userId ? canView(userId) : false,
+    canView: canViewFlag,
     canCreate: userId ? canManage(userId) : false,
-    canEdit: userId ? isAdmin(userId) || hasPermission(userId, 'schedules.edit') : false,
-    canDelete: userId ? isAdmin(userId) || hasPermission(userId, 'schedules.delete') : false,
+    canEdit: userId ? isAdmin(userId) : false,
+    canDelete: userId ? isAdmin(userId) : false,
   };
-  return res.inertia('schedules', { permissions });
+
+  const schedules = canViewFlag
+    ? (userId && isTeacherActor(userId) ? findSchedulesByTeacher(userId) : findAllSchedules())
+    : [];
+  const classes = canViewFlag ? findAllClasses() : [];
+  const subjects = canViewFlag ? findAllSubjects() : [];
+  const teachers = canViewFlag ? findTeacherUsersForSchedule() : [];
+  const years = canViewFlag ? findAllAcademicYears() : [];
+
+  return res.inertia('schedules', { permissions, schedules, classes, subjects, teachers, years });
 };
 
 export const listSchedules = (req: NaraRequest, res: NaraResponse) => {
@@ -26,6 +43,13 @@ export const listSchedules = (req: NaraRequest, res: NaraResponse) => {
   const classId = req.query.class_id as string | undefined;
   const teacherId = req.query.teacher_user_id as string | undefined;
 
+  if (isTeacherActor(req.user.id)) {
+    if (teacherId && teacherId !== req.user.id) return jsonError(res, 'Forbidden', 403);
+    const ownSchedules = findSchedulesByTeacher(req.user.id);
+    const data = classId ? ownSchedules.filter(schedule => schedule.class_id === classId) : ownSchedules;
+    return jsonSuccess(res, 'OK', data);
+  }
+
   const data = classId ? findSchedulesByClass(classId) : teacherId ? findSchedulesByTeacher(teacherId) : findAllSchedules();
   return jsonSuccess(res, 'OK', data);
 };
@@ -33,9 +57,12 @@ export const listSchedules = (req: NaraRequest, res: NaraResponse) => {
 export const scheduleData = (req: NaraRequest, res: NaraResponse) => {
   if (!req.user) return jsonError(res, 'Unauthorized', 401);
   if (!canView(req.user.id)) return jsonError(res, 'Forbidden', 403);
-
   const item = findScheduleById(req.params.id || '');
+
   if (!item) return jsonError(res, 'Not found', 404);
+  if (isTeacherActor(req.user.id) && item.teacher_user_id !== req.user.id) {
+    return jsonError(res, 'Forbidden', 403);
+  }
   return jsonSuccess(res, 'OK', item);
 };
 
@@ -57,7 +84,7 @@ export const addSchedule = (req: NaraRequest, res: NaraResponse) => {
 
 export const editSchedule = (req: NaraRequest, res: NaraResponse) => {
   if (!req.user) return jsonError(res, 'Unauthorized', 401);
-  if (!isAdmin(req.user.id) && !hasPermission(req.user.id, 'schedules.edit')) return jsonError(res, 'Forbidden', 403);
+  if (!isAdmin(req.user.id)) return jsonError(res, 'Forbidden', 403);
 
   const id = req.params.id;
   if (!id) return jsonError(res, 'ID required', 400);
@@ -77,7 +104,7 @@ export const editSchedule = (req: NaraRequest, res: NaraResponse) => {
 
 export const removeSchedule = (req: NaraRequest, res: NaraResponse) => {
   if (!req.user) return jsonError(res, 'Unauthorized', 401);
-  if (!isAdmin(req.user.id) && !hasPermission(req.user.id, 'schedules.delete')) return jsonError(res, 'Forbidden', 403);
+  if (!isAdmin(req.user.id)) return jsonError(res, 'Forbidden', 403);
 
   const id = req.params.id;
   if (!id) return jsonError(res, 'ID required', 400);

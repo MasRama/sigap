@@ -21,7 +21,7 @@ vi.mock('@queries/classes', () => ({ findAllClasses: vi.fn(() => []) }));
 vi.mock('@queries/academicYears', () => ({ findAllAcademicYears: vi.fn(() => []) }));
 
 vi.mock('@queries/users', () => ({
-  isAdmin: vi.fn(() => true),
+  isAdmin: vi.fn(() => false),
   hasPermission: vi.fn(() => false),
 }));
 vi.mock('@queries/teacherClassAssignments', () => ({
@@ -29,10 +29,10 @@ vi.mock('@queries/teacherClassAssignments', () => ({
   isTeacherAssignedToClass: vi.fn(() => false),
   isTeacherAssignedToStudent: vi.fn(() => false),
 }));
-
 vi.mock('@services/Logger', () => ({
   default: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
+
 
 import { addGrade, editGrade, removeGrade } from '../../app/handlers/grades';
 import { createGrade, updateGrade, deleteGrade, findGradeById } from '@queries/grades';
@@ -56,7 +56,10 @@ describe('grades handler audit hooks', () => {
   beforeEach(() => vi.clearAllMocks());
 
   it('logs a create action when a grade is added', () => {
-    vi.mocked(isAdmin).mockReturnValue(true);
+    vi.mocked(isAdmin).mockReturnValue(false);
+    vi.mocked(hasPermission).mockReturnValue(true);
+    vi.mocked(isTeacherUser).mockReturnValue(true);
+    vi.mocked(isTeacherAssignedToClass).mockReturnValue(true);
     vi.mocked(createGrade).mockReturnValue({ id: 'grade-1', ...gradeBody, created_at: 1, updated_at: 1 } as never);
     const req = mockRequest({ body: gradeBody, user: mockUser({ id: 'user-1' }) });
     const res = mockResponse();
@@ -77,7 +80,10 @@ describe('grades handler audit hooks', () => {
   });
 
   it('logs an update action with old and new scores', () => {
-    vi.mocked(isAdmin).mockReturnValue(true);
+    vi.mocked(isAdmin).mockReturnValue(false);
+    vi.mocked(hasPermission).mockReturnValue(true);
+    vi.mocked(isTeacherUser).mockReturnValue(true);
+    vi.mocked(isTeacherAssignedToClass).mockReturnValue(true);
     vi.mocked(findGradeById).mockReturnValue({ id: 'grade-1', ...gradeBody, score: 80, created_at: 1, updated_at: 1 } as never);
     vi.mocked(updateGrade).mockReturnValue({ id: 'grade-1', ...gradeBody, score: 90, created_at: 1, updated_at: 2 } as never);
     const req = mockRequest({ params: { id: 'grade-1' }, body: { score: 90 }, user: mockUser({ id: 'user-1' }) });
@@ -95,7 +101,10 @@ describe('grades handler audit hooks', () => {
   });
 
   it('logs a delete action with the old score', () => {
-    vi.mocked(isAdmin).mockReturnValue(true);
+    vi.mocked(isAdmin).mockReturnValue(false);
+    vi.mocked(hasPermission).mockReturnValue(true);
+    vi.mocked(isTeacherUser).mockReturnValue(true);
+    vi.mocked(isTeacherAssignedToClass).mockReturnValue(true);
     vi.mocked(findGradeById).mockReturnValue({ id: 'grade-1', ...gradeBody, score: 80, created_at: 1, updated_at: 1 } as never);
     vi.mocked(deleteGrade).mockReturnValue(true);
     const req = mockRequest({ params: { id: 'grade-1' }, user: mockUser({ id: 'user-1' }) });
@@ -113,7 +122,10 @@ describe('grades handler audit hooks', () => {
   });
 
   it('does not log when the grade to delete does not exist', () => {
-    vi.mocked(isAdmin).mockReturnValue(true);
+    vi.mocked(isAdmin).mockReturnValue(false);
+    vi.mocked(hasPermission).mockReturnValue(true);
+    vi.mocked(isTeacherUser).mockReturnValue(true);
+    vi.mocked(isTeacherAssignedToClass).mockReturnValue(true);
     vi.mocked(findGradeById).mockReturnValue(undefined);
     vi.mocked(deleteGrade).mockReturnValue(false);
     const req = mockRequest({ params: { id: 'missing' }, user: mockUser({ id: 'user-1' }) });
@@ -124,6 +136,19 @@ describe('grades handler audit hooks', () => {
     expect(logGradeChange).not.toHaveBeenCalled();
     expect(res._status).toBe(404);
   });
+  it('denies admin grade entry even with grade permissions', () => {
+    vi.mocked(isAdmin).mockReturnValue(true);
+    vi.mocked(hasPermission).mockReturnValue(true);
+    vi.mocked(isTeacherUser).mockReturnValue(false);
+    const req = mockRequest({ body: gradeBody, user: mockUser({ id: 'admin-1' }) });
+    const res = mockResponse();
+
+    addGrade(req, res);
+
+    expect(res._status).toBe(403);
+    expect(createGrade).not.toHaveBeenCalled();
+  });
+
   it('denies a teacher who is not assigned to the grade class', () => {
     vi.mocked(isAdmin).mockReturnValue(false);
     vi.mocked(hasPermission).mockReturnValue(true);

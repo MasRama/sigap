@@ -11,7 +11,12 @@ export const findParentById = (id: string): Parent | undefined =>
 export const findParentByUserId = (userId: string): Parent | undefined =>
   SQLite.one<Parent>`SELECT * FROM parents WHERE user_id = ${userId}`;
 
-export const getParentsPaginated = (page: number, limit: number, search = ''): { data: Parent[]; total: number } => {
+export interface ParentListItem extends Parent {
+  user_name: string | null;
+  user_username: string;
+}
+
+export const getParentsPaginated = (page: number, limit: number, search = ''): { data: ParentListItem[]; total: number } => {
   const pattern = `%${search.replace(/[%_]/g, '')}%`;
   const countRow = SQLite.get<{ count: number }>(
     `SELECT COUNT(*) as count FROM parents p
@@ -19,8 +24,9 @@ export const getParentsPaginated = (page: number, limit: number, search = ''): {
      WHERE u.name LIKE ? OR p.phone LIKE ?`,
     [pattern, pattern]
   );
-  const data = SQLite.all<Parent>(
-    `SELECT p.* FROM parents p
+  const data = SQLite.all<ParentListItem>(
+    `SELECT p.*, u.name AS user_name, u.username AS user_username
+     FROM parents p
      INNER JOIN users u ON p.user_id = u.id
      WHERE u.name LIKE ? OR p.phone LIKE ?
      ORDER BY p.created_at DESC LIMIT ? OFFSET ?`,

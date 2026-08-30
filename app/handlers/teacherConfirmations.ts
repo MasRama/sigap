@@ -7,33 +7,44 @@ import { findActiveSchoolLocation } from '@queries/schoolLocations';
 import { haversineDistance, validateCoordinates } from '@services/Geolocation';
 import { saveConfirmationPhoto } from '@services/CameraUpload';
 import { isAdmin, hasPermission } from '@queries/users';
+import { isTeacherUser } from '@queries/teacherClassAssignments';
 import { TeacherConfirmationSchema, zodToErrors } from '@validators';
 import type { TeacherConfirmation } from '@types';
 
+const isTeacherActor = (userId: string): boolean => !isAdmin(userId) && isTeacherUser(userId);
 const canView = (userId: string): boolean => isAdmin(userId) || hasPermission(userId, 'confirmations.view');
 
 export const teacherConfirmationsPage = (req: NaraRequest, res: NaraResponse) => {
   if (!req.user) return res.redirect('/login');
   const userId = req.user.id;
-  const permissions = { canView: userId ? canView(userId) : false };
-  const records = canView(userId) ? findAllTeacherConfirmationLogs() : [];
+  const permissions = { canView: canView(userId) };
+  const records = canView(userId)
+    ? (isTeacherActor(userId) ? findConfirmationsByTeacher(userId) : findAllTeacherConfirmationLogs())
+    : [];
   return res.inertia('teacherConfirmations', { permissions, records });
 };
 
 export const confirmPage = (req: NaraRequest, res: NaraResponse) => {
   if (!req.user) return res.redirect('/login');
+  if (!isTeacherActor(req.user.id) || !hasPermission(req.user.id, 'confirmations.create')) {
+    return res.redirect('/dashboard');
+  }
 
   const scheduleId = req.query.schedule_id as string | undefined;
   const schedule = scheduleId ? findScheduleById(scheduleId) : null;
+  if (schedule && schedule.teacher_user_id !== req.user.id) return res.redirect('/dashboard');
   return res.inertia('teacher/confirm', { scheduleId: scheduleId || null, schedule });
 };
 
 export const listTeacherConfirmations = (req: NaraRequest, res: NaraResponse) => {
   if (!req.user) return jsonError(res, 'Unauthorized', 401);
-  if (!canView(req.user.id) && req.user.id !== req.query.teacher_user_id) return jsonError(res, 'Forbidden', 403);
 
   const teacherId = queryString(req, 'teacher_user_id');
-  const data = teacherId ? findConfirmationsByTeacher(teacherId) : [];
+  const isOversight = canView(req.user.id) && !isTeacherActor(req.user.id);
+  const isOwn = isTeacherActor(req.user.id) && teacherId === req.user.id;
+  if (!isOversight && !isOwn) return jsonError(res, 'Forbidden', 403);
+
+  const data = teacherId ? findConfirmationsByTeacher(teacherId) : findAllTeacherConfirmations();
   return jsonSuccess(res, 'OK', data);
 };
 
@@ -42,13 +53,18 @@ export const teacherConfirmationData = (req: NaraRequest, res: NaraResponse) => 
 
   const item = findTeacherConfirmationById(req.params.id || '');
   if (!item) return jsonError(res, 'Not found', 404);
-  if (!canView(req.user.id) && item.teacher_user_id !== req.user.id) return jsonError(res, 'Forbidden', 403);
+  const isOversight = canView(req.user.id) && !isTeacherActor(req.user.id);
+  const isOwn = isTeacherActor(req.user.id) && item.teacher_user_id === req.user.id;
+  if (!isOversight && !isOwn) return jsonError(res, 'Forbidden', 403);
 
   return jsonSuccess(res, 'OK', item);
 };
 
 export const submitTeacherConfirmation = async (req: NaraRequest, res: NaraResponse) => {
   if (!req.user) return jsonError(res, 'Unauthorized', 401);
+  if (!isTeacherActor(req.user.id) || !hasPermission(req.user.id, 'confirmations.create')) {
+    return jsonError(res, 'Forbidden', 403);
+  }
 
   const parsed = TeacherConfirmationSchema.safeParse(req.body);
   if (!parsed.success) return jsonValidationError(res, 'Validation failed', zodToErrors(parsed.error));
@@ -59,11 +75,7 @@ export const submitTeacherConfirmation = async (req: NaraRequest, res: NaraRespo
   if (scheduleId) {
     const schedule = findScheduleById(scheduleId);
     if (!schedule) return jsonError(res, 'Schedule not found', 404);
-    // Only the assigned teacher or admin can confirm per-schedule
-    const isAssignedTeacher = schedule.teacher_user_id === req.user.id;
-    if (!isAssignedTeacher && !canView(req.user.id)) {
-      return jsonError(res, 'Forbidden', 403);
-    }
+    if (schedule.teacher_user_id !== req.user.id) return jsonError(res, 'Forbidden', 403);
     // Block duplicate per-schedule today
     const existing = findTodayConfirmationBySchedule(schedule.id);
     if (existing) {
@@ -129,8 +141,15 @@ export const submitTeacherConfirmation = async (req: NaraRequest, res: NaraRespo
 
 export const outsideConfirmationsData = (req: NaraRequest, res: NaraResponse) => {
   if (!req.user) return jsonError(res, 'Unauthorized', 401);
-  if (!isAdmin(req.user.id) && !hasPermission(req.user.id, 'confirmations.view')) return jsonError(res, 'Forbidden', 403);
+  if (!canView(req.user.id)) return jsonError(res, 'Forbidden', 403);
 
-  const data = findConfirmationsByTeacher(req.query.teacher_user_id as string || '').filter(c => c.is_inside_school === 0);
+  const teacherId = queryString(req, 'teacher_user_id');
+  if (isTeacherActor(req.user.id) && teacherId && teacherId !== req.user.id) {
+    return jsonError(res, 'Forbidden', 403);
+  }
+  const data = (isTeacherActor(req.user.id)
+    ? findConfirmationsByTeacher(req.user.id)
+    : teacherId ? findConfirmationsByTeacher(teacherId) : findAllTeacherConfirmations())
+    .filter(c => c.is_inside_school === 0);
   return jsonSuccess(res, 'OK', data);
 };

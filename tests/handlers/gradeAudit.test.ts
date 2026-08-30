@@ -63,15 +63,16 @@ describe('gradeAuditPage', () => {
     });
   });
 
-  it('admins always pass the audit permission check', () => {
+  it('denies admins even when audit permission is present', () => {
     vi.mocked(isAdmin).mockReturnValue(true);
-    vi.mocked(getGradeAuditLogsPaginated).mockReturnValue({ data: [], total: 0 });
+    vi.mocked(hasPermission).mockReturnValue(true);
     const req = mockRequest({ user: mockUser() });
     const res = mockResponse({ inertia: vi.fn() });
 
     gradeAuditPage(req, res);
 
-    expect(res.inertia).toHaveBeenCalledWith('gradeAudit', expect.objectContaining({ canView: true }));
+    expect(res.inertia).toHaveBeenCalledWith('gradeAudit', expect.objectContaining({ canView: false }));
+    expect(getGradeAuditLogsPaginated).not.toHaveBeenCalled();
   });
 });
 

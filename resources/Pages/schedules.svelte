@@ -10,13 +10,23 @@
   import Modal from '../Components/Modal.svelte';
   import ConfirmDialog from '../Components/ConfirmDialog.svelte';
   import Select from '../Components/Select.svelte';
-  import type { Schedule, ScheduleForm, Class, Subject, AcademicYear, User } from '../types';
+  import type { Schedule, ScheduleForm, Class, Subject, AcademicYear } from '../types';
   import { createEmptyScheduleForm, scheduleToForm } from '../types';
   import { timestampToTimeInput, timeInputToTimestamp } from '$lib/utils/datetime';
   import { Pencil, Trash2 } from '@lucide/svelte';
   import { fly } from 'svelte/transition';
 
-  let { permissions, schedules = [], classes = [], subjects = [], teachers = [], years = [] }: { permissions: { canCreate?: boolean; canEdit?: boolean; canDelete?: boolean }; schedules?: Schedule[]; classes?: Class[]; subjects?: Subject[]; teachers?: User[]; years?: AcademicYear[] } = $props();
+  type TeacherOption = { id: string; name: string | null; username: string };
+  type ScheduleRow = Schedule & {
+    day_name: string;
+    start_time_label: string;
+    end_time_label: string;
+    class_name: string;
+    subject_name: string;
+    teacher_name: string;
+  };
+
+  let { permissions, schedules = [], classes = [], subjects = [], teachers = [], years = [] }: { permissions: { canCreate?: boolean; canEdit?: boolean; canDelete?: boolean }; schedules?: Schedule[]; classes?: Class[]; subjects?: Subject[]; teachers?: TeacherOption[]; years?: AcademicYear[] } = $props();
 
   let isOpen = $state(false);
   let isDeleteOpen = $state(false);
@@ -26,6 +36,18 @@
   let endTimeInput = $state('09:00');
 
   const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+  const classNames = $derived(new Map(classes.map(item => [item.id, item.name])));
+  const subjectNames = $derived(new Map(subjects.map(item => [item.id, item.name])));
+  const teacherNames = $derived(new Map(teachers.map(item => [item.id, item.name || item.username])));
+  const displaySchedules = $derived(schedules.map((schedule): ScheduleRow => ({
+    ...schedule,
+    day_name: days[schedule.day_of_week] ?? '-',
+    start_time_label: timestampToTimeInput(schedule.start_time),
+    end_time_label: timestampToTimeInput(schedule.end_time),
+    class_name: classNames.get(schedule.class_id) ?? schedule.class_id,
+    subject_name: subjectNames.get(schedule.subject_id) ?? schedule.subject_id,
+    teacher_name: teacherNames.get(schedule.teacher_user_id) ?? schedule.teacher_user_id,
+  })));
 
   function openCreate(): void { form = createEmptyScheduleForm(); selected = null; startTimeInput = '07:30'; endTimeInput = '09:00'; isOpen = true; }
   function openEdit(item: Schedule): void { selected = item; form = scheduleToForm(item); startTimeInput = timestampToTimeInput(item.start_time); endTimeInput = timestampToTimeInput(item.end_time); isOpen = true; }
@@ -45,10 +67,17 @@
     if (result.success) { isDeleteOpen = false; router.visit('/schedules', { preserveScroll: true }); }
   }
 
-  const columns = [{ key: 'day_of_week', label: 'Hari' }, { key: 'start_time', label: 'Mulai' }, { key: 'end_time', label: 'Selesai' }, { key: 'class_id', label: 'Kelas' }, { key: 'subject_id', label: 'Mapel' }, { key: 'teacher_user_id', label: 'Guru' }];
+  const columns = [
+    { key: 'day_name', label: 'Hari' },
+    { key: 'start_time_label', label: 'Mulai' },
+    { key: 'end_time_label', label: 'Selesai' },
+    { key: 'class_name', label: 'Kelas' },
+    { key: 'subject_name', label: 'Mapel' },
+    { key: 'teacher_name', label: 'Guru' },
+  ];
 </script>
 
-{#snippet rowActions(item: Schedule)}
+{#snippet rowActions(item: ScheduleRow)}
   {#if permissions.canEdit}<Button variant="ghost" size="icon" onclick={() => openEdit(item)}><Pencil class="w-4 h-4" /></Button>{/if}
   {#if permissions.canDelete}<Button variant="ghost" size="icon" onclick={() => confirmDelete(item)}><Trash2 class="w-4 h-4 text-destructive" /></Button>{/if}
 {/snippet}
@@ -67,7 +96,7 @@
     </div>
     {#if permissions.canCreate}<Button onclick={openCreate} size="lg">Tambah Jadwal</Button>{/if}
   </div>
-  <DataTable {columns} rows={schedules} rowAction={rowActions} />
+  <DataTable {columns} rows={displaySchedules} rowAction={rowActions} />
 </div>
 
 <Modal bind:open={isOpen} title={selected ? 'Edit Jadwal' : 'Tambah Jadwal'} description="Tambah atau ubah jadwal pelajaran. Atur hari, jam, kelas, mapel, dan guru.">
@@ -91,7 +120,7 @@
     </div>
     <div class="flex flex-col gap-0"><Label for="teacher" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Guru</Label>
       <Select id="teacher" bind:value={form.teacher_user_id} placeholder="Pilih guru">
-        {#each teachers as t}<option value={t.id}>{t.name}</option>{/each}
+        {#each teachers as t}<option value={t.id}>{t.name || t.username}</option>{/each}
       </Select>
     </div>
     <div class="flex flex-col gap-0"><Label for="year" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Tahun Ajaran</Label>

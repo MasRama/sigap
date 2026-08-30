@@ -196,14 +196,14 @@ export const QrSettingsSchema = z.object({
 
 export const TeacherConfirmationSchema = z.object({
   schedule_id: z.string().uuid('Invalid schedule ID').optional().nullable(),
-  teacher_user_id: z.string().uuid('Invalid teacher user ID'),
+  teacher_user_id: z.string().uuid('Invalid teacher user ID').optional(),
   photo_url: z.string().min(1, 'Photo is required').optional().nullable(),
   latitude: z.number().optional().nullable(),
   longitude: z.number().optional().nullable(),
   distance_meters: z.number().optional().nullable(),
   is_inside_school: z.number().optional(),
   confirmation_date: z.number().optional().nullable(),
-  confirmed_at: z.number({ message: 'Confirmed at is required' }),
+  confirmed_at: z.number().optional(),
 });
 
 export const JournalSchema = z.object({

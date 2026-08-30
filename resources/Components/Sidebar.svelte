@@ -117,15 +117,15 @@
           show: !isParent && !isTeacher && hasPermission('schedules.view'),
         },
         { href: '/teacher-assignments', label: 'Kontrak Mengajar', group: 'teacher-assignments', icon: UserCog, show: isAdmin },
-        { href: '/journals', label: 'Jurnal Mengajar', group: 'journals', icon: BookOpen, show: !isParent && hasPermission('journals.view') },
-        { href: '/attendance', label: 'Absensi Siswa', group: 'attendance', icon: CalendarCheck, show: !isParent && hasPermission('attendance.view') },
+        { href: '/journals', label: 'Jurnal Mengajar', group: 'journals', icon: BookOpen, show: !isParent && !isAdmin && hasPermission('journals.view') },
+        { href: '/attendance', label: 'Absensi Siswa', group: 'attendance', icon: CalendarCheck, show: !isParent && !isAdmin && hasPermission('attendance.view') },
       ],
     },
     {
       label: 'Penilaian',
       links: [
-        { href: '/grades', label: 'Nilai Siswa', group: 'grades', icon: GraduationCap, show: !isParent && hasPermission('grades.view') },
-        { href: '/grade-audit', label: 'Audit Nilai', group: 'grade-audit', icon: History, show: !isParent && hasPermission('grades.audit') },
+        { href: '/grades', label: 'Nilai Siswa', group: 'grades', icon: GraduationCap, show: !isParent && !isAdmin && hasPermission('grades.view') },
+        { href: '/grade-audit', label: 'Audit Nilai', group: 'grade-audit', icon: History, show: !isParent && !isAdmin && hasPermission('grades.audit') },
       ],
     },
     {
@@ -144,16 +144,16 @@
     {
       label: 'Laporan & Informasi',
       links: [
-        { href: '/headmaster/dashboard', label: 'Pengawasan Sekolah', group: 'headmaster', icon: ChartColumn, show: !isHeadmaster && hasPermission('headmaster.view') },
-        { href: '/headmaster/reports', label: 'Laporan Kehadiran Guru', group: 'headmaster-reports', icon: ChartColumn, show: hasPermission('headmaster.view') },
+        { href: '/headmaster/dashboard', label: 'Pengawasan Sekolah', group: 'headmaster', icon: ChartColumn, show: isHeadmaster },
+        { href: '/headmaster/reports', label: 'Laporan Kehadiran Guru', group: 'headmaster-reports', icon: ChartColumn, show: isHeadmaster },
         { href: '/announcements', label: 'Pengumuman', group: 'announcements', icon: Megaphone, show: isAdmin },
       ],
     },
     {
       label: 'Manajemen',
       links: [
-        { href: '/users', label: 'Pengguna', group: 'users', icon: Users, show: isAdmin || isHeadmaster },
-        { href: '/roles', label: 'Peran & Hak Akses', group: 'roles', icon: Shield, show: isAdmin || isHeadmaster },
+        { href: '/users', label: 'Pengguna', group: 'users', icon: Users, show: isAdmin },
+        { href: '/roles', label: 'Peran & Hak Akses', group: 'roles', icon: Shield, show: isAdmin },
       ],
     },
     {

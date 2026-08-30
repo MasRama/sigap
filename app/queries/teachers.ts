@@ -15,6 +15,13 @@ export const findUsersForTeacherSelect = (): { id: string; name: string | null; 
   SQLite.many<{ id: string; name: string | null; username: string }>`
     SELECT id, name, username FROM users ORDER BY COALESCE(name, username)
   `;
+export const findTeacherUsersForSchedule = (): { id: string; name: string | null; username: string }[] =>
+  SQLite.many<{ id: string; name: string | null; username: string }>`
+    SELECT u.id, u.name, u.username
+    FROM users u
+    INNER JOIN teachers t ON t.user_id = u.id
+    ORDER BY COALESCE(u.name, u.username)
+  `;
 
 
 export const findTeacherById = (id: string): Teacher | undefined =>

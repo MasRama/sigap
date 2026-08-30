@@ -4,9 +4,10 @@ import { hashPassword } from '@services/Authenticate';
 import Logger from '@services/Logger';
 import {
   getUsersPaginated, createUser, updateUser, deleteUsers,
-  getUserRoles, getRolesForUsers, isAdmin, hasPermission, syncRoles
+  getUserRoles, getRolesForUsers, isAdmin, syncRoles
 } from '@queries';
 import { findAllRoles, findRoleBySlug, getUsersWithRole } from '@queries/roles';
+import { createParent, findParentByUserId } from '@queries/parents';
 import { findStudentsForParentSelect, findStudentById, linkStudentToParent } from '@queries/students';
 import { randomUUID } from 'crypto';
 import { CreateUserSchema, UpdateUserSchema, DeleteUsersSchema, ChangeProfileSchema, zodToErrors } from '@validators';
@@ -36,7 +37,7 @@ export const usersPage = (req: NaraRequest, res: NaraResponse) => {
 
   const userId = req.user.id;
   const admin = isAdmin(userId);
-  const canView = admin || hasPermission(userId, 'users.view');
+  const canView = admin;
   if (!canView) {
     return res.inertia('users', {
       users: [], availableRoles: [], students: [],
@@ -50,20 +51,20 @@ export const usersPage = (req: NaraRequest, res: NaraResponse) => {
   const search = queryString(req, 'search');
 
   const result = getUsersPaginated(page, limit, search);
-  const canCreate = admin || hasPermission(userId, 'users.create');
-  const canEdit = admin || hasPermission(userId, 'users.edit');
-  const canDelete = admin || hasPermission(userId, 'users.delete');
+  const canCreate = admin;
+  const canEdit = admin;
+  const canDelete = admin;
   const rolesMap = getRolesForUsers(result.data.map(u => u.id));
 
   const users = result.data.map(u => ({
     id: u.id, name: u.name,
-    username: (admin || canEdit) ? u.username : undefined,
+    username: u.username,
     avatar: u.avatar,
     roles: (rolesMap.get(u.id) || []).map(r => r.slug),
   }));
 
   const roles = findAllRoles().map(r => ({ name: r.name, slug: r.slug, description: r.description }));
-  const students = canCreate ? findStudentsForParentSelect().map(s => ({ id: s.id, nis: s.nis, name: s.name, class_name: s.class_name })) : [];
+  const students = findStudentsForParentSelect().map(s => ({ id: s.id, nis: s.nis, name: s.name, class_name: s.class_name }));
 
   return res.inertia('users', {
     users, availableRoles: roles, students,
@@ -98,7 +99,7 @@ export const changeProfile = (req: NaraRequest, res: NaraResponse) => {
 
 export const addUser = (req: NaraRequest, res: NaraResponse) => {
   if (!req.user) return jsonError(res, 'Unauthorized', 401);
-  if (!isAdmin(req.user.id) && !hasPermission(req.user.id, 'users.create')) {
+  if (!isAdmin(req.user.id)) {
     return jsonError(res, 'Forbidden', 403);
   }
 
@@ -131,6 +132,9 @@ export const addUser = (req: NaraRequest, res: NaraResponse) => {
       const roleIds = roles.map(slug => allRoles.find(r => r.slug === slug)?.id).filter(Boolean) as string[];
       syncRoles(user.id, roleIds);
     }
+    if (roles?.includes('parent') && !findParentByUserId(user.id)) {
+      createParent({ user_id: user.id, phone: null, address: null });
+    }
 
     // Link student to parent if student_id provided
     if (student_id && roles?.includes('parent')) {
@@ -159,7 +163,7 @@ export const editUser = (req: NaraRequest, res: NaraResponse) => {
   // Users can update own profile, or need users.edit permission
   const isSelf = req.user.id === id;
   const admin = isAdmin(req.user.id);
-  if (!isSelf && !admin && !hasPermission(req.user.id, 'users.edit')) {
+  if (!isSelf && !admin) {
     return jsonError(res, 'Forbidden', 403);
   }
 
@@ -188,6 +192,9 @@ export const editUser = (req: NaraRequest, res: NaraResponse) => {
 
       syncRoles(id, roleIds);
     }
+    if (admin && roles?.includes('parent') && !findParentByUserId(id)) {
+      createParent({ user_id: id, phone: null, address: null });
+    }
 
     const userRoles = getUserRoles(id);
     return jsonSuccess(res, 'Pengguna diperbarui', {
@@ -204,7 +211,7 @@ export const editUser = (req: NaraRequest, res: NaraResponse) => {
 
 export const removeUsers = (req: NaraRequest, res: NaraResponse) => {
   if (!req.user) return jsonError(res, 'Unauthorized', 401);
-  if (!isAdmin(req.user.id) && !hasPermission(req.user.id, 'users.delete')) {
+  if (!isAdmin(req.user.id)) {
     return jsonError(res, 'Forbidden', 403);
   }
 

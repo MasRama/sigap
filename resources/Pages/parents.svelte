@@ -11,12 +11,14 @@
   import ConfirmDialog from '../Components/ConfirmDialog.svelte';
   import Select from '../Components/Select.svelte';
   import Pagination from '../Components/Pagination.svelte';
-  import type { Parent, ParentForm, User, PaginationMeta } from '../types';
+  import type { Parent, ParentForm, PaginationMeta } from '../types';
   import { createEmptyParentForm, parentToForm } from '../types';
   import { Pencil, Trash2 } from '@lucide/svelte';
   import { fly } from 'svelte/transition';
 
-  let { permissions, parents = [], users = [], meta }: { permissions: { canCreate?: boolean; canEdit?: boolean; canDelete?: boolean }; parents?: Parent[]; users?: User[]; meta?: PaginationMeta } = $props();
+  type ParentRow = Parent & { user_name: string | null; user_username: string };
+  type UserOption = { id: string; name: string | null; username: string };
+  let { permissions, parents = [], users = [], meta }: { permissions: { canCreate?: boolean; canEdit?: boolean; canDelete?: boolean }; parents?: ParentRow[]; users?: UserOption[]; meta?: PaginationMeta } = $props();
 
   let isOpen = $state(false);
   let isDeleteOpen = $state(false);
@@ -39,10 +41,10 @@
     if (result.success) { isDeleteOpen = false; router.visit('/parents', { preserveScroll: true }); }
   }
 
-  const columns = [{ key: 'user_id', label: 'Pengguna' }, { key: 'phone', label: 'Telepon' }, { key: 'address', label: 'Alamat' }];
+  const columns = [{ key: 'user_name', label: 'Pengguna' }, { key: 'phone', label: 'Telepon' }, { key: 'address', label: 'Alamat' }];
 </script>
 
-{#snippet rowActions(item: Parent)}
+{#snippet rowActions(item: ParentRow)}
   {#if permissions.canEdit}<Button variant="ghost" size="icon" onclick={() => openEdit(item)}><Pencil class="w-4 h-4" /></Button>{/if}
   {#if permissions.canDelete}<Button variant="ghost" size="icon" onclick={() => confirmDelete(item)}><Trash2 class="w-4 h-4 text-destructive" /></Button>{/if}
 {/snippet}

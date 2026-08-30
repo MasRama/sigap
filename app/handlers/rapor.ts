@@ -12,7 +12,7 @@ export const raporPage = (req: NaraRequest, res: NaraResponse) => {
   const studentId = req.params.studentId;
   if (!studentId) return res.redirect('/dashboard');
 
-  const isStaff = isAdmin(req.user.id) || hasPermission(req.user.id, 'grades.view');
+  const isStaff = !isAdmin(req.user.id) && hasPermission(req.user.id, 'grades.view');
 
   let ownsChild = false;
   if (!isStaff) {

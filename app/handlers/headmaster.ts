@@ -4,10 +4,10 @@ import { getDashboardStats } from '@queries/stats';
 import { getTodaySessions, getMissedSessions, getJournalCompleteness, getGradeProgress, getOutsideConfirmations } from '@queries/headmaster';
 import { findActiveSchoolLocation } from '@queries/schoolLocations';
 import { findAllTeacherConfirmations } from '@queries/teacherConfirmations';
-import { isAdmin, hasPermission } from '@queries/users';
+import { hasPermission } from '@queries/users';
 
 const isHeadmaster = (userId: string): boolean =>
-  isAdmin(userId) || hasPermission(userId, 'headmaster.view');
+  hasPermission(userId, 'headmaster.view');
 
 export const headmasterDashboardPage = (req: NaraRequest, res: NaraResponse) => {
   const userId = req.user?.id;

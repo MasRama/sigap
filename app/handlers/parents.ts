@@ -3,7 +3,7 @@ import { jsonSuccess, jsonCreated, jsonError, jsonServerError, jsonValidationErr
 import Logger from '@services/Logger';
 import { getParentsPaginated, findParentById, findParentByUserId, createParent, updateParent, deleteParent } from '@queries/parents';
 import { findStudentsByParent } from '@queries/students';
-import { isAdmin, hasPermission } from '@queries/users';
+import { findUsersForParentSelect, isAdmin, hasPermission } from '@queries/users';
 import { ParentSchema, UpdateParentSchema, zodToErrors } from '@validators';
 
 const canView = (userId: string): boolean => isAdmin(userId) || hasPermission(userId, 'parents.view');
@@ -11,13 +11,35 @@ const canManage = (userId: string): boolean => isAdmin(userId) || hasPermission(
 
 export const parentsPage = (req: NaraRequest, res: NaraResponse) => {
   const userId = req.user?.id;
+  const canViewFlag = userId ? canView(userId) : false;
   const permissions = {
-    canView: userId ? canView(userId) : false,
+    canView: canViewFlag,
     canCreate: userId ? canManage(userId) : false,
     canEdit: userId ? isAdmin(userId) || hasPermission(userId, 'parents.edit') : false,
     canDelete: userId ? isAdmin(userId) || hasPermission(userId, 'parents.delete') : false,
   };
-  return res.inertia('parents', { permissions });
+  if (!canViewFlag) {
+    return res.inertia('parents', {
+      permissions,
+      parents: [],
+      users: [],
+      meta: undefined,
+    });
+  }
+
+  const page = queryInt(req, 'page', 1);
+  const limit = queryInt(req, 'limit', 10);
+  const search = queryString(req, 'search');
+  const { data, total } = getParentsPaginated(page, limit, search);
+  const totalPages = Math.ceil(total / limit);
+  const users = permissions.canCreate ? findUsersForParentSelect() : [];
+
+  return res.inertia('parents', {
+    permissions,
+    parents: data,
+    users,
+    meta: { total, page, limit, totalPages, hasNext: page < totalPages, hasPrev: page > 1 },
+  });
 };
 
 export const listParents = (req: NaraRequest, res: NaraResponse) => {
@@ -55,6 +77,9 @@ export const addParent = (req: NaraRequest, res: NaraResponse) => {
 
   const parsed = ParentSchema.safeParse(req.body);
   if (!parsed.success) return jsonValidationError(res, 'Validation failed', zodToErrors(parsed.error));
+  if (findParentByUserId(parsed.data.user_id)) {
+    return jsonError(res, 'Profil orang tua sudah terdaftar', 409, 'PARENT_EXISTS');
+  }
 
   try {
     const item = createParent({

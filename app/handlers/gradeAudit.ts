@@ -3,7 +3,7 @@ import { jsonError, jsonPaginated, queryInt } from '@core';
 import { getGradeAuditLogsPaginated } from '@queries/gradeAuditLogs';
 import { isAdmin, hasPermission } from '@queries/users';
 
-const canViewAudit = (userId: string): boolean => isAdmin(userId) || hasPermission(userId, 'grades.audit');
+const canViewAudit = (userId: string): boolean => !isAdmin(userId) && hasPermission(userId, 'grades.audit');
 
 export const gradeAuditPage = (req: NaraRequest, res: NaraResponse) => {
   if (!req.user) return res.redirect('/login');

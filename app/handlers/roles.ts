@@ -5,7 +5,7 @@ import {
   findAllRoles, findRoleById, createRole, updateRole, deleteRole,
   getRolePermissions, getPermissionsForRoles, getUserCountsForRoles, syncRolePermissions, findAllPermissions
 } from '@queries/roles';
-import { isAdmin, hasPermission } from '@queries/users';
+import { isAdmin } from '@queries/users';
 import { randomUUID } from 'crypto';
 import { CreateRoleSchema, UpdateRoleSchema, zodToErrors } from '@validators';
 
@@ -14,10 +14,10 @@ export const rolesPage = (req: NaraRequest, res: NaraResponse) => {
 
   const userId = req.user.id;
   const permissions = {
-    canCreate: isAdmin(userId) || hasPermission(userId, 'roles.create'),
-    canEdit: isAdmin(userId) || hasPermission(userId, 'roles.edit'),
-    canDelete: isAdmin(userId) || hasPermission(userId, 'roles.delete'),
-    canAssign: isAdmin(userId) || hasPermission(userId, 'roles.edit'),
+    canCreate: isAdmin(userId),
+    canEdit: isAdmin(userId),
+    canDelete: isAdmin(userId),
+    canAssign: isAdmin(userId),
   };
 
   return res.inertia('roles', { permissions });
@@ -25,7 +25,7 @@ export const rolesPage = (req: NaraRequest, res: NaraResponse) => {
 
 export const listRoles = (req: NaraRequest, res: NaraResponse) => {
   if (!req.user) return jsonError(res, 'Unauthorized', 401);
-  if (!isAdmin(req.user.id) && !hasPermission(req.user.id, 'roles.view')) {
+  if (!isAdmin(req.user.id)) {
     return jsonError(res, 'Forbidden', 403);
   }
 
@@ -44,7 +44,7 @@ export const listRoles = (req: NaraRequest, res: NaraResponse) => {
 
 export const permissionsData = (req: NaraRequest, res: NaraResponse) => {
   if (!req.user) return jsonError(res, 'Unauthorized', 401);
-  if (!isAdmin(req.user.id) && !hasPermission(req.user.id, 'roles.view')) {
+  if (!isAdmin(req.user.id)) {
     return jsonError(res, 'Forbidden', 403);
   }
 
@@ -59,7 +59,7 @@ export const permissionsData = (req: NaraRequest, res: NaraResponse) => {
 
 export const addRole = (req: NaraRequest, res: NaraResponse) => {
   if (!req.user) return jsonError(res, 'Unauthorized', 401);
-  if (!isAdmin(req.user.id) && !hasPermission(req.user.id, 'roles.create')) {
+  if (!isAdmin(req.user.id)) {
     return jsonError(res, 'Forbidden', 403);
   }
 
@@ -88,7 +88,7 @@ export const addRole = (req: NaraRequest, res: NaraResponse) => {
 
 export const editRole = (req: NaraRequest, res: NaraResponse) => {
   if (!req.user) return jsonError(res, 'Unauthorized', 401);
-  if (!isAdmin(req.user.id) && !hasPermission(req.user.id, 'roles.edit')) {
+  if (!isAdmin(req.user.id)) {
     return jsonError(res, 'Forbidden', 403);
   }
 
@@ -132,7 +132,7 @@ export const editRole = (req: NaraRequest, res: NaraResponse) => {
 
 export const removeRole = (req: NaraRequest, res: NaraResponse) => {
   if (!req.user) return jsonError(res, 'Unauthorized', 401);
-  if (!isAdmin(req.user.id) && !hasPermission(req.user.id, 'roles.delete')) {
+  if (!isAdmin(req.user.id)) {
     return jsonError(res, 'Forbidden', 403);
   }
 

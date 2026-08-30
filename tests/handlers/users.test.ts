@@ -205,8 +205,8 @@ describe('users handler', () => {
         body: { ids: [UUID_OTHER] },
       });
       const res = mockResponse();
-      (isAdmin as any).mockReturnValue(false);
-      (hasPermission as any).mockReturnValue(true);
+      vi.mocked(isAdmin).mockReturnValue(true);
+      vi.mocked(hasPermission).mockReturnValue(true);
       (findRoleBySlug as any).mockReturnValue({ id: 'role-admin', slug: 'admin' });
       (getUsersWithRole as any).mockReturnValue([{ id: UUID_OTHER }]);
       removeUsers(req as any, res as any);
