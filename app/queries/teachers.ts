@@ -31,13 +31,13 @@ export const findTeachersBySubject = (subjectId: string): Teacher[] =>
     ORDER BY t.created_at DESC
   `;
 
-export interface TeacherWithHomeroom extends Teacher {
+export interface TeacherListItem extends Teacher {
   user_name: string | null;
   user_username: string;
-  homeroom_class_name: string | null;
+  subject_names: string | null;
 }
 
-export const getTeachersPaginated = (page: number, limit: number, search = ''): { data: TeacherWithHomeroom[]; total: number } => {
+export const getTeachersPaginated = (page: number, limit: number, search = ''): { data: TeacherListItem[]; total: number } => {
   const pattern = `%${search.replace(/[%_]/g, '')}%`;
   const countRow = SQLite.get<{ count: number }>(
     `SELECT COUNT(*) as count FROM teachers t
@@ -45,14 +45,21 @@ export const getTeachersPaginated = (page: number, limit: number, search = ''): 
      WHERE u.name LIKE ? OR t.employee_id LIKE ?`,
     [pattern, pattern]
   );
-  const data = SQLite.all<TeacherWithHomeroom>(
+  const data = SQLite.all<TeacherListItem>(
     `SELECT t.*, u.name AS user_name, u.username AS user_username,
-            hc.name AS homeroom_class_name
+            subject_list.subject_names
      FROM teachers t
      INNER JOIN users u ON t.user_id = u.id
-     LEFT JOIN teacher_class_assignments tca
-       ON tca.teacher_id = t.id AND tca.is_homeroom = 1
-     LEFT JOIN classes hc ON hc.id = tca.class_id
+     LEFT JOIN (
+       SELECT teacher_id, GROUP_CONCAT(name, ', ') AS subject_names
+       FROM (
+         SELECT DISTINCT ts.teacher_id, sub.name
+         FROM teacher_subjects ts
+         INNER JOIN subjects sub ON sub.id = ts.subject_id
+         ORDER BY sub.name ASC
+       )
+       GROUP BY teacher_id
+     ) subject_list ON subject_list.teacher_id = t.id
      WHERE u.name LIKE ? OR t.employee_id LIKE ?
      ORDER BY COALESCE(u.name, u.username) ASC
      LIMIT ? OFFSET ?`,

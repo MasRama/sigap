@@ -16,7 +16,7 @@
   import { Pencil, Trash2 } from '@lucide/svelte';
   import { fly } from 'svelte/transition';
 
-  let { permissions, teachers = [], users = [], meta }: { permissions: { canCreate?: boolean; canEdit?: boolean; canDelete?: boolean }; teachers?: (Teacher & { user_name: string | null; user_username: string; homeroom_class_name: string | null })[]; users?: User[]; meta?: PaginationMeta } = $props();
+  let { permissions, teachers = [], users = [], meta }: { permissions: { canCreate?: boolean; canEdit?: boolean; canDelete?: boolean }; teachers?: (Teacher & { user_name: string | null; user_username: string; subject_names: string | null })[]; users?: User[]; meta?: PaginationMeta } = $props();
 
   let isOpen = $state(false);
   let isDeleteOpen = $state(false);
@@ -39,7 +39,7 @@
     if (result.success) { isDeleteOpen = false; router.visit('/teachers', { preserveScroll: true }); }
   }
 
-  const columns = [{ key: 'employee_id', label: 'NIP' }, { key: 'user_name', label: 'Nama Guru' }, { key: 'user_username', label: 'Username' }, { key: 'homeroom_class_name', label: 'Wali Kelas' }, { key: 'phone', label: 'Telepon' }];
+  const columns = [{ key: 'employee_id', label: 'NIP' }, { key: 'user_name', label: 'Nama' }, { key: 'subject_names', label: 'Mapel' }];
 </script>
 
 {#snippet rowActions(item: Teacher)}
@@ -56,7 +56,7 @@
         Guru.
       </h1>
       <p class="mt-4 text-base text-muted-foreground leading-relaxed max-w-[52ch]">
-        Data guru terdaftar beserta NIP dan kontak. Tambah, edit, atau hapus.
+        Data guru terdaftar beserta NIP dan mata pelajaran. Tambah, edit, atau hapus.
       </p>
     </div>
     {#if permissions.canCreate}<Button onclick={openCreate} size="lg">Tambah Guru</Button>{/if}

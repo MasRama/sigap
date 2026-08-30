@@ -10,8 +10,8 @@
 
 ## Stats
 
-- Files indexed: 249
-- Total lines: 23569
+- Files indexed: 250
+- Total lines: 23619
 - Total exports: 784
 - Entry points (★): `app/core/index.ts`, `resources/app.ts`, `routes/web.ts`, `server.ts`
 
@@ -112,7 +112,7 @@
 - `subjects.ts` (33L) — findAllSubjects, findSubjectById, findSubjectByCode, createSubject, updateSubject, deleteSubject
 - `teacherClassAssignments.ts` (107L) — findTeacherClassAssignments, findTeacherClassAssignmentsByAcademicYear, isTeacherUser, isTeacherAssignedToClass, isTeacherAssignedToStudent, syncTeacherClassAssignments, TeacherClassAssignmentView
 - `teacherConfirmations.ts` (81L) — findAllTeacherConfirmations, findAllTeacherConfirmationLogs, findTeacherConfirmationById, findConfirmationsByTeacher, findConfirmationsBySchedule, findTodayConfirmationBySchedule, findTodayConfirmationByTeacher, createTeacherConfirmation, +2
-- `teachers.ts` (99L) — findAllTeachers, findAllTeachersForAssignment, findUsersForTeacherSelect, findTeacherById, findTeacherByUserId, findTeachersBySubject, getTeachersPaginated, createTeacher, +5
+- `teachers.ts` (106L) — findAllTeachers, findAllTeachersForAssignment, findUsersForTeacherSelect, findTeacherById, findTeacherByUserId, findTeachersBySubject, getTeachersPaginated, createTeacher, +5
 - `users.ts` (164L) — findUserById, findUserByUsername, createUser, updateUser, deleteUser, deleteUsers, usernameExists, searchUsers, +12
 
 ### app/services/
@@ -355,6 +355,7 @@
 
 - `roles.test.ts` (125L)
 - `teacherClassAssignments.test.ts` (46L)
+- `teachers.test.ts` (43L)
 
 ### tests/services/
 
@@ -975,7 +976,7 @@
 - `const` **deleteTeacher**
 - `const` **getTeacherSubjects**
 - `const` **syncTeacherSubjects**
-- `iface` **TeacherWithHomeroom**
+- `iface` **TeacherListItem**
 
 ### `app/queries/users.ts`
 
@@ -1741,6 +1742,7 @@
 - `tests/middlewares/securityHeaders.test.ts` → `../../app/middlewares/securityHeaders`, `../helpers/mocks`
 - `tests/queries/roles.test.ts` → `@services/SQLite`
 - `tests/queries/teacherClassAssignments.test.ts` → `../../app/queries/teacherClassAssignments`, `@services/SQLite`
+- `tests/queries/teachers.test.ts` → `../../app/queries/teachers`, `@services/SQLite`
 - `tests/services/Authenticate.test.ts` → `../../app/services/Authenticate`
 - `tests/services/CacheStore.test.ts` → `../../app/services/CacheStore`
 - `tests/services/GradeCalculator.test.ts` → `../../app/services/GradeCalculator`
