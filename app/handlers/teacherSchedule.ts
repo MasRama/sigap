@@ -1,32 +1,34 @@
 import type { NaraRequest, NaraResponse } from '@core';
 import { jsonSuccess, jsonError } from '@core';
-import { findSchedulesByTeacher, findScheduleById } from '@queries/schedules';
-import { findTodayConfirmationBySchedule } from '@queries/teacherConfirmations';
+import { findTeacherSchedulesByDay, findScheduleById } from '@queries/schedules';
+import { findTodayConfirmationByTeacher } from '@queries/teacherConfirmations';
 import { isAdmin, hasPermission } from '@queries/users';
 import { isTeacherUser } from '@queries/teacherClassAssignments';
 
 const isTeacherActor = (userId: string): boolean =>
   !isAdmin(userId) && isTeacherUser(userId) && hasPermission(userId, 'schedules.view');
 
+const confirmationRequired = (res: NaraResponse): NaraResponse =>
+  jsonError(res, 'Konfirmasi kehadiran hari ini diperlukan sebelum membuka jadwal', 403, 'CONFIRMATION_REQUIRED');
+
 export const teacherSchedulePage = (req: NaraRequest, res: NaraResponse) => {
   const userId = req.user?.id;
-  return res.inertia('teacher/schedule', { isTeacher: userId ? isTeacherActor(userId) : false });
+  const isTeacher = userId ? isTeacherActor(userId) : false;
+  const confirmedToday = isTeacher && !!userId && !!findTodayConfirmationByTeacher(userId);
+  const schedules = confirmedToday && userId
+    ? findTeacherSchedulesByDay(userId, new Date().getDay())
+    : [];
+
+  return res.inertia('teacher/schedule', { isTeacher, confirmedToday, schedules });
 };
 
 export const listTodaySchedules = (req: NaraRequest, res: NaraResponse) => {
   if (!req.user) return jsonError(res, 'Unauthorized', 401);
   if (!isTeacherActor(req.user.id)) return jsonError(res, 'Forbidden', 403);
+  if (!findTodayConfirmationByTeacher(req.user.id)) return confirmationRequired(res);
 
-  const userId = req.user.id;
-  const dayOfWeek = new Date().getDay();
-  const schedules = findSchedulesByTeacher(userId).filter(s => s.day_of_week === dayOfWeek);
-
-  const data = schedules.map(s => ({
-    ...s,
-    confirmed: !!findTodayConfirmationBySchedule(s.id),
-  }));
-
-  return jsonSuccess(res, 'OK', data);
+  const schedules = findTeacherSchedulesByDay(req.user.id, new Date().getDay());
+  return jsonSuccess(res, 'OK', schedules.map(schedule => ({ ...schedule, confirmed: true })));
 };
 
 export const todayScheduleDetail = (req: NaraRequest, res: NaraResponse) => {
@@ -38,7 +40,7 @@ export const todayScheduleDetail = (req: NaraRequest, res: NaraResponse) => {
   if (!isTeacherActor(req.user.id) || schedule.teacher_user_id !== req.user.id) {
     return jsonError(res, 'Forbidden', 403);
   }
+  if (!findTodayConfirmationByTeacher(req.user.id)) return confirmationRequired(res);
 
-  const confirmation = findTodayConfirmationBySchedule(schedule.id);
-  return jsonSuccess(res, 'OK', { schedule, confirmed: !!confirmation });
+  return jsonSuccess(res, 'OK', { schedule, confirmed: true, confirmedToday: true });
 };

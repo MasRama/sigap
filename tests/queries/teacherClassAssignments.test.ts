@@ -11,7 +11,7 @@ vi.mock('@services/SQLite', () => ({
 }));
 
 import SQLite from '@services/SQLite';
-import { isTeacherAssignedToClass, syncTeacherClassAssignments } from '../../app/queries/teacherClassAssignments';
+import { isTeacherAssignedToClass, isTeacherHomeroomOfClass, isTeacherAssignedToClassSubject, syncTeacherClassAssignments } from '../../app/queries/teacherClassAssignments';
 
 const yearId = '00000000-0000-4000-8000-000000000001';
 const classId = '00000000-0000-4000-8000-000000000002';
@@ -41,5 +41,13 @@ describe('teacher class assignment queries', () => {
 
     expect(() => syncTeacherClassAssignments('teacher-1', yearId, [{ class_id: classId, is_homeroom: false }])).toThrow();
     expect(SQLite.transaction).not.toHaveBeenCalled();
+  });
+
+  it('checks homeroom and exact class-subject assignments', () => {
+    vi.mocked(SQLite.one).mockReturnValue({ id: 'assignment-1' });
+
+    expect(isTeacherHomeroomOfClass('teacher-user-1', classId)).toBe(true);
+    expect(isTeacherAssignedToClassSubject('teacher-user-1', classId, 'subject-1')).toBe(true);
+    expect(SQLite.one).toHaveBeenCalledTimes(2);
   });
 });

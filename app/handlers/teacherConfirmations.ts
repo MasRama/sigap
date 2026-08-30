@@ -1,11 +1,12 @@
 import type { NaraRequest, NaraResponse } from '@core';
-import { jsonSuccess, jsonCreated, jsonError, jsonServerError, jsonValidationError, queryString } from '@core';
+import { jsonSuccess, jsonCreated, jsonError, jsonServerError, jsonValidationError, queryString, isUniqueConstraintError } from '@core';
 import Logger from '@services/Logger';
-import { findTeacherConfirmationById, findAllTeacherConfirmations, findAllTeacherConfirmationLogs, findConfirmationsByTeacher, createTeacherConfirmation, findTodayConfirmationBySchedule, findTodayConfirmationByTeacher } from '@queries/teacherConfirmations';
+import { findTeacherConfirmationById, findAllTeacherConfirmations, findAllTeacherConfirmationLogs, findConfirmationsByTeacher, createTeacherConfirmation, findTodayConfirmationByTeacher } from '@queries/teacherConfirmations';
 import { findScheduleById } from '@queries/schedules';
 import { findActiveSchoolLocation } from '@queries/schoolLocations';
 import { haversineDistance, validateCoordinates } from '@services/Geolocation';
 import { saveConfirmationPhoto } from '@services/CameraUpload';
+import { verifyQrToken } from '@services/QrCode';
 import { isAdmin, hasPermission } from '@queries/users';
 import { isTeacherUser } from '@queries/teacherClassAssignments';
 import { TeacherConfirmationSchema, zodToErrors } from '@validators';
@@ -30,10 +31,20 @@ export const confirmPage = (req: NaraRequest, res: NaraResponse) => {
     return res.redirect('/dashboard');
   }
 
-  const scheduleId = req.query.schedule_id as string | undefined;
+  const scheduleId = typeof req.query.schedule_id === 'string' ? req.query.schedule_id : undefined;
   const schedule = scheduleId ? findScheduleById(scheduleId) : null;
   if (schedule && schedule.teacher_user_id !== req.user.id) return res.redirect('/dashboard');
-  return res.inertia('teacher/confirm', { scheduleId: scheduleId || null, schedule });
+
+  const qrToken = typeof req.query.qr_token === 'string' ? req.query.qr_token : null;
+  const qrStatus = qrToken ? verifyQrToken(qrToken) : null;
+  return res.inertia('teacher/confirm', {
+    scheduleId: scheduleId || null,
+    schedule,
+    qrToken,
+    qrTokenValid: !!qrStatus?.valid && !qrStatus.expired,
+    qrTokenExpired: !!qrStatus?.expired,
+    alreadyConfirmed: !!findTodayConfirmationByTeacher(req.user.id),
+  });
 };
 
 export const listTeacherConfirmations = (req: NaraRequest, res: NaraResponse) => {
@@ -69,27 +80,24 @@ export const submitTeacherConfirmation = async (req: NaraRequest, res: NaraRespo
   const parsed = TeacherConfirmationSchema.safeParse(req.body);
   if (!parsed.success) return jsonValidationError(res, 'Validation failed', zodToErrors(parsed.error));
 
-  // QR flow: schedule_id optional, photo optional
-  // Legacy flow: schedule_id required, photo required
+  const qrToken = parsed.data.qr_token;
+  if (!qrToken) return jsonError(res, 'Silakan scan QR absen sekolah terlebih dahulu', 403, 'QR_TOKEN_REQUIRED');
+  const qrStatus = verifyQrToken(qrToken);
+  if (!qrStatus.valid) return jsonError(res, 'QR absen tidak valid', 403, 'INVALID_QR_TOKEN');
+  if (qrStatus.expired) return jsonError(res, 'QR absen sudah kedaluwarsa', 403, 'EXPIRED_QR_TOKEN');
+
+  const existingToday = findTodayConfirmationByTeacher(req.user.id);
+  if (existingToday) {
+    return jsonError(res, 'Anda sudah konfirmasi kehadiran hari ini', 409, 'DUPLICATE_CONFIRMATION');
+  }
+
   const scheduleId = parsed.data.schedule_id ?? null;
   if (scheduleId) {
     const schedule = findScheduleById(scheduleId);
     if (!schedule) return jsonError(res, 'Schedule not found', 404);
     if (schedule.teacher_user_id !== req.user.id) return jsonError(res, 'Forbidden', 403);
-    // Block duplicate per-schedule today
-    const existing = findTodayConfirmationBySchedule(schedule.id);
-    if (existing) {
-      return jsonError(res, 'Already confirmed for this schedule today', 409, 'DUPLICATE_CONFIRMATION');
-    }
-  } else {
-    // QR flow: block duplicate per-teacher today
-    const existingToday = findTodayConfirmationByTeacher(req.user.id);
-    if (existingToday) {
-      return jsonError(res, 'Sudah konfirmasi kehadiran hari ini', 409, 'DUPLICATE_CONFIRMATION');
-    }
   }
 
-  // Geolocation (optional in QR flow, kept for backward compatibility)
   const location = findActiveSchoolLocation();
   let isInside = false;
   let distanceMeters: number | null = null;
@@ -102,7 +110,6 @@ export const submitTeacherConfirmation = async (req: NaraRequest, res: NaraRespo
     isInside = distanceMeters <= location.radius_meters;
   }
 
-  // Save photo (optional in QR flow)
   let photoUrl: string | null = parsed.data.photo_url ?? null;
   if (photoUrl && photoUrl.startsWith('data:image')) {
     try {
@@ -114,7 +121,6 @@ export const submitTeacherConfirmation = async (req: NaraRequest, res: NaraRespo
     }
   }
 
-  // Compute start-of-day for confirmation_date
   const startOfDay = new Date();
   startOfDay.setHours(0, 0, 0, 0);
 
@@ -134,6 +140,9 @@ export const submitTeacherConfirmation = async (req: NaraRequest, res: NaraRespo
     const item = createTeacherConfirmation(data);
     return jsonCreated(res, 'Konfirmasi kehadiran tercatat', item);
   } catch (error: unknown) {
+    if (isUniqueConstraintError(error)) {
+      return jsonError(res, 'Anda sudah konfirmasi kehadiran hari ini', 409, 'DUPLICATE_CONFIRMATION');
+    }
     Logger.error('Failed to create teacher confirmation', error as Error);
     return jsonServerError(res, 'Failed to create confirmation');
   }

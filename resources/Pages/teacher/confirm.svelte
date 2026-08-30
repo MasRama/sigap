@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { router } from '@inertiajs/svelte';
+  import { inertia, router } from '@inertiajs/svelte';
   import axios from 'axios';
   import { api } from '$lib/api';
   import Sidebar from '../../Components/Sidebar.svelte';
@@ -8,30 +8,43 @@
   import Button from '../../Components/Button.svelte';
   import { fly } from 'svelte/transition';
 
-  let { scheduleId: initialScheduleId = null }: { scheduleId?: string | null } = $props();
-  let scheduleId = $state('');
+  let {
+    scheduleId: initialScheduleId = null,
+    qrToken: initialQrToken = null,
+    qrTokenValid = false,
+    qrTokenExpired = false,
+    alreadyConfirmed = false,
+  }: {
+    scheduleId?: string | null;
+    qrToken?: string | null;
+    qrTokenValid?: boolean;
+    qrTokenExpired?: boolean;
+    alreadyConfirmed?: boolean;
+  } = $props();
 
+  let scheduleId = $state(initialScheduleId ?? '');
   $effect(() => {
-    if (initialScheduleId && scheduleId !== initialScheduleId) {
-      scheduleId = initialScheduleId;
-    }
+    scheduleId = initialScheduleId ?? '';
   });
+
   let photo = $state<string | null>(null);
   let coords = $state<{ latitude: number; longitude: number } | null>(null);
   let geoError = $state<string | null>(null);
   let isLoading = $state(false);
 
   async function submit(): Promise<void> {
+    if (!initialQrToken || !qrTokenValid) { geoError = 'Silakan scan QR absen sekolah yang masih berlaku'; return; }
     if (!photo) { geoError = 'Silakan ambil foto terlebih dahulu'; return; }
     if (!coords) { geoError = 'Silakan bagikan lokasi Anda'; return; }
-    if (!scheduleId) { geoError = 'ID jadwal tidak ditemukan'; return; }
     isLoading = true;
-    const result = await api(() => axios.post('/teacher/confirmations', {
-      schedule_id: scheduleId,
+    const payload = {
+      qr_token: initialQrToken,
+      ...(scheduleId ? { schedule_id: scheduleId } : {}),
       photo_url: photo,
       latitude: coords.latitude,
       longitude: coords.longitude,
-    }));
+    };
+    const result = await api(() => axios.post('/teacher/confirmations', payload));
     isLoading = false;
     if (result.success) router.visit('/teacher/schedule', { preserveScroll: true });
   }
@@ -43,75 +56,94 @@
   <div in:fly={{ y: 20, duration: 700 }}>
     <p class="font-mono-accent text-[10px] uppercase tracking-[0.25em] text-muted-foreground mb-4">Verifikasi Kehadiran</p>
     <h1 class="font-heading font-semibold tracking-[-0.03em] leading-[1] text-[clamp(2rem,5vw,3.5rem)] text-foreground mb-2">Konfirmasi Kehadiran</h1>
-    <p class="text-sm text-muted-foreground mb-8">Ambil foto dan bagikan lokasi Anda untuk memverifikasi kehadiran.</p>
+    <p class="text-sm text-muted-foreground mb-8">Scan QR sekolah sekali setiap hari, lalu ambil foto dan bagikan lokasi Anda.</p>
   </div>
 
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6" in:fly={{ y: 20, duration: 700, delay: 100 }}>
-    <!-- Camera capture card -->
-    <div class="bg-card border border-border rounded-lg overflow-hidden">
-      <div class="px-5 py-3 bg-secondary/60 border-b border-border">
-        <span class="font-mono-accent text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Foto Konfirmasi</span>
-      </div>
-      <div class="p-5">
-        <CameraCapture onCapture={(data) => photo = data} />
-      </div>
+  {#if alreadyConfirmed}
+    <div class="bg-card border border-primary/30 rounded-lg p-6 max-w-2xl" in:fly={{ y: 20, duration: 700, delay: 100 }}>
+      <p class="font-mono-accent text-[10px] uppercase tracking-[0.2em] text-primary mb-3">Sudah terverifikasi</p>
+      <h2 class="font-heading text-xl font-semibold text-foreground">Kehadiran hari ini sudah tercatat.</h2>
+      <p class="text-sm text-muted-foreground mt-2">Buka jadwal untuk melihat kelas dan mapel yang Anda ajar hari ini.</p>
+      <a href="/teacher/schedule" use:inertia class="inline-flex mt-5">
+        <Button>Lihat Jadwal Hari Ini</Button>
+      </a>
+    </div>
+  {:else if !qrTokenValid}
+    <div class="bg-card border border-border rounded-lg p-6 max-w-2xl" in:fly={{ y: 20, duration: 700, delay: 100 }}>
+      <p class="font-mono-accent text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-3">QR diperlukan</p>
+      <h2 class="font-heading text-xl font-semibold text-foreground">
+        {qrTokenExpired ? 'QR absen sudah kedaluwarsa.' : 'Scan QR absen sekolah terlebih dahulu.'}
+      </h2>
+      <p class="text-sm text-muted-foreground mt-2">Gunakan kamera ponsel untuk scan QR yang ditampilkan sekolah. Halaman konfirmasi akan terbuka dari QR yang valid.</p>
+    </div>
+  {:else}
+    <div class="mb-6 rounded-lg border border-primary/30 bg-primary/5 px-5 py-4" in:fly={{ y: 20, duration: 700, delay: 100 }}>
+      <p class="font-heading font-medium text-foreground">QR absen valid</p>
+      <p class="text-sm text-muted-foreground mt-1">Selesaikan foto dan lokasi dari area sekolah untuk mencatat kehadiran hari ini.</p>
     </div>
 
-    <div class="flex flex-col gap-6">
-      <!-- Location card -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6" in:fly={{ y: 20, duration: 700, delay: 150 }}>
       <div class="bg-card border border-border rounded-lg overflow-hidden">
-        <div class="px-5 py-3 bg-secondary/60 border-b border-border flex items-center justify-between">
-          <span class="font-mono-accent text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Geolokasi</span>
-          {#if coords}
-            <span class="flex items-center gap-1.5">
-              <span class="w-2 h-2 rounded-full bg-primary"></span>
-              <span class="font-mono-accent text-[10px] uppercase tracking-[0.15em] text-primary">Aktif</span>
-            </span>
-          {/if}
+        <div class="px-5 py-3 bg-secondary/60 border-b border-border">
+          <span class="font-mono-accent text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Foto Konfirmasi</span>
         </div>
         <div class="p-5">
-          {#if coords}
-            <dl class="flex flex-col gap-2 font-mono-accent text-xs">
-              <div class="flex justify-between border-b border-border/60 pb-2">
-                <dt class="text-muted-foreground">Latitude</dt>
-                <dd class="text-foreground">{coords.latitude.toFixed(6)}°</dd>
-              </div>
-              <div class="flex justify-between">
-                <dt class="text-muted-foreground">Longitude</dt>
-                <dd class="text-foreground">{coords.longitude.toFixed(6)}°</dd>
-              </div>
-            </dl>
-          {:else}
-            <p class="text-sm text-muted-foreground">Lokasi belum didapatkan.</p>
-          {/if}
-          <GeoButton class="mt-4" onLocation={(c) => { coords = c; geoError = null; }} onError={(m) => geoError = m} />
+          <CameraCapture onCapture={(data) => photo = data} />
         </div>
       </div>
 
-      <!-- Photo preview -->
-      {#if photo}
+      <div class="flex flex-col gap-6">
         <div class="bg-card border border-border rounded-lg overflow-hidden">
-          <div class="px-5 py-3 bg-secondary/60 border-b border-border">
-            <span class="font-mono-accent text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Pratinjau Foto</span>
+          <div class="px-5 py-3 bg-secondary/60 border-b border-border flex items-center justify-between">
+            <span class="font-mono-accent text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Geolokasi</span>
+            {#if coords}
+              <span class="flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-primary"></span>
+                <span class="font-mono-accent text-[10px] uppercase tracking-[0.15em] text-primary">Aktif</span>
+              </span>
+            {/if}
           </div>
           <div class="p-5">
-            <img src={photo} alt="Foto konfirmasi" class="w-full max-w-xs rounded-md" />
+            {#if coords}
+              <dl class="flex flex-col gap-2 font-mono-accent text-xs">
+                <div class="flex justify-between border-b border-border/60 pb-2">
+                  <dt class="text-muted-foreground">Latitude</dt>
+                  <dd class="text-foreground">{coords.latitude.toFixed(6)}°</dd>
+                </div>
+                <div class="flex justify-between">
+                  <dt class="text-muted-foreground">Longitude</dt>
+                  <dd class="text-foreground">{coords.longitude.toFixed(6)}°</dd>
+                </div>
+              </dl>
+            {:else}
+              <p class="text-sm text-muted-foreground">Lokasi belum didapatkan.</p>
+            {/if}
+            <GeoButton class="mt-4" onLocation={(c) => { coords = c; geoError = null; }} onError={(m) => geoError = m} />
           </div>
         </div>
-      {/if}
 
-      <!-- Error -->
-      {#if geoError}
-        <div class="rounded-md border border-destructive/30 bg-destructive/5 px-4 py-3 flex items-start gap-3">
-          <span class="w-2 h-2 rounded-full bg-destructive shrink-0 mt-1.5"></span>
-          <span class="text-sm text-destructive leading-relaxed">{geoError}</span>
-        </div>
-      {/if}
+        {#if photo}
+          <div class="bg-card border border-border rounded-lg overflow-hidden">
+            <div class="px-5 py-3 bg-secondary/60 border-b border-border">
+              <span class="font-mono-accent text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Pratinjau Foto</span>
+            </div>
+            <div class="p-5">
+              <img src={photo} alt="Foto konfirmasi" class="w-full max-w-xs rounded-md" />
+            </div>
+          </div>
+        {/if}
 
-      <!-- Submit -->
-      <Button onclick={submit} disabled={isLoading} size="lg" class="self-start">
-        {isLoading ? 'Memproses...' : 'Kirim Konfirmasi'}
-      </Button>
+        {#if geoError}
+          <div class="rounded-md border border-destructive/30 bg-destructive/5 px-4 py-3 flex items-start gap-3">
+            <span class="w-2 h-2 rounded-full bg-destructive shrink-0 mt-1.5"></span>
+            <span class="text-sm text-destructive leading-relaxed">{geoError}</span>
+          </div>
+        {/if}
+
+        <Button onclick={submit} disabled={isLoading} size="lg" class="self-start">
+          {isLoading ? 'Memproses...' : 'Kirim Konfirmasi'}
+        </Button>
+      </div>
     </div>
-  </div>
+  {/if}
 </div>

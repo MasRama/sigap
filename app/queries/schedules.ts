@@ -13,6 +13,22 @@ export const findSchedulesByClass = (classId: string): Schedule[] =>
 
 export const findSchedulesByTeacher = (teacherUserId: string): Schedule[] =>
   SQLite.many<Schedule>`SELECT * FROM schedules WHERE teacher_user_id = ${teacherUserId} ORDER BY day_of_week, start_time`;
+export interface TeacherDailySchedule extends Schedule {
+  class_name: string;
+  subject_name: string;
+}
+
+export const findTeacherSchedulesByDay = (teacherUserId: string, dayOfWeek: number): TeacherDailySchedule[] =>
+  SQLite.many<TeacherDailySchedule>`
+    SELECT s.*, c.name AS class_name, sub.name AS subject_name
+    FROM schedules s
+    INNER JOIN classes c ON c.id = s.class_id AND c.academic_year_id = s.academic_year_id
+    INNER JOIN subjects sub ON sub.id = s.subject_id
+    INNER JOIN academic_years ay ON ay.id = s.academic_year_id AND ay.is_active = 1
+    WHERE s.teacher_user_id = ${teacherUserId} AND s.day_of_week = ${dayOfWeek}
+    ORDER BY s.start_time
+  `;
+
 
 export const findSchedulesByDay = (dayOfWeek: number): Schedule[] =>
   SQLite.many<Schedule>`SELECT * FROM schedules WHERE day_of_week = ${dayOfWeek} ORDER BY start_time`;

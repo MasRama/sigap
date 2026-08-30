@@ -13,6 +13,49 @@ export const findGradeById = (id: string): Grade | undefined =>
 export const findGradesByStudent = (studentId: string): Grade[] =>
   SQLite.many<Grade>`SELECT * FROM grades WHERE student_id = ${studentId} ORDER BY date DESC`;
 
+const teacherGradeScopeSql = (alias: string): string => `(
+  EXISTS (
+    SELECT 1
+    FROM teacher_class_assignments tca
+    INNER JOIN teachers homeroom_teacher ON homeroom_teacher.id = tca.teacher_id
+    INNER JOIN classes homeroom_class
+      ON homeroom_class.id = tca.class_id AND homeroom_class.academic_year_id = tca.academic_year_id
+    WHERE homeroom_teacher.user_id = ?
+      AND tca.class_id = ${alias}.class_id
+      AND tca.is_homeroom = 1
+  )
+  OR EXISTS (
+    SELECT 1
+    FROM schedules schedule_assignment
+    INNER JOIN classes scheduled_class
+      ON scheduled_class.id = schedule_assignment.class_id
+      AND scheduled_class.academic_year_id = schedule_assignment.academic_year_id
+    WHERE schedule_assignment.teacher_user_id = ?
+      AND schedule_assignment.class_id = ${alias}.class_id
+      AND schedule_assignment.subject_id = ${alias}.subject_id
+  )
+  OR EXISTS (
+    SELECT 1
+    FROM class_subjects class_subject_assignment
+    INNER JOIN teachers class_subject_teacher ON class_subject_teacher.id = class_subject_assignment.teacher_id
+    INNER JOIN classes assigned_class
+      ON assigned_class.id = class_subject_assignment.class_id
+      AND assigned_class.academic_year_id = class_subject_assignment.academic_year_id
+    WHERE class_subject_teacher.user_id = ?
+      AND class_subject_assignment.class_id = ${alias}.class_id
+      AND class_subject_assignment.subject_id = ${alias}.subject_id
+  )
+)`;
+
+export const findGradesByStudentForTeacher = (studentId: string, teacherUserId: string): Grade[] =>
+  SQLite.all<Grade>(
+    `SELECT g.*
+     FROM grades g
+     WHERE g.student_id = ? AND ${teacherGradeScopeSql('g')}
+     ORDER BY g.date DESC`,
+    [studentId, teacherUserId, teacherUserId, teacherUserId],
+  );
+
 export const findGradesByClassSubject = (classId: string, subjectId: string): Grade[] =>
   SQLite.many<Grade>`SELECT * FROM grades WHERE class_id = ${classId} AND subject_id = ${subjectId} ORDER BY date DESC`;
 
@@ -31,31 +74,28 @@ export const getGradesPaginated = (
   const params: (string | number)[] = [];
 
   if (studentId) {
-    conditions.push('student_id = ?');
+    conditions.push('g.student_id = ?');
     params.push(studentId);
   }
   if (classId) {
-    conditions.push('class_id = ?');
+    conditions.push('g.class_id = ?');
     params.push(classId);
   }
   if (subjectId) {
-    conditions.push('subject_id = ?');
+    conditions.push('g.subject_id = ?');
     params.push(subjectId);
   }
   if (teacherUserId) {
-    conditions.push(`class_id IN (
-      SELECT tca.class_id
-      FROM teacher_class_assignments tca
-      INNER JOIN teachers t ON t.id = tca.teacher_id
-      INNER JOIN classes c ON c.id = tca.class_id AND c.academic_year_id = tca.academic_year_id
-      WHERE t.user_id = ?
-    )`);
-    params.push(teacherUserId);
+    conditions.push(teacherGradeScopeSql('g'));
+    params.push(teacherUserId, teacherUserId, teacherUserId);
   }
 
   const where = conditions.join(' AND ');
-  const countRow = SQLite.get<{ count: number }>(`SELECT COUNT(*) as count FROM grades WHERE ${where}`, params);
-  const data = SQLite.all<Grade>(`SELECT * FROM grades WHERE ${where} ORDER BY date DESC LIMIT ? OFFSET ?`, [...params, limit, (page - 1) * limit]);
+  const countRow = SQLite.get<{ count: number }>(`SELECT COUNT(*) as count FROM grades g WHERE ${where}`, params);
+  const data = SQLite.all<Grade>(
+    `SELECT g.* FROM grades g WHERE ${where} ORDER BY g.date DESC LIMIT ? OFFSET ?`,
+    [...params, limit, (page - 1) * limit],
+  );
 
   return { data, total: countRow?.count ?? 0 };
 };

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { router } from '@inertiajs/svelte';
+  import { inertia, router } from '@inertiajs/svelte';
   import axios from 'axios';
   import { api } from '$lib/api';
   import Sidebar from '../Components/Sidebar.svelte';
@@ -17,11 +17,29 @@
   import { fly } from 'svelte/transition';
 
   let {
-    permissions, grades = [], students = [], subjects = [], classes = [], years = [], meta, summary = null, classId = '', subjectId = '',
+    permissions,
+    grades = [],
+    students = [],
+    subjects = [],
+    classes = [],
+    years = [],
+    meta,
+    summary = null,
+    classId = '',
+    subjectId = '',
+    confirmationRequired = false,
   }: {
     permissions: { canCreate?: boolean; canEdit?: boolean; canDelete?: boolean };
-    grades?: Grade[]; students?: Student[]; subjects?: Subject[]; classes?: Class[]; years?: AcademicYear[];
-    meta?: PaginationMeta; summary?: ClassSubjectSummary | null; classId?: string; subjectId?: string;
+    grades?: Grade[];
+    students?: Student[];
+    subjects?: Subject[];
+    classes?: Class[];
+    years?: AcademicYear[];
+    meta?: PaginationMeta;
+    summary?: ClassSubjectSummary | null;
+    classId?: string;
+    subjectId?: string;
+    confirmationRequired?: boolean;
   } = $props();
 
   let isOpen = $state(false);
@@ -32,7 +50,11 @@
   let filterClassId = $state(classId);
   let filterSubjectId = $state(subjectId);
 
-  function openCreate(): void { form = createEmptyGradeForm(); selected = null; isOpen = true; }
+  function openCreate(): void {
+    form = { ...createEmptyGradeForm(), class_id: filterClassId, subject_id: filterSubjectId };
+    selected = null;
+    isOpen = true;
+  }
   function openEdit(item: Grade): void { selected = item; form = gradeToForm(item); isOpen = true; }
   function confirmDelete(item: Grade): void { selected = item; isDeleteOpen = true; }
 
@@ -80,14 +102,18 @@
         predikat: row.predikat ?? '—',
         status: row.is_passed === null ? '—' : row.is_passed ? 'Tuntas' : 'Belum Tuntas',
       };
-      for (const component of s.components) {
-        display[component.type] = row.scores[component.type] ?? '—';
-      }
+      for (const component of s.components) display[component.type] = row.scores[component.type] ?? '—';
       return display;
     });
   });
 
-  const columns = [{ key: 'student_id', label: 'Siswa' }, { key: 'subject_id', label: 'Mapel' }, { key: 'class_id', label: 'Kelas' }, { key: 'type', label: 'Jenis' }, { key: 'score', label: 'Nilai' }];
+  const columns = [
+    { key: 'student_id', label: 'Siswa' },
+    { key: 'subject_id', label: 'Mapel' },
+    { key: 'class_id', label: 'Kelas' },
+    { key: 'type', label: 'Jenis' },
+    { key: 'score', label: 'Nilai' },
+  ];
 </script>
 
 {#snippet rowActions(item: Grade)}
@@ -100,46 +126,51 @@
   <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-8" in:fly={{ y: 20, duration: 800 }}>
     <div>
       <p class="font-mono-accent text-[10px] uppercase tracking-[0.25em] text-muted-foreground mb-4">Penilaian</p>
-      <h1 class="font-heading font-semibold tracking-[-0.03em] leading-[1] text-[clamp(2rem,5vw,3.5rem)] text-foreground">
-        Nilai.
-      </h1>
-      <p class="mt-4 text-base text-muted-foreground leading-relaxed max-w-[52ch]">
-        Input nilai per komponen, lihat rekap nilai akhir, KKM, dan predikat per kelas dan mapel.
-      </p>
+      <h1 class="font-heading font-semibold tracking-[-0.03em] leading-[1] text-[clamp(2rem,5vw,3.5rem)] text-foreground">Nilai.</h1>
+      <p class="mt-4 text-base text-muted-foreground leading-relaxed max-w-[52ch]">Input nilai tugas, ulangan, UTS, dan UAS sesuai kelas serta mapel yang diampu.</p>
     </div>
-    {#if permissions.canCreate}<Button onclick={openCreate} size="lg">Tambah Nilai</Button>{/if}
+    {#if permissions.canCreate && !confirmationRequired}<Button onclick={openCreate} size="lg">Tambah Nilai</Button>{/if}
   </div>
 
-  <div class="bg-card border border-border rounded-lg p-4 mb-8 flex flex-col sm:flex-row gap-3 items-end" in:fly={{ y: 20, duration: 700, delay: 100 }}>
-    <div class="flex flex-col gap-1 flex-1 w-full">
-      <Label for="filter-class" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1">Kelas</Label>
-      <Select id="filter-class" bind:value={filterClassId} placeholder="Pilih kelas">
-        <option value="">Semua kelas</option>
-        {#each classes as c}<option value={c.id}>{c.name}</option>{/each}
-      </Select>
+  {#if confirmationRequired}
+    <div class="bg-card border border-primary/30 rounded-lg p-6 max-w-2xl" in:fly={{ y: 20, duration: 700, delay: 100 }}>
+      <p class="font-mono-accent text-[10px] uppercase tracking-[0.2em] text-primary mb-3">Akses terkunci</p>
+      <h2 class="font-heading text-xl font-semibold text-foreground">Konfirmasi kehadiran diperlukan.</h2>
+      <p class="text-sm text-muted-foreground mt-2 leading-relaxed">Scan QR sekolah sekali setiap hari sebelum membuka daftar kelas dan mengisi nilai.</p>
+      <a href="/teacher/confirm" use:inertia class="inline-flex mt-5"><Button>Scan QR Absen</Button></a>
     </div>
-    <div class="flex flex-col gap-1 flex-1 w-full">
-      <Label for="filter-subject" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1">Mapel</Label>
-      <Select id="filter-subject" bind:value={filterSubjectId} placeholder="Pilih mapel">
-        <option value="">Semua mapel</option>
-        {#each subjects as s}<option value={s.id}>{s.name}</option>{/each}
-      </Select>
-    </div>
-    <Button onclick={showRekap}><FileSpreadsheet class="w-4 h-4 mr-1" /> Lihat Rekap</Button>
-  </div>
-
-  {#if summary}
-    <div class="mb-10" in:fly={{ y: 20, duration: 700, delay: 150 }}>
-      <div class="flex items-baseline justify-between mb-3">
-        <h2 class="font-heading font-semibold tracking-[-0.02em]">Rekap Nilai — {summary.subjectName} ({summary.className})</h2>
-        <p class="text-xs text-muted-foreground font-mono-accent">KKM {summary.kkm}</p>
+  {:else}
+    <div class="bg-card border border-border rounded-lg p-4 mb-8 flex flex-col sm:flex-row gap-3 items-end" in:fly={{ y: 20, duration: 700, delay: 100 }}>
+      <div class="flex flex-col gap-1 flex-1 w-full">
+        <Label for="filter-class" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1">Kelas</Label>
+        <Select id="filter-class" bind:value={filterClassId} placeholder="Pilih kelas">
+          <option value="">Semua kelas</option>
+          {#each classes as c}<option value={c.id}>{c.name}</option>{/each}
+        </Select>
       </div>
-      <DataTable columns={summaryColumns} rows={summaryRows} keyField="student_id" emptyMessage="Belum ada nilai untuk kelas dan mapel ini." />
+      <div class="flex flex-col gap-1 flex-1 w-full">
+        <Label for="filter-subject" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1">Mapel</Label>
+        <Select id="filter-subject" bind:value={filterSubjectId} placeholder="Pilih mapel">
+          <option value="">Semua mapel</option>
+          {#each subjects as s}<option value={s.id}>{s.name}</option>{/each}
+        </Select>
+      </div>
+      <Button onclick={showRekap}><FileSpreadsheet class="w-4 h-4 mr-1" /> Lihat Rekap</Button>
     </div>
-  {/if}
 
-  <DataTable {columns} rows={grades} rowAction={rowActions} />
-  {#if meta}<Pagination {meta} />{/if}
+    {#if summary}
+      <div class="mb-10" in:fly={{ y: 20, duration: 700, delay: 150 }}>
+        <div class="flex items-baseline justify-between mb-3">
+          <h2 class="font-heading font-semibold tracking-[-0.02em]">Rekap Nilai — {summary.subjectName} ({summary.className})</h2>
+          <p class="text-xs text-muted-foreground font-mono-accent">KKM {summary.kkm}</p>
+        </div>
+        <DataTable columns={summaryColumns} rows={summaryRows} keyField="student_id" emptyMessage="Belum ada nilai untuk kelas dan mapel ini." />
+      </div>
+    {/if}
+
+    <DataTable columns={columns} rows={grades} rowAction={rowActions} />
+    {#if meta}<Pagination {meta} />{/if}
+  {/if}
 </div>
 
 <Modal bind:open={isOpen} title={selected ? 'Edit Nilai' : 'Tambah Nilai'} description="Tambah atau ubah nilai siswa. Pilih siswa, mapel, kelas, dan jenis penilaian.">
@@ -165,9 +196,9 @@
       </Select>
     </div>
     <div class="flex flex-col gap-0"><Label for="type" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Jenis</Label>
-      <Select id="type" bind:value={form.type} placeholder="Pilih jenis nilai">
+      <Select id="type" bind:value={form.type} placeholder="Pilih jenis penilaian">
         <option value="task">Tugas</option>
-        <option value="daily_quiz">Kuis Harian</option>
+        <option value="daily_quiz">Ulangan Harian</option>
         <option value="midterm">UTS</option>
         <option value="final">UAS</option>
       </Select>

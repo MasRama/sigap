@@ -196,6 +196,7 @@ export const QrSettingsSchema = z.object({
 
 export const TeacherConfirmationSchema = z.object({
   schedule_id: z.string().uuid('Invalid schedule ID').optional().nullable(),
+  qr_token: z.string().min(1, 'QR absen wajib dipindai').optional(),
   teacher_user_id: z.string().uuid('Invalid teacher user ID').optional(),
   photo_url: z.string().min(1, 'Photo is required').optional().nullable(),
   latitude: z.number().optional().nullable(),

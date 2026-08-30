@@ -9,6 +9,7 @@ interface QrTokenPayload {
 }
 
 const QR_SECRET = process.env.QR_SECRET || 'sigap-qr-secret-change-in-production';
+const APP_URL = (process.env.APP_URL || `http://localhost:${process.env.PORT || '5555'}`).replace(/\/+$/, '');
 
 const formatDate = (date: Date): string => {
   const y = date.getFullYear();
@@ -47,7 +48,8 @@ export const generateQrCodeData = async (intervalMinutes: number): Promise<QrCod
 
   const payload: QrTokenPayload = { date, nonce, expires_at: expiresAt, token };
   const payloadString = JSON.stringify(payload);
-  const dataUrl = await QRCode.toDataURL(payloadString, {
+  const scanUrl = `${APP_URL}/teacher/confirm?qr_token=${encodeURIComponent(payloadString)}`;
+  const dataUrl = await QRCode.toDataURL(scanUrl, {
     width: 512,
     margin: 2,
     errorCorrectionLevel: 'M',
@@ -65,12 +67,26 @@ export const generateQrCodeData = async (intervalMinutes: number): Promise<QrCod
 
 export const verifyQrToken = (payloadString: string): { valid: boolean; date?: string; expired: boolean } => {
   try {
-    const payload = JSON.parse(payloadString) as QrTokenPayload;
+    const payload = JSON.parse(payloadString) as Partial<QrTokenPayload>;
+    if (
+      typeof payload.date !== 'string'
+      || typeof payload.nonce !== 'string'
+      || payload.nonce.length === 0
+      || typeof payload.expires_at !== 'number'
+      || !Number.isFinite(payload.expires_at)
+      || typeof payload.token !== 'string'
+    ) {
+      return { valid: false, expired: false };
+    }
+
     const expectedToken = signToken(payload.date, payload.nonce, payload.expires_at);
-    if (payload.token !== expectedToken) return { valid: false, expired: false };
-    const expired = Date.now() > payload.expires_at;
-    return { valid: true, date: payload.date, expired };
+    if (payload.token !== expectedToken || payload.date !== formatDate(new Date())) {
+      return { valid: false, expired: false };
+    }
+
+    return { valid: true, date: payload.date, expired: Date.now() >= payload.expires_at };
   } catch {
     return { valid: false, expired: false };
   }
 };
+

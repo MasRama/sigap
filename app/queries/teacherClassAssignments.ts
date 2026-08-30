@@ -40,6 +40,42 @@ export const isTeacherAssignedToClass = (teacherUserId: string, classId: string)
   `;
   return !!row;
 };
+export const isTeacherHomeroomOfClass = (teacherUserId: string, classId: string): boolean => {
+  const row = SQLite.one<{ id: string }>`
+    SELECT tca.id
+    FROM teacher_class_assignments tca
+    INNER JOIN teachers t ON t.id = tca.teacher_id
+    INNER JOIN classes c ON c.id = tca.class_id AND c.academic_year_id = tca.academic_year_id
+    WHERE t.user_id = ${teacherUserId}
+      AND tca.class_id = ${classId}
+      AND tca.is_homeroom = 1
+  `;
+  return !!row;
+};
+
+export const isTeacherAssignedToClassSubject = (teacherUserId: string, classId: string, subjectId: string): boolean => {
+  const row = SQLite.one<{ id: string }>`
+    SELECT sch.id
+    FROM schedules sch
+    INNER JOIN classes scheduled_class
+      ON scheduled_class.id = sch.class_id AND scheduled_class.academic_year_id = sch.academic_year_id
+    WHERE sch.teacher_user_id = ${teacherUserId}
+      AND sch.class_id = ${classId}
+      AND sch.subject_id = ${subjectId}
+    UNION ALL
+    SELECT cs.id
+    FROM class_subjects cs
+    INNER JOIN teachers t ON t.id = cs.teacher_id
+    INNER JOIN classes assigned_class
+      ON assigned_class.id = cs.class_id AND assigned_class.academic_year_id = cs.academic_year_id
+    WHERE t.user_id = ${teacherUserId}
+      AND cs.class_id = ${classId}
+      AND cs.subject_id = ${subjectId}
+    LIMIT 1
+  `;
+  return !!row;
+};
+
 
 export const isTeacherAssignedToStudent = (teacherUserId: string, studentId: string): boolean => {
   const row = SQLite.one<{ id: string }>`

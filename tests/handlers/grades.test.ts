@@ -5,19 +5,30 @@ vi.mock('@queries/grades', () => ({
   getGradesPaginated: vi.fn(),
   findGradeById: vi.fn(),
   findGradesByStudent: vi.fn(),
+  findGradesByStudentForTeacher: vi.fn(),
   createGrade: vi.fn(),
   updateGrade: vi.fn(),
   deleteGrade: vi.fn(),
   getClassSubjectSummary: vi.fn(),
 }));
 
+vi.mock('@queries/teacherConfirmations', () => ({
+  findTodayConfirmationByTeacher: vi.fn(() => ({ id: 'confirmation-1' })),
+}));
 vi.mock('@queries/gradeAuditLogs', () => ({
   logGradeChange: vi.fn(),
 }));
 
-vi.mock('@queries/students', () => ({ findAllStudents: vi.fn(() => []) }));
+vi.mock('@queries/students', () => ({
+  findAllStudents: vi.fn(() => []),
+  findStudentsByTeacherUser: vi.fn(() => []),
+  findStudentById: vi.fn(() => ({ class_id: '00000000-0000-4000-8000-000000000003' })),
+}));
 vi.mock('@queries/subjects', () => ({ findAllSubjects: vi.fn(() => []) }));
-vi.mock('@queries/classes', () => ({ findAllClasses: vi.fn(() => []) }));
+vi.mock('@queries/classes', () => ({
+  findAllClasses: vi.fn(() => []),
+  findClassesByTeacherUser: vi.fn(() => []),
+}));
 vi.mock('@queries/academicYears', () => ({ findAllAcademicYears: vi.fn(() => []) }));
 
 vi.mock('@queries/users', () => ({
@@ -28,17 +39,20 @@ vi.mock('@queries/teacherClassAssignments', () => ({
   isTeacherUser: vi.fn(() => false),
   isTeacherAssignedToClass: vi.fn(() => false),
   isTeacherAssignedToStudent: vi.fn(() => false),
+  isTeacherAssignedToClassSubject: vi.fn(() => false),
+  isTeacherHomeroomOfClass: vi.fn(() => false),
 }));
 vi.mock('@services/Logger', () => ({
   default: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
 
-import { addGrade, editGrade, removeGrade } from '../../app/handlers/grades';
+import { addGrade, editGrade, removeGrade, gradeData } from '../../app/handlers/grades';
 import { createGrade, updateGrade, deleteGrade, findGradeById } from '@queries/grades';
 import { logGradeChange } from '@queries/gradeAuditLogs';
+import { findTodayConfirmationByTeacher } from '@queries/teacherConfirmations';
 import { isAdmin, hasPermission } from '@queries/users';
-import { isTeacherUser, isTeacherAssignedToClass } from '@queries/teacherClassAssignments';
+import { isTeacherUser, isTeacherAssignedToClassSubject, isTeacherHomeroomOfClass } from '@queries/teacherClassAssignments';
 
 const uuid = (n: number) => `00000000-0000-4000-8000-${String(n).padStart(12, '0')}`;
 
@@ -59,7 +73,7 @@ describe('grades handler audit hooks', () => {
     vi.mocked(isAdmin).mockReturnValue(false);
     vi.mocked(hasPermission).mockReturnValue(true);
     vi.mocked(isTeacherUser).mockReturnValue(true);
-    vi.mocked(isTeacherAssignedToClass).mockReturnValue(true);
+    vi.mocked(isTeacherAssignedToClassSubject).mockReturnValue(true);
     vi.mocked(createGrade).mockReturnValue({ id: 'grade-1', ...gradeBody, created_at: 1, updated_at: 1 } as never);
     const req = mockRequest({ body: gradeBody, user: mockUser({ id: 'user-1' }) });
     const res = mockResponse();
@@ -83,7 +97,7 @@ describe('grades handler audit hooks', () => {
     vi.mocked(isAdmin).mockReturnValue(false);
     vi.mocked(hasPermission).mockReturnValue(true);
     vi.mocked(isTeacherUser).mockReturnValue(true);
-    vi.mocked(isTeacherAssignedToClass).mockReturnValue(true);
+    vi.mocked(isTeacherAssignedToClassSubject).mockReturnValue(true);
     vi.mocked(findGradeById).mockReturnValue({ id: 'grade-1', ...gradeBody, score: 80, created_at: 1, updated_at: 1 } as never);
     vi.mocked(updateGrade).mockReturnValue({ id: 'grade-1', ...gradeBody, score: 90, created_at: 1, updated_at: 2 } as never);
     const req = mockRequest({ params: { id: 'grade-1' }, body: { score: 90 }, user: mockUser({ id: 'user-1' }) });
@@ -104,7 +118,7 @@ describe('grades handler audit hooks', () => {
     vi.mocked(isAdmin).mockReturnValue(false);
     vi.mocked(hasPermission).mockReturnValue(true);
     vi.mocked(isTeacherUser).mockReturnValue(true);
-    vi.mocked(isTeacherAssignedToClass).mockReturnValue(true);
+    vi.mocked(isTeacherAssignedToClassSubject).mockReturnValue(true);
     vi.mocked(findGradeById).mockReturnValue({ id: 'grade-1', ...gradeBody, score: 80, created_at: 1, updated_at: 1 } as never);
     vi.mocked(deleteGrade).mockReturnValue(true);
     const req = mockRequest({ params: { id: 'grade-1' }, user: mockUser({ id: 'user-1' }) });
@@ -125,7 +139,7 @@ describe('grades handler audit hooks', () => {
     vi.mocked(isAdmin).mockReturnValue(false);
     vi.mocked(hasPermission).mockReturnValue(true);
     vi.mocked(isTeacherUser).mockReturnValue(true);
-    vi.mocked(isTeacherAssignedToClass).mockReturnValue(true);
+    vi.mocked(isTeacherAssignedToClassSubject).mockReturnValue(true);
     vi.mocked(findGradeById).mockReturnValue(undefined);
     vi.mocked(deleteGrade).mockReturnValue(false);
     const req = mockRequest({ params: { id: 'missing' }, user: mockUser({ id: 'user-1' }) });
@@ -153,13 +167,58 @@ describe('grades handler audit hooks', () => {
     vi.mocked(isAdmin).mockReturnValue(false);
     vi.mocked(hasPermission).mockReturnValue(true);
     vi.mocked(isTeacherUser).mockReturnValue(true);
-    vi.mocked(isTeacherAssignedToClass).mockReturnValue(false);
+    vi.mocked(isTeacherAssignedToClassSubject).mockReturnValue(false);
     const req = mockRequest({ body: gradeBody, user: mockUser({ id: 'teacher-1' }) });
     const res = mockResponse();
 
     addGrade(req, res);
 
     expect(res._status).toBe(403);
+    expect(createGrade).not.toHaveBeenCalled();
+  });
+
+  it('allows a homeroom teacher to view another subject in their class', () => {
+    vi.mocked(isAdmin).mockReturnValue(false);
+    vi.mocked(hasPermission).mockReturnValue(true);
+    vi.mocked(isTeacherUser).mockReturnValue(true);
+    vi.mocked(isTeacherHomeroomOfClass).mockReturnValue(true);
+    vi.mocked(findGradeById).mockReturnValue({ id: 'grade-1', ...gradeBody, score: 80, created_at: 1, updated_at: 1 } as never);
+    const req = mockRequest({ params: { id: 'grade-1' }, user: mockUser({ id: 'user-1' }) });
+    const res = mockResponse();
+
+    gradeData(req, res);
+
+    expect(res._status).toBe(200);
+  });
+
+  it('denies a teacher from viewing an unrelated subject in an assigned class', () => {
+    vi.mocked(isAdmin).mockReturnValue(false);
+    vi.mocked(hasPermission).mockReturnValue(true);
+    vi.mocked(isTeacherUser).mockReturnValue(true);
+    vi.mocked(isTeacherHomeroomOfClass).mockReturnValue(false);
+    vi.mocked(isTeacherAssignedToClassSubject).mockReturnValue(false);
+    vi.mocked(findGradeById).mockReturnValue({ id: 'grade-1', ...gradeBody, score: 80, created_at: 1, updated_at: 1 } as never);
+    const req = mockRequest({ params: { id: 'grade-1' }, user: mockUser({ id: 'user-1' }) });
+    const res = mockResponse();
+
+    gradeData(req, res);
+
+    expect(res._status).toBe(403);
+  });
+
+  it('requires the daily attendance confirmation before grade entry', () => {
+    vi.mocked(isAdmin).mockReturnValue(false);
+    vi.mocked(hasPermission).mockReturnValue(true);
+    vi.mocked(isTeacherUser).mockReturnValue(true);
+    vi.mocked(isTeacherAssignedToClassSubject).mockReturnValue(true);
+    vi.mocked(findTodayConfirmationByTeacher).mockReturnValue(undefined);
+    const req = mockRequest({ body: gradeBody, user: mockUser({ id: 'user-1' }) });
+    const res = mockResponse();
+
+    addGrade(req, res);
+
+    expect(res._status).toBe(403);
+    expect(res._body).toMatchObject({ code: 'CONFIRMATION_REQUIRED' });
     expect(createGrade).not.toHaveBeenCalled();
   });
 });
