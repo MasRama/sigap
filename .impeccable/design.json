@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2026-07-28T00:00:00Z",
-  "title": "Design System: SIGAP",
+  "title": "Design System: SIMPATIK",
   "extensions": {
     "colorMeta": {
       "primary": {
@@ -138,13 +138,13 @@
       "kind": "nav",
       "refersTo": "navigation",
       "description": "Fixed top nav. Solid background, no transparency transition. Logo + links + dark mode toggle.",
-      "html": "<nav class=\"ds-nav\"><div class=\"ds-nav-logo\"><span class=\"ds-nav-mark\"></span><span class=\"ds-nav-name\">SIGAP</span></div><div class=\"ds-nav-links\"><a class=\"ds-nav-link\">Masuk</a></div></nav>",
+      "html": "<nav class=\"ds-nav\"><div class=\"ds-nav-logo\"><span class=\"ds-nav-mark\"></span><span class=\"ds-nav-name\">SIMPATIK</span></div><div class=\"ds-nav-links\"><a class=\"ds-nav-link\">Masuk</a></div></nav>",
       "css": ".ds-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 50; display: flex; align-items: center; justify-content: space-between; height: 64px; padding: 0 24px; background: #FFFFFF; border-bottom: 1px solid #DDE1E0; } .ds-nav-logo { display: flex; align-items: center; gap: 12px; } .ds-nav-mark { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; background: #1DA85A; border-radius: 6px; } .ds-nav-mark::after { content: ''; width: 10px; height: 10px; background: #FFFFFF; border-radius: 2px; } .ds-nav-name { font-family: 'Spectral', Georgia, serif; font-weight: 600; font-size: 18px; letter-spacing: -0.01em; color: #1C1F1E; } .ds-nav-links { display: flex; align-items: center; gap: 20px; } .ds-nav-link { font-family: 'Public Sans', system-ui, sans-serif; font-size: 14px; color: #6B7674; cursor: pointer; transition: color 0.2s; } .ds-nav-link:hover { color: #1C1F1E; }"
     }
   ],
   "narrative": {
     "northStar": "The Live Ledger",
-    "overview": "SIGAP's visual system is a digital attendance ledger that is alive — names appear one by one, status dots light up green or red, timestamps tick. The system rejects the generic SaaS landing page. Instead, the product demonstrates itself: the hero IS the product working, not a description of it.\n\nThe palette is operational, not decorative. Green means verified presence. Red means absence. Amber means late. These are semantic colors of attendance status, and the entire interface is built from them. The deep green accent panel in the hero is the institutional voice: calm, authoritative, the school speaking.\n\nDensity is high but legible. Mono type carries data. Serif carries headlines. Sans carries body. Three voices for three audiences: institution, people, data.",
+    "overview": "SIMPATIK's visual system is a digital attendance ledger that is alive — names appear one by one, status dots light up green or red, timestamps tick. The system rejects the generic SaaS landing page. Instead, the product demonstrates itself: the hero IS the product working, not a description of it.\\n\\nThe palette is operational, not decorative. Green means verified presence. Red means absence. Amber means late. These are semantic colors of attendance status, and the entire interface is built from them. The deep green accent panel in the hero is the institutional voice: calm, authoritative, the school speaking.\\n\\nDensity is high but legible. Mono type carries data. Serif carries headlines. Sans carries body. Three voices for three audiences: institution, people, data.",
     "keyCharacteristics": [
       "Ledger-first: every surface shows data in rows, not marketing cards",
       "Semantic color: green/red/amber carry meaning, never decorative",

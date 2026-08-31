@@ -1,11 +1,11 @@
 /**
- * SIGAP design tokens — mirror of resources/config/theme.css.
+ * SIMPATIK design tokens — mirror of resources/config/theme.css.
  * Edit theme.css to change the live color; update this file if a component
  * needs the same value in JS (charts, canvas, etc).
  */
 
 export const theme = {
-  name: 'SIGAP',
+  name: 'SIMPATIK',
   colors: {
     background: {
       light: '0 0% 100%',

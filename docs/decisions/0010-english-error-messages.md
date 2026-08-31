@@ -5,13 +5,13 @@ Status: Accepted (supersedes the 2025-01-15 English-only decision)
 
 ## Context
 
-SIGAP is a school management system for Indonesian schools (SMP/SMA). User-facing messages appear in:
+SIMPATIK is a school management system for Indonesian schools (SMP/SMA). User-facing messages appear in:
 - Toast notifications (frontend)
 - Form validation errors (frontend)
 - API error responses (JSON `message` field)
 - Page copy, labels, buttons, empty states
 
-The previous decision (2025-01-15) mandated English for user-facing messages because the project was an open-source AI-first starter kit (Nara) with an editorial English aesthetic. SIGAP has since become a product for Indonesian schools — teachers in the field, admins in school offices, and parents at home. English messages are a friction layer for the actual audience, especially parents and teachers who are not fluent in English.
+The previous decision (2025-01-15) mandated English for user-facing messages because the project was an open-source AI-first starter kit (Nara) with an editorial English aesthetic. SIMPATIK has since become a product for Indonesian schools — teachers in the field, admins in school offices, and parents at home. English messages are a friction layer for the actual audience, especially parents and teachers who are not fluent in English.
 
 PRODUCT.md (2026-07-28) records Bahasa Indonesia as the binding UI language. This ADR brings the convention in line with the product truth.
 
@@ -41,7 +41,7 @@ Examples:
 
 Positive:
 - UI language matches the audience — Indonesian teachers, admins, and parents read Bahasa Indonesia
-- Consistent with PRODUCT.md and the `sigap.id` market positioning
+- Consistent with PRODUCT.md and the SIMPATIK market positioning
 - Clear separation: code/logs in English, UI in Bahasa Indonesia
 
 Negative:

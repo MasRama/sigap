@@ -126,7 +126,7 @@
             </div>
             <div>
               <p class="font-heading text-[11px] uppercase tracking-[0.25em] text-muted-foreground mb-1">Terenkripsi</p>
-              <p class="text-xs text-muted-foreground leading-relaxed">Data Anda terenkripsi saat disimpan dan saat dikirim di backend SIGAP.</p>
+              <p class="text-xs text-muted-foreground leading-relaxed">Data Anda terenkripsi saat disimpan dan saat dikirim di backend SIMPATIK.</p>
             </div>
           </div>
         </div>

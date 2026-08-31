@@ -74,7 +74,7 @@
 <svelte:window bind:scrollY />
 
 <!--
-  THESIS: Landing page SIGAP adalah daftar hadir yang sedang diisi live, bukan
+  THESIS: Landing page SIMPATIK adalah daftar hadir yang sedang diisi live, bukan
   hero yang dijelaskan. Menolak template LMS landing (gradient hero, feature card,
   "trusted by", pricing table). Mekanisme dibuktikan dengan produk bekerja.
 
@@ -107,8 +107,8 @@
       <span class="inline-flex items-center justify-center w-7 h-7 bg-primary rounded-md">
         <span class="w-2.5 h-2.5 bg-primary-foreground rounded-[2px] transition-transform duration-300 group-hover:scale-110"></span>
       </span>
-      <span class="font-heading font-semibold tracking-tight text-lg">SIGAP</span>
-      <span class="hidden sm:inline text-xs text-muted-foreground font-mono-accent tracking-wide border-l border-border pl-3">Sistem Manajemen Sekolah</span>
+      <span class="font-heading font-semibold tracking-tight text-lg">SIMPATIK</span>
+      <span class="hidden sm:inline text-xs text-muted-foreground font-mono-accent tracking-wide border-l border-border pl-3">Sistem Monitoring Perkembangan dan Aktivitas Akademik</span>
     </a>
 
     <div class="flex items-center gap-5 text-sm">
@@ -143,7 +143,7 @@
         </h1>
 
         <p in:fly={{ y: 20, duration: 900, delay: 280 }} class="mt-7 text-base sm:text-lg text-accent-foreground/75 leading-relaxed max-w-[48ch]">
-          SIGAP memverifikasi kehadiran guru dengan geolokasi sebelum jam mulai mengajar. Setiap jurnal terikat ke guru nyata, di tempat nyata.
+          SIMPATIK memverifikasi kehadiran guru dengan geolokasi sebelum jam mulai mengajar. Setiap jurnal terikat ke guru nyata, di tempat nyata.
         </p>
 
         <div in:fly={{ y: 16, duration: 900, delay: 440 }} class="mt-9 flex flex-col gap-3">
@@ -328,7 +328,7 @@
           Data yang sama, tiga cara lihat.
         </h2>
         <p class="text-muted-foreground leading-relaxed">
-          Guru, admin, dan orang tua — masing-masing melihat SIGAP dari sudut yang berbeda. Data verifikasi yang sama, tampilan yang berbeda.
+          Guru, admin, dan orang tua — masing-masing melihat SIMPATIK dari sudut yang berbeda. Data verifikasi yang sama, tampilan yang berbeda.
         </p>
       </div>
 
@@ -457,13 +457,13 @@
             <span class="w-2.5 h-2.5 bg-primary-foreground rounded-[2px]"></span>
           </span>
           <div class="flex flex-col">
-            <span class="font-heading font-semibold tracking-tight">SIGAP</span>
-            <span class="text-xs text-muted-foreground">Sistem Manajemen Sekolah</span>
+            <span class="font-heading font-semibold tracking-tight">SIMPATIK</span>
+            <span class="text-xs text-muted-foreground">Sistem Monitoring Perkembangan dan Aktivitas Akademik</span>
           </div>
         </div>
         <div class="flex flex-col sm:items-end gap-1">
           <p class="text-sm text-muted-foreground">Untuk mendapatkan akses, hubungi admin sekolah Anda.</p>
-          <p class="font-mono-accent text-[10px] text-muted-foreground">&copy; {new Date().getFullYear()} SIGAP · MIT License</p>
+          <p class="font-mono-accent text-[10px] text-muted-foreground">&copy; {new Date().getFullYear()} SIMPATIK · MIT License</p>
           <p class="font-mono-accent text-[10px] text-muted-foreground">Built with <a href="https://github.com/MasRama/nara" target="_blank" rel="noopener noreferrer" class="text-primary hover:text-primary/80 transition-colors">Nara</a></p>
         </div>
       </div>

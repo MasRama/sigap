@@ -1,11 +1,11 @@
-# SIGAP
+# SIMPATIK — Sistem Monitoring Perkembangan dan Aktivitas Akademik
 
-[![CI](https://github.com/MasRama/sigap/actions/workflows/ci.yml/badge.svg)](https://github.com/MasRama/sigap/actions/workflows/ci.yml)
+[![CI](https://github.com/MasRama/simpatik/actions/workflows/ci.yml/badge.svg)](https://github.com/MasRama/simpatik/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 
 > Trust-first school management — verify attendance with camera and geolocation.
 
-SIGAP helps schools manage academic years, classes, students, teachers, schedules, journals, grades, and parent access. The anti-fraud confirmation flow requires teachers to capture a selfie and share their location before class, so every journal entry is tied to a real person at a real place.
+SIMPATIK (Sistem Monitoring Perkembangan dan Aktivitas Akademik) membantu sekolah mengelola tahun ajaran, kelas, siswa, guru, jadwal, jurnal, nilai, dan akses orang tua. Alur konfirmasi anti-kecurangan mengharuskan guru mengambil swafoto dan membagikan lokasi sebelum mengajar, sehingga setiap jurnal terikat pada orang nyata di tempat nyata.
 
 Built on the Nara AI-first TypeScript starter: functions over classes, raw SQL over ORM, Svelte 5 + Inertia.js, and SQLite.
 
@@ -26,7 +26,7 @@ Built on the Nara AI-first TypeScript starter: functions over classes, raw SQL o
 ## Quick start
 
 ```bash
-git clone https://github.com/MasRama/sigap.git && cd sigap
+git clone https://github.com/MasRama/simpatik.git && cd simpatik
 npm install
 cp .env.example .env
 npm run migrate:fresh

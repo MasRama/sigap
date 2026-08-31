@@ -1,4 +1,4 @@
-# SIGAP - Project Knowledge Base
+# SIMPATIK - Project Knowledge Base
 
 > **Skills:** Deep-dive procedures live in [`.agents/skills/`](./.agents/skills/SKILL.md) — load on demand.
 
@@ -256,7 +256,7 @@ Rule: **specific test file during development, full suite before commit.**
 
 ## Agent Tooling
 
-SIGAP ships with agent-ergonomic tooling. Run these before committing AI-generated code.
+SIMPATIK ships with agent-ergonomic tooling. Run these before committing AI-generated code.
 
 | Command | Purpose | Blocks commit? |
 |---|---|---|

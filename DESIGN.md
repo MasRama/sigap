@@ -1,5 +1,5 @@
 ---
-name: SIGAP
+name: SIMPATIK
 description: Trust-first school management — verified attendance, live.
 colors:
   primary: "#1DA85A"
@@ -100,13 +100,13 @@ components:
     rounded: "50%"
 ---
 
-# Design System: SIGAP
+# Design System: SIMPATIK
 
 ## Overview
 
 **Creative North Star: "The Live Ledger"**
 
-SIGAP's visual system is a digital attendance ledger that is alive — names appear one by one, status dots light up green or red, timestamps tick. The system rejects the generic SaaS landing page (gradient heroes, feature card grids, "trusted by" logos, pricing tables). Instead, the product demonstrates itself: the hero IS the product working, not a description of it.
+SIMPATIK's visual system is a digital attendance ledger that is alive — names appear one by one, status dots light up green or red, timestamps tick. The system rejects the generic SaaS landing page (gradient heroes, feature card grids, "trusted by" logos, pricing tables). Instead, the product demonstrates itself: the hero IS the product working, not a description of it.
 
 The palette is operational, not decorative. Green means verified presence. Red means absence or out-of-radius alert. Amber means late. These are not brand colors chosen for mood — they are the semantic colors of attendance status, and the entire interface is built from them. The deep green accent panel in the hero is the institutional voice: calm, authoritative, the school speaking.
 
@@ -242,7 +242,7 @@ Borders are 1px solid, using `--border` color. Dividers within cards use `border
 
 ### Navigation
 - **Style:** Fixed top, 64px height, solid `bg-background` with `border-b border-border`. No transparency transition.
-- **Logo:** Green rounded square mark + "SIGAP" in Spectral semibold + tagline in mono.
+- **Logo:** Green rounded square mark + "SIMPATIK" in Spectral semibold + tagline in mono.
 - **Links:** Public Sans, 14px, `text-muted-foreground` → `text-foreground` on hover.
 
 ### Verification Log (Signature Component)

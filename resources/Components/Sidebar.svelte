@@ -4,7 +4,7 @@
   import { api } from '$lib/api';
   import { cn } from '$lib/utils';
   import DarkModeToggle from './DarkModeToggle.svelte';
-  import SigapIcon from './SigapIcon.svelte';
+  import SimpatikIcon from './SimpatikIcon.svelte';
   import * as dialog from "@zag-js/dialog";
   import { useMachine, normalizeProps, portal } from "@zag-js/svelte";
   import {
@@ -265,7 +265,7 @@
     <Menu class="h-5 w-5" />
   </button>
   <a href="/" use:inertia class="flex items-center gap-2">
-    <SigapIcon size={28} textClass="font-heading font-semibold tracking-tight text-lg" />
+    <SimpatikIcon size={28} textClass="font-heading font-semibold tracking-tight text-lg" />
   </a>
   <div class="flex items-center gap-2">
     {@render notificationBell('top-full')}
@@ -281,10 +281,10 @@
       <div {...sheetApi.getContentProps()} class="bg-background fixed inset-y-0 left-0 z-50 h-full w-[84%] max-w-[300px] border-r border-border flex flex-col transition ease-in-out duration-300 font-body">
         <div class="flex items-center justify-between px-5 h-[4.5rem] border-b border-border shrink-0">
           <a href="/" use:inertia onclick={() => isMenuOpen = false} class="flex items-center gap-2">
-            <SigapIcon size={30} showText={false} />
+            <SimpatikIcon size={30} showText={false} />
             <div class="min-w-0">
-              <p class="font-heading font-semibold tracking-tight text-lg">SIGAP</p>
-              <p class="text-[9px] uppercase tracking-[0.12em] text-muted-foreground truncate">Sistem Informasi Akademik</p>
+              <p class="font-heading font-semibold tracking-tight text-lg">SIMPATIK</p>
+              <p class="text-[9px] uppercase tracking-[0.12em] text-muted-foreground truncate">Sistem Monitoring Perkembangan dan Aktivitas Akademik</p>
             </div>
           </a>
           <button {...sheetApi.getCloseTriggerProps()} onclick={() => isMenuOpen = false} aria-label="Tutup menu" class="text-muted-foreground hover:text-foreground transition-colors p-1">
@@ -319,10 +319,10 @@
 <!-- ───────────── DESKTOP SIDEBAR ───────────── -->
 <aside data-slot="sidebar" class="hidden lg:flex fixed inset-y-0 left-0 z-30 w-64 bg-background border-r border-border flex-col">
   <div class="h-[4.5rem] shrink-0 flex items-center gap-3 px-5 border-b border-border">
-    <SigapIcon size={30} showText={false} />
+    <SimpatikIcon size={30} showText={false} />
     <div class="min-w-0">
-      <p class="font-heading font-semibold tracking-tight text-lg">SIGAP</p>
-      <p class="text-[9px] uppercase tracking-[0.12em] text-muted-foreground truncate">Sistem Informasi Akademik</p>
+      <p class="font-heading font-semibold tracking-tight text-lg">SIMPATIK</p>
+      <p class="text-[9px] uppercase tracking-[0.12em] text-muted-foreground truncate">Sistem Monitoring Perkembangan dan Aktivitas Akademik</p>
     </div>
   </div>
 

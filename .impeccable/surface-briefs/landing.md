@@ -28,7 +28,7 @@ Only real proof: the anti-fraud mechanism itself (selfie + geolocation + Haversi
 
 ## Chosen direction
 
-Sertifikat Kehadiran — the landing page is a document being produced, not a hero being marketed. Every journal entry in SIGAP is a "surat bersertifikat": selfie + geo + stamp. The page shows the mechanism as a certificate being stamped, not as feature cards being listed.
+Sertifikat Kehadiran — the landing page is a document being produced, not a hero being marketed. Every journal entry in SIMPATIK is a "surat bersertifikat": selfie + geo + stamp. The page shows the mechanism as a certificate being stamped, not as feature cards being listed.
 
 Visual world: Indonesian surat dinas / certificate aesthetic — ivory paper, ink-black text, stamp red accent, official blue for institutional headers, serial numbers, signature blocks, seals. The mental model "this is verified because it's stamped and signed" is exactly what selfie+geolocation replaces digitally.
 

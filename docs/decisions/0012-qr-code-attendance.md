@@ -6,7 +6,7 @@ Accepted
 
 ## Context
 
-SIGAP previously used camera selfies + GPS geolocation for teacher attendance
+SIMPATIK previously used camera selfies + GPS geolocation for teacher attendance
 verification (ADR 0011). The flow has changed: teachers now confirm attendance
 once per day by scanning a QR code displayed on a school screen (TV/projector),
 rather than taking a photo per class session.

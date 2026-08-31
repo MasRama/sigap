@@ -3,7 +3,7 @@
   import axios from 'axios';
   import { api } from '$lib/api';
   import DarkModeToggle from './DarkModeToggle.svelte';
-  import SigapIcon from './SigapIcon.svelte';
+  import SimpatikIcon from './SimpatikIcon.svelte';
   import * as menu from "@zag-js/menu";
   import * as dialog from "@zag-js/dialog";
   import { useMachine, normalizeProps, portal } from "@zag-js/svelte";
@@ -77,7 +77,7 @@
 
     <div class="flex items-center gap-8">
       <a href="/" use:inertia class="group">
-        <SigapIcon class="transition-opacity duration-300 group-hover:opacity-80" />
+        <SimpatikIcon class="transition-opacity duration-300 group-hover:opacity-80" />
       </a>
 
       <div class="hidden md:flex items-center gap-1">
@@ -152,7 +152,7 @@
               <div {...sheetApi.getContentProps()} class="bg-background fixed inset-y-0 left-0 z-50 h-full w-[80%] max-w-sm border-r border-border p-6 shadow-xl transition ease-in-out duration-300 font-body">
                 <div class="flex items-center justify-between">
                   <a href="/" use:inertia onclick={() => isMenuOpen = false} class="group">
-                    <SigapIcon class="group-hover:opacity-80" />
+                    <SimpatikIcon class="group-hover:opacity-80" />
                   </a>
                   <button {...sheetApi.getCloseTriggerProps()} aria-label="Close menu" class="text-muted-foreground hover:text-foreground transition-colors p-1 -mr-1">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>

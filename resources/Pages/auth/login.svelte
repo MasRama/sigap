@@ -42,7 +42,7 @@
       <span class="inline-flex items-center justify-center w-7 h-7 bg-primary rounded-md">
         <span class="w-2.5 h-2.5 bg-primary-foreground rounded-[2px] transition-transform duration-300 group-hover:scale-110"></span>
       </span>
-      <span class="font-heading font-semibold tracking-tight text-lg">SIGAP</span>
+      <span class="font-heading font-semibold tracking-tight text-lg">SIMPATIK</span>
     </a>
     <div class="flex items-center gap-4">
       <a href="/" use:inertia class="text-sm text-muted-foreground hover:text-foreground transition-colors cursor-pointer">
@@ -65,7 +65,7 @@
             <span class="w-2 h-2 rounded-full bg-primary"></span>
             <span class="font-mono-accent text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Masuk ke akun</span>
           </div>
-          <span class="font-mono-accent text-[10px] text-muted-foreground">SIGAP</span>
+          <span class="font-mono-accent text-[10px] text-muted-foreground">SIMPATIK</span>
         </header>
 
         <!-- Card body -->
@@ -162,14 +162,14 @@
 
       <!-- Below card note -->
       <p class="mt-5 text-center font-mono-accent text-[10px] text-muted-foreground">
-        SIGAP tidak menyediakan pendaftaran publik &middot; MIT License
+        SIMPATIK tidak menyediakan pendaftaran publik &middot; MIT License
       </p>
     </div>
   </div>
 
   <!-- Bottom bar -->
   <footer class="shrink-0 px-6 sm:px-10 py-4 flex items-center justify-between">
-    <span class="font-mono-accent text-[10px] text-muted-foreground">&copy; {new Date().getFullYear()} SIGAP</span>
+    <span class="font-mono-accent text-[10px] text-muted-foreground">&copy; {new Date().getFullYear()} SIMPATIK</span>
     <span class="font-mono-accent text-[10px] text-muted-foreground">Trust-first school management</span>
   </footer>
 </div>

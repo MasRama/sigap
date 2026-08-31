@@ -69,7 +69,7 @@
   <nav class="relative z-20 flex items-center justify-between h-16 px-6 sm:px-10 lg:px-16">
     <a href="/" use:inertia class="flex items-center gap-2 group">
       <span class="inline-block w-2.5 h-2.5 rounded-full bg-primary transition-transform duration-300 group-hover:scale-125"></span>
-      <span class="font-heading font-semibold tracking-tight text-lg text-white">SIGAP</span>
+      <span class="font-heading font-semibold tracking-tight text-lg text-white">SIMPATIK</span>
     </a>
     <div class="flex items-center gap-5 text-sm">
       <a href="/" use:inertia class="text-white/60 hover:text-white transition-colors">Home</a>
@@ -171,7 +171,7 @@
 
   <!-- ───────────── FOOTER (on image) ───────────── -->
   <footer class="absolute bottom-0 inset-x-0 z-10 px-6 sm:px-10 lg:px-16 py-6 flex justify-between items-center text-xs text-white/40">
-    <span>&copy; {new Date().getFullYear()} SIGAP</span>
+    <span>&copy; {new Date().getFullYear()} SIMPATIK</span>
     <span class="font-heading uppercase tracking-[0.2em]">A foundation for building with AI</span>
   </footer>
 </div>
