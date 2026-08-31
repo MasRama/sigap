@@ -3,6 +3,7 @@
   import axios from 'axios'
   import { api } from '$lib/api'
   import { Toast } from '$lib/toast'
+  import SimpatikIcon from '../../Components/SimpatikIcon.svelte'
   import DarkModeToggle from '../../Components/DarkModeToggle.svelte'
   import { fly, fade } from 'svelte/transition'
   import { ArrowRight, Eye, EyeOff } from '@lucide/svelte'
@@ -39,10 +40,7 @@
   <!-- Top bar -->
   <nav class="flex items-center justify-between h-16 px-6 sm:px-10 shrink-0">
     <a href="/" use:inertia class="flex items-center gap-3 group">
-      <span class="inline-flex items-center justify-center w-7 h-7 bg-primary rounded-md">
-        <span class="w-2.5 h-2.5 bg-primary-foreground rounded-[2px] transition-transform duration-300 group-hover:scale-110"></span>
-      </span>
-      <span class="font-heading font-semibold tracking-tight text-lg">SIMPATIK</span>
+      <SimpatikIcon size={30} />
     </a>
     <div class="flex items-center gap-4">
       <a href="/" use:inertia class="text-sm text-muted-foreground hover:text-foreground transition-colors cursor-pointer">

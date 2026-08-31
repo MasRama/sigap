@@ -4,6 +4,7 @@
   import { api } from '$lib/api'
   import { password_generator } from '$lib/utils/password'
   import { Toast } from '$lib/toast'
+  import SimpatikIcon from '../../Components/SimpatikIcon.svelte'
   import DarkModeToggle from '../../Components/DarkModeToggle.svelte'
   import { fly, fade } from 'svelte/transition'
   import { ArrowRight, Eye, EyeOff, Sparkles } from '@lucide/svelte'
@@ -68,8 +69,7 @@
   <!-- ───────────── NAV (floating, like landing) ───────────── -->
   <nav class="relative z-20 flex items-center justify-between h-16 px-6 sm:px-10 lg:px-16">
     <a href="/" use:inertia class="flex items-center gap-2 group">
-      <span class="inline-block w-2.5 h-2.5 rounded-full bg-primary transition-transform duration-300 group-hover:scale-125"></span>
-      <span class="font-heading font-semibold tracking-tight text-lg text-white">SIMPATIK</span>
+      <SimpatikIcon size={30} />
     </a>
     <div class="flex items-center gap-5 text-sm">
       <a href="/" use:inertia class="text-white/60 hover:text-white transition-colors">Home</a>

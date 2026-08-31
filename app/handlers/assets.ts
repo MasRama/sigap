@@ -109,11 +109,13 @@ export const serveDistAsset = async (req: NaraRequest, res: NaraResponse) => {
     return res.status(403).send('Access denied');
   }
 
-  const distDir = path.resolve(process.cwd(), 'dist/assets');
-  const filePath = path.resolve(distDir, file);
+  const assetDir = process.env.NODE_ENV === 'development'
+    ? path.resolve(process.cwd(), 'resources/assets')
+    : path.resolve(process.cwd(), 'dist/assets');
+  const filePath = path.resolve(assetDir, file);
 
   // Use path.sep to prevent prefix bypass (e.g. /dist-assets/ matching /dist/)
-  if (!filePath.startsWith(distDir + path.sep) && filePath !== distDir) {
+  if (!filePath.startsWith(assetDir + path.sep) && filePath !== assetDir) {
     return res.status(403).send('Access denied');
   }
 
@@ -130,8 +132,8 @@ export const serveDistAsset = async (req: NaraRequest, res: NaraResponse) => {
     if (await fs.promises.access(filePath).then(() => true).catch(() => false)) {
       // Resolve symlinks before serving
       const realPath = fs.realpathSync(filePath);
-      const realDistDir = fs.realpathSync(distDir);
-      if (!realPath.startsWith(realDistDir + path.sep) && realPath !== realDistDir) {
+      const realAssetDir = fs.realpathSync(assetDir);
+      if (!realPath.startsWith(realAssetDir + path.sep) && realPath !== realAssetDir) {
         Logger.logSecurity('Symlink escape blocked', { path: file, ip: req.ip });
         return res.status(403).send('Access denied');
       }

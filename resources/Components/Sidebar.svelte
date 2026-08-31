@@ -265,7 +265,7 @@
     <Menu class="h-5 w-5" />
   </button>
   <a href="/" use:inertia class="flex items-center gap-2">
-    <SimpatikIcon size={28} textClass="font-heading font-semibold tracking-tight text-lg" />
+    <SimpatikIcon size={28} />
   </a>
   <div class="flex items-center gap-2">
     {@render notificationBell('top-full')}

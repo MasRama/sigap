@@ -332,7 +332,7 @@ Semua id `TEXT PRIMARY KEY` UUID, timestamp `INTEGER`, FK `ON DELETE CASCADE`.
 
 ## 9. Frontend Components (Complete Rewrite) — `19cd0a8`
 
-- [x] **9.1** `resources/Components/SimpatikIcon.svelte` — logo lingkaran/sky icon.
+- [x] **9.1** `resources/Components/SimpatikIcon.svelte` — transparent horizontal logo lockup + compact mark based on the supplied reference.
 - [x] **9.2** `resources/Components/Header.svelte` — nav per role:
   - Teacher: Jadwal, Konfirmasi, Jurnal, Nilai.
   - Parent: Anak, Kehadiran, Nilai.

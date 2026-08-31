@@ -3,6 +3,7 @@
   import { fly, fade, scale } from 'svelte/transition';
   import { cubicOut } from 'svelte/easing';
   import DarkModeToggle from '../Components/DarkModeToggle.svelte';
+  import SimpatikIcon from '../Components/SimpatikIcon.svelte';
 
   interface User {
     id: string;
@@ -104,10 +105,7 @@
     class="fixed top-0 inset-x-0 z-50 flex items-center justify-between h-16 px-6 sm:px-10 lg:px-16 bg-background border-b border-border"
   >
     <a href="/" use:inertia class="flex items-center gap-3 group">
-      <span class="inline-flex items-center justify-center w-7 h-7 bg-primary rounded-md">
-        <span class="w-2.5 h-2.5 bg-primary-foreground rounded-[2px] transition-transform duration-300 group-hover:scale-110"></span>
-      </span>
-      <span class="font-heading font-semibold tracking-tight text-lg">SIMPATIK</span>
+      <SimpatikIcon size={31} />
       <span class="hidden sm:inline text-xs text-muted-foreground font-mono-accent tracking-wide border-l border-border pl-3">Sistem Monitoring Perkembangan dan Aktivitas Akademik</span>
     </a>
 
@@ -453,13 +451,8 @@
     <div class="max-w-4xl mx-auto px-6 sm:px-10 py-12">
       <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
         <div class="flex items-center gap-3">
-          <span class="inline-flex items-center justify-center w-7 h-7 bg-primary rounded-md">
-            <span class="w-2.5 h-2.5 bg-primary-foreground rounded-[2px]"></span>
-          </span>
-          <div class="flex flex-col">
-            <span class="font-heading font-semibold tracking-tight">SIMPATIK</span>
-            <span class="text-xs text-muted-foreground">Sistem Monitoring Perkembangan dan Aktivitas Akademik</span>
-          </div>
+          <SimpatikIcon size={34} />
+          <span class="text-xs text-muted-foreground">Sistem Monitoring Perkembangan dan Aktivitas Akademik</span>
         </div>
         <div class="flex flex-col sm:items-end gap-1">
           <p class="text-sm text-muted-foreground">Untuk mendapatkan akses, hubungi admin sekolah Anda.</p>

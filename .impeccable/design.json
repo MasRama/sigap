@@ -138,8 +138,8 @@
       "kind": "nav",
       "refersTo": "navigation",
       "description": "Fixed top nav. Solid background, no transparency transition. Logo + links + dark mode toggle.",
-      "html": "<nav class=\"ds-nav\"><div class=\"ds-nav-logo\"><span class=\"ds-nav-mark\"></span><span class=\"ds-nav-name\">SIMPATIK</span></div><div class=\"ds-nav-links\"><a class=\"ds-nav-link\">Masuk</a></div></nav>",
-      "css": ".ds-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 50; display: flex; align-items: center; justify-content: space-between; height: 64px; padding: 0 24px; background: #FFFFFF; border-bottom: 1px solid #DDE1E0; } .ds-nav-logo { display: flex; align-items: center; gap: 12px; } .ds-nav-mark { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; background: #1DA85A; border-radius: 6px; } .ds-nav-mark::after { content: ''; width: 10px; height: 10px; background: #FFFFFF; border-radius: 2px; } .ds-nav-name { font-family: 'Spectral', Georgia, serif; font-weight: 600; font-size: 18px; letter-spacing: -0.01em; color: #1C1F1E; } .ds-nav-links { display: flex; align-items: center; gap: 20px; } .ds-nav-link { font-family: 'Public Sans', system-ui, sans-serif; font-size: 14px; color: #6B7674; cursor: pointer; transition: color 0.2s; } .ds-nav-link:hover { color: #1C1F1E; }"
+      "html": "<nav class=\"ds-nav\"><img class=\"ds-logo\" src=\"/public/simpatik-logo.png\" alt=\"SIMPATIK\" /><div class=\"ds-nav-links\"><a class=\"ds-nav-link\">Masuk</a></div></nav>",
+      "css": ".ds-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 50; display: flex; align-items: center; justify-content: space-between; height: 64px; padding: 0 24px; background: #FFFFFF; border-bottom: 1px solid #DDE1E0; } .ds-logo { height: 28px; width: auto; object-fit: contain; } .ds-nav-links { display: flex; align-items: center; gap: 20px; } .ds-nav-link { font-family: 'Public Sans', system-ui, sans-serif; font-size: 14px; color: #6B7674; cursor: pointer; transition: color 0.2s; } .ds-nav-link:hover { color: #1C1F1E; }"
     }
   ],
   "narrative": {

@@ -201,7 +201,7 @@ Shadows appear only on the live attendance card in the hero — a subtle elevati
 
 Corners are rounded but restrained. The radius scale: `sm` (2px) for small elements like status dots containers, `md` (6px) for buttons and inputs, `lg` (8px) for cards and containers. The default `--radius` is 6px (0.375rem).
 
-Status dots are perfect circles (50% radius, 8px). The logo mark is a rounded square (6px radius) with an inner square. No sharp corners anywhere — the system is operational but not harsh.
+Status dots are perfect circles (50% radius, 8px). The logo is a transparent horizontal lockup: a green-and-black connected people-and-device mark followed by the lowercase `simpatik` wordmark. The compact mark is used where space is limited.
 
 Borders are 1px solid, using `--border` color. Dividers within cards use `border-border/60` (60% opacity) for subtle separation.
 
@@ -242,7 +242,7 @@ Borders are 1px solid, using `--border` color. Dividers within cards use `border
 
 ### Navigation
 - **Style:** Fixed top, 64px height, solid `bg-background` with `border-b border-border`. No transparency transition.
-- **Logo:** Green rounded square mark + "SIMPATIK" in Spectral semibold + tagline in mono.
+- **Logo:** Transparent horizontal lockup based on the supplied reference — green-and-black connected people-and-device mark + lowercase "simpatik" wordmark; compact mark in the sidebar and favicon.
 - **Links:** Public Sans, 14px, `text-muted-foreground` → `text-foreground` on hover.
 
 ### Verification Log (Signature Component)
