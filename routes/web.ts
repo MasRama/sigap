@@ -215,6 +215,8 @@ Route.get('/parent/child/:studentId/grades', [Auth], parent.parentGradesPage);
 // Headmaster Dashboard
 Route.get('/headmaster/dashboard', [Auth], headmaster.headmasterDashboardPage);
 Route.get('/headmaster/dashboard/data', [Auth], headmaster.headmasterDashboardData);
+Route.get('/headmaster/classes/:classId/grades', [Auth], headmaster.headmasterClassGradesPage);
+Route.get('/headmaster/teachers/:teacherUserId/attendance', [Auth], headmaster.headmasterTeacherAttendancePage);
 Route.get('/headmaster/reports', [Auth], headmaster.headmasterReportsPage);
 Route.get('/headmaster/reports/outside-confirmations', [Auth], headmaster.listOutsideConfirmations);
 

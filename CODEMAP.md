@@ -10,9 +10,9 @@
 
 ## Stats
 
-- Files indexed: 264
-- Total lines: 25256
-- Total exports: 798
+- Files indexed: 268
+- Total lines: 26184
+- Total exports: 808
 - Entry points (★): `app/core/index.ts`, `resources/app.ts`, `routes/web.ts`, `server.ts`
 
 ## File Tree
@@ -53,7 +53,7 @@
 - `dashboard.ts` (29L) — dashboardPage
 - `gradeAudit.ts` (39L) — gradeAuditPage, gradeAuditData
 - `grades.ts` (245L) — gradesPage, listGrades, gradesByStudent, gradeData, addGrade, editGrade, removeGrade
-- `headmaster.ts` (50L) — headmasterDashboardPage, headmasterDashboardData, headmasterReportsPage, listOutsideConfirmations
+- `headmaster.ts` (102L) — headmasterDashboardPage, headmasterDashboardData, headmasterReportsPage, headmasterClassGradesPage, headmasterTeacherAttendancePage, listOutsideConfirmations
 - `home.ts` (17L) — landingPage
 - `index.ts` (30L)
 - `journals.ts` (137L) — journalsPage, listJournals, journalData, addJournal, editJournal, removeJournal
@@ -97,7 +97,7 @@
 - `gradeAuditLogs.ts` (39L) — logGradeChange, getGradeAuditLogsPaginated
 - `gradeComponents.ts` (20L) — findGradeComponentsByYear, upsertGradeComponents
 - `grades.ts` (259L) — findAllGrades, findGradeById, findGradesByStudent, findGradesByStudentForTeacher, findGradesByClassSubject, findGradesByTeacher, getGradesPaginated, createGrade, +8
-- `headmaster.ts` (162L) — getTodaySessions, getMissedSessions, getJournalCompleteness, getGradeProgress, getOutsideConfirmations, SessionStatus, JournalCompletenessRow, GradeProgressRow, +1
+- `headmaster.ts` (429L) — getTodaySessions, getMissedSessions, getJournalCompleteness, getGradeProgress, getClassOverview, getTeacherAttendanceOverview, getTeacherAttendanceHistory, findClassGradeDetails, +5
 - `index.ts` (25L)
 - `journals.ts` (44L) — findAllJournals, findJournalById, findJournalsBySchedule, findJournalsByTeacher, findJournalsByDateRange, createJournal, updateJournal, deleteJournal
 - `notifications.ts` (41L) — createGradePublishedNotifications, findNotificationsByUser, getUnreadNotificationCount, markAllNotificationsRead
@@ -136,7 +136,7 @@
 ### app/types/
 
 - `models.ts` (279L) — User, Session, Role, Permission, Asset, UserRole, RolePermission, AcademicYear, +20
-- `shared.ts` (358L) — User, Role, RoleInfo, Permission, Session, PaginationMeta, PaginatedResponse, ApiSuccessResponse, +31
+- `shared.ts` (400L) — User, Role, RoleInfo, Permission, Session, PaginationMeta, PaginatedResponse, ApiSuccessResponse, +35
 
 ### app/validators/
 
@@ -243,8 +243,10 @@
 
 ### resources/Pages/headmaster/
 
-- `dashboard.svelte` (158L)
+- `class-grades.svelte` (63L)
+- `dashboard.svelte` (236L)
 - `reports.svelte` (64L)
+- `teacher-attendance.svelte` (67L)
 
 ### resources/Pages/parent/
 
@@ -287,12 +289,12 @@
 
 ### resources/types/
 
-- `forms.ts` (432L) — createEmptyUserForm, userToForm, isApiSuccess, isApiError, createEmptyRoleForm, roleToForm, createEmptyAcademicYearForm, academicYearToForm, +36
+- `forms.ts` (438L) — createEmptyUserForm, userToForm, isApiSuccess, isApiError, createEmptyRoleForm, roleToForm, createEmptyAcademicYearForm, academicYearToForm, +36
 - `index.ts` (15L)
 
 ### routes/
 
-- `web.ts` ★ (227L)
+- `web.ts` ★ (229L)
 
 ### scripts/
 
@@ -338,6 +340,7 @@
 - `auth.test.ts` (81L)
 - `gradeAudit.test.ts` (116L)
 - `grades.test.ts` (239L)
+- `headmaster.test.ts` (202L)
 - `notifications.test.ts` (102L)
 - `parent.test.ts` (146L)
 - `parents.test.ts` (91L)
@@ -366,6 +369,7 @@
 ### tests/queries/
 
 - `grades.test.ts` (37L)
+- `headmaster.test.ts` (149L)
 - `roles.test.ts` (125L)
 - `teacherClassAssignments.test.ts` (54L)
 - `teachers.test.ts` (43L)
@@ -550,6 +554,8 @@
 - `const` **headmasterDashboardPage**
 - `const` **headmasterDashboardData**
 - `const` **headmasterReportsPage**
+- `const` **headmasterClassGradesPage**
+- `const` **headmasterTeacherAttendancePage**
 - `const` **listOutsideConfirmations**
 
 ### `app/handlers/home.ts`
@@ -823,6 +829,10 @@
 - `const` **getMissedSessions**
 - `const` **getJournalCompleteness**
 - `const` **getGradeProgress**
+- `const` **getClassOverview**
+- `const` **getTeacherAttendanceOverview**
+- `const` **getTeacherAttendanceHistory**
+- `const` **findClassGradeDetails**
 - `const` **getOutsideConfirmations**
 - `type` **SessionStatus**
 - `type` **JournalCompletenessRow**
@@ -1185,6 +1195,10 @@
 - `iface` **SessionStatusView**
 - `iface` **JournalCompletenessView**
 - `iface` **GradeProgressView**
+- `iface` **HeadmasterClassOverviewView**
+- `iface` **HeadmasterTeacherAttendanceView**
+- `iface` **HeadmasterTeacherAttendanceHistoryView**
+- `iface` **HeadmasterGradeDetailView**
 - `iface` **OutsideConfirmationView**
 - `iface` **AnnouncementView**
 - `iface` **NotificationView**
@@ -1638,7 +1652,7 @@
 - `app/handlers/dashboard.ts` → `@core`, `@queries/academicYears`, `@queries/classes`, `@queries/stats`, `@queries/subjects`, `@queries/users`
 - `app/handlers/gradeAudit.ts` → `@core`, `@queries/gradeAuditLogs`, `@queries/users`
 - `app/handlers/grades.ts` → `@core`, `@queries/academicYears`, `@queries/classes`, `@queries/gradeAuditLogs`, `@queries/grades`, `@queries/students`, `@queries/subjects`, `@queries/teacherConfirmations`, `@queries/users`, `@services/Logger`, `@validators`
-- `app/handlers/headmaster.ts` → `@core`, `@queries/headmaster`, `@queries/schoolLocations`, `@queries/stats`, `@queries/teacherConfirmations`, `@queries/users`
+- `app/handlers/headmaster.ts` → `@core`, `@queries/classes`, `@queries/schoolLocations`, `@queries/stats`, `@queries/teacherConfirmations`, `@queries/teachers`, `@queries/users`
 - `app/handlers/home.ts` → `@core`, `@queries`
 - `app/handlers/journals.ts` → `@core`, `@queries/journals`, `@queries/schedules`, `@queries/studentAttendance`, `@queries/teacherClassAssignments`, `@queries/users`, `@services/Logger`, `@types`, `@validators`
 - `app/handlers/notifications.ts` → `@core`, `@queries/notifications`
@@ -1674,7 +1688,7 @@
 - `app/queries/gradeAuditLogs.ts` → `../types/shared`, `@services/SQLite`
 - `app/queries/gradeComponents.ts` → `@services/SQLite`, `@types`
 - `app/queries/grades.ts` → `../types/shared`, `@services/GradeCalculator`, `@services/SQLite`, `@types`
-- `app/queries/headmaster.ts` → `../types/shared`, `@services/SQLite`
+- `app/queries/headmaster.ts` → `@services/SQLite`
 - `app/queries/journals.ts` → `@services/SQLite`, `@types`
 - `app/queries/notifications.ts` → `../types/shared`, `@services/SQLite`
 - `app/queries/parents.ts` → `@services/SQLite`, `@types`
@@ -1726,8 +1740,10 @@
 - `resources/Pages/dashboard.svelte` → `../Components/BentoCard.svelte`, `../Components/Sidebar.svelte`, `../Components/StatCard.svelte`, `../types`, `@inertiajs/svelte`, `@lucide/svelte`
 - `resources/Pages/gradeAudit.svelte` → `../Components/DataTable.svelte`, `../Components/Pagination.svelte`, `../Components/Sidebar.svelte`, `../types`
 - `resources/Pages/grades.svelte` → `../Components/Button.svelte`, `../Components/ConfirmDialog.svelte`, `../Components/DataTable.svelte`, `../Components/Input.svelte`, `../Components/Label.svelte`, `../Components/Modal.svelte`, `../Components/Pagination.svelte`, `../Components/Select.svelte`, `../Components/Sidebar.svelte`, `../types`, `@inertiajs/svelte`, `@lucide/svelte`
-- `resources/Pages/headmaster/dashboard.svelte` → `../../Components/DataTable.svelte`, `../../Components/Sidebar.svelte`, `../../Components/StatCard.svelte`, `../../types`, `@inertiajs/svelte`, `@lucide/svelte`
+- `resources/Pages/headmaster/class-grades.svelte` → `../../Components/DataTable.svelte`, `../../Components/Sidebar.svelte`, `../../types`, `@inertiajs/svelte`, `@lucide/svelte`
+- `resources/Pages/headmaster/dashboard.svelte` → `../../Components/DataTable.svelte`, `../../Components/Sidebar.svelte`, `../../Components/StatCard.svelte`, `@inertiajs/svelte`, `@lucide/svelte`
 - `resources/Pages/headmaster/reports.svelte` → `../../Components/DataTable.svelte`, `../../Components/Sidebar.svelte`, `../../Components/StatCard.svelte`, `../../types`
+- `resources/Pages/headmaster/teacher-attendance.svelte` → `../../Components/DataTable.svelte`, `../../Components/Sidebar.svelte`, `../../Components/StatCard.svelte`, `../../types`, `@inertiajs/svelte`, `@lucide/svelte`
 - `resources/Pages/journals.svelte` → `../Components/Button.svelte`, `../Components/ConfirmDialog.svelte`, `../Components/DataTable.svelte`, `../Components/Input.svelte`, `../Components/Label.svelte`, `../Components/Modal.svelte`, `../Components/Select.svelte`, `../Components/Sidebar.svelte`, `../types`, `@inertiajs/svelte`, `@lucide/svelte`
 - `resources/Pages/landing.svelte` → `../Components/DarkModeToggle.svelte`, `../Components/SimpatikIcon.svelte`, `@inertiajs/svelte`
 - `resources/Pages/parent/attendance.svelte` → `../../Components/DataTable.svelte`, `../../Components/Sidebar.svelte`, `../../types`
@@ -1771,6 +1787,7 @@
 - `tests/handlers/auth.test.ts` → `../../app/handlers/auth`, `../helpers/mocks`, `@queries`, `@services/Authenticate`
 - `tests/handlers/gradeAudit.test.ts` → `../../app/handlers/gradeAudit`, `../helpers/mocks`, `@queries/gradeAuditLogs`, `@queries/users`
 - `tests/handlers/grades.test.ts` → `../../app/handlers/grades`, `../helpers/mocks`, `@queries/gradeAuditLogs`, `@queries/grades`, `@queries/teacherClassAssignments`, `@queries/teacherConfirmations`, `@queries/users`
+- `tests/handlers/headmaster.test.ts` → `../helpers/mocks`, `@queries/classes`, `@queries/teachers`, `@queries/users`
 - `tests/handlers/notifications.test.ts` → `../../app/handlers/academicYears`, `../../app/handlers/notifications`, `../helpers/mocks`, `@queries/academicYears`, `@queries/notifications`, `@queries/users`
 - `tests/handlers/parent.test.ts` → `../../app/handlers/parent`, `../helpers/mocks`, `@queries/grades`, `@queries/parents`, `@queries/studentAttendance`, `@queries/students`
 - `tests/handlers/parents.test.ts` → `../../app/handlers/parents`, `../helpers/mocks`, `@queries/parents`, `@queries/users`
@@ -1790,6 +1807,7 @@
 - `tests/middlewares/requestId.test.ts` → `../../app/middlewares/requestId`, `../helpers/mocks`
 - `tests/middlewares/securityHeaders.test.ts` → `../../app/middlewares/securityHeaders`, `../helpers/mocks`
 - `tests/queries/grades.test.ts` → `../../app/queries/grades`, `@services/SQLite`
+- `tests/queries/headmaster.test.ts` → `@services/SQLite`
 - `tests/queries/roles.test.ts` → `@services/SQLite`
 - `tests/queries/teacherClassAssignments.test.ts` → `../../app/queries/teacherClassAssignments`, `@services/SQLite`
 - `tests/queries/teachers.test.ts` → `../../app/queries/teachers`, `@services/SQLite`

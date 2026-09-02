@@ -330,6 +330,48 @@ export interface GradeProgressView {
   graded_students: number;
 }
 
+export interface HeadmasterClassOverviewView {
+  class_id: string;
+  class_name: string;
+  total_students: number;
+  graded_students: number;
+  average_score: number | null;
+  attendance_rate: number | null;
+  needs_attention: boolean;
+}
+
+export interface HeadmasterTeacherAttendanceView {
+  teacher_user_id: string;
+  teacher_name: string;
+  expected_days: number;
+  confirmed_days: number;
+  attendance_rate: number | null;
+}
+
+export interface HeadmasterTeacherAttendanceHistoryView {
+  teacher_user_id: string;
+  teacher_name: string;
+  date: number;
+  class_names: string;
+  subject_names: string;
+  scheduled_sessions: number;
+  confirmed: boolean;
+  confirmed_at: number | null;
+  is_inside_school: number | null;
+  distance_meters: number | null;
+}
+
+export interface HeadmasterGradeDetailView {
+  id: string;
+  student_id: string;
+  student_name: string;
+  nis: string;
+  subject_name: string;
+  type: string;
+  score: number;
+  date: number;
+}
+
 export interface OutsideConfirmationView {
   schedule_id: string;
   class_name: string;

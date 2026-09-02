@@ -38,9 +38,10 @@ Inertia.js pages rendered by Svelte 5. Each page is a route destination — the 
 | `users.svelte` | User management (CRUD table + role assignment) |
 | `auth/login.svelte` | Login form |
 | `auth/register.svelte` | Registration form (legacy) |
-| `headmaster/dashboard.svelte` | Headmaster overview: today sessions, missed sessions, grade progress, journal completeness |
+| `headmaster/dashboard.svelte` | Headmaster overview: school-wide class summaries, teacher attendance, today sessions, missed sessions, grade progress, journal completeness |
+| `headmaster/class-grades.svelte` | Read-only per-student grade details for a class |
+| `headmaster/teacher-attendance.svelte` | Read-only teacher attendance history and QR confirmation detail |
 | `headmaster/reports.svelte` | Outside confirmations report |
-| `reports/rapor.svelte` | Printable student rapor (grades, predikat, attendance) |
 | `parent/attendance.svelte` | Parent view of child attendance |
 | `parent/dashboard.svelte` | Parent children summary |
 | `parent/grades.svelte` | Parent view of child grades |
