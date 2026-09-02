@@ -269,6 +269,15 @@ export interface SubjectGradeSummary {
   is_passed: boolean | null;
 }
 
+export interface StudentGradeProgression {
+  id: string;
+  subject_id: string;
+  subject_name: string;
+  type: string;
+  score: number;
+  date: number;
+}
+
 export interface GradeSummaryComponent {
   type: string;
   name: string;

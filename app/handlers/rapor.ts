@@ -4,7 +4,7 @@ import { findParentByUserId } from '@queries/parents';
 import { findStudentsByParent } from '@queries/students';
 import { getStudentGradeSummaries, getStudentContext } from '@queries/grades';
 import { findAttendanceByStudent } from '@queries/studentAttendance';
-import { isAdmin, hasPermission } from '@queries/users';
+import { isAdmin, hasPermission, hasRole } from '@queries/users';
 
 export const raporPage = (req: NaraRequest, res: NaraResponse) => {
   if (!req.user) return res.redirect('/login');
@@ -12,7 +12,8 @@ export const raporPage = (req: NaraRequest, res: NaraResponse) => {
   const studentId = req.params.studentId;
   if (!studentId) return res.redirect('/dashboard');
 
-  const isStaff = !isAdmin(req.user.id) && hasPermission(req.user.id, 'grades.view');
+  const parentUser = hasRole(req.user.id, 'parent');
+  const isStaff = !isAdmin(req.user.id) && !parentUser && hasPermission(req.user.id, 'grades.view');
 
   let ownsChild = false;
   if (!isStaff) {
@@ -41,7 +42,7 @@ export const raporPage = (req: NaraRequest, res: NaraResponse) => {
     student: { name: student.name, nis: student.nis },
     className: context?.class_name ?? '',
     yearName: context?.year_name ?? '',
-    isParent: !isStaff,
+    isParent: parentUser,
     gradesPublished: published,
     summaries: isStaff || published ? summaries : [],
     attendanceCounts,

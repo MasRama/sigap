@@ -171,7 +171,7 @@ Server (ultimate-express)
 |Kepala Sekolah|kepala|kepala123|oversight dashboards, reports, audit|
 |Guru (Matematika + Biologi)|budi|teacher123|mengajar 10A MAT, 10B BIO|
 |Guru (Bahasa Inggris)|siti|teacher123|mengajar 10A & 10B ENG|
-|Orang Tua|andi|parent123|10 anak (NIS 10001–10010), lihat nilai + absensi|
+|Orang Tua|10001|parent123|10 anak (NIS 10001–10010), lihat nilai + absensi|
 
 Demo data (`seeds/07_demo_data.ts`): 14 hari konfirmasi + jurnal guru (1 sesi sengaja tidak dikonfirmasi untuk demo alarm kepala sekolah, 1 konfirmasi di luar radius), nilai UAS untuk semua siswa, audit log, notifikasi parent, pengumuman, dan nilai terpublikasi.
 

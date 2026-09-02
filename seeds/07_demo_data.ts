@@ -171,7 +171,7 @@ export function run(SQLite: typeof SQLiteType): void {
   }
 
   // ── One parent notification (only when the parent has no unread) ─────────
-  const parentUser = SQLite.one<{ id: string }>`SELECT id FROM users WHERE username = ${'andi'}`;
+  const parentUser = SQLite.one<{ id: string }>`SELECT id FROM users WHERE username = ${'10001'}`;
   if (parentUser) {
     const unreadCount = SQLite.get<{ count: number }>(
       'SELECT COUNT(*) as count FROM notifications WHERE user_id = ? AND read_at IS NULL',

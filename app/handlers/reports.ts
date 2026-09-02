@@ -1,11 +1,11 @@
 import type { NaraRequest, NaraResponse } from '@core';
 import { jsonSuccess, jsonError } from '@core';
 import { getClassSubjectStats } from '@queries/stats';
-import { isAdmin, hasPermission } from '@queries/users';
+import { isAdmin, hasPermission, hasRole } from '@queries/users';
 
 export const classSubjectReport = (req: NaraRequest, res: NaraResponse) => {
   if (!req.user) return jsonError(res, 'Unauthorized', 401);
-  if (isAdmin(req.user.id) || (!hasPermission(req.user.id, 'grades.view') && !hasPermission(req.user.id, 'attendance.view'))) {
+  if (hasRole(req.user.id, 'parent') || isAdmin(req.user.id) || (!hasPermission(req.user.id, 'grades.view') && !hasPermission(req.user.id, 'attendance.view'))) {
     return jsonError(res, 'Forbidden', 403);
   }
 

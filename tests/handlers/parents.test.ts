@@ -14,14 +14,14 @@ vi.mock('@queries/users', () => ({
   findUsersForParentSelect: vi.fn(() => []),
   isAdmin: vi.fn(() => false),
   hasPermission: vi.fn(() => false),
+  hasRole: vi.fn(() => false),
 }));
 vi.mock('@services/Logger', () => ({
   default: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
-
-import { parentsPage, addParent } from '../../app/handlers/parents';
+import { parentsPage, addParent, listParents, parentByUser } from '../../app/handlers/parents';
 import { getParentsPaginated, findParentByUserId, createParent } from '@queries/parents';
-import { findUsersForParentSelect } from '@queries/users';
+import { findUsersForParentSelect, hasRole } from '@queries/users';
 import { isAdmin } from '@queries/users';
 
 const parent = {
@@ -68,5 +68,23 @@ describe('parents administration', () => {
 
     expect(res._status).toBe(409);
     expect(createParent).not.toHaveBeenCalled();
+  });
+
+  it('denies parent accounts access to parent administration records', () => {
+    vi.mocked(hasRole).mockReturnValue(true);
+    const req = mockRequest({
+      user: mockUser({ id: 'parent-1', roles: ['parent'] }),
+      params: { userId: 'other-user' },
+    });
+    const res = mockResponse();
+
+    listParents(req, res);
+    expect(res._status).toBe(403);
+
+    const secondResponse = mockResponse();
+    parentByUser(req, secondResponse);
+    expect(secondResponse._status).toBe(403);
+    expect(findParentByUserId).not.toHaveBeenCalled();
+    expect(getParentsPaginated).not.toHaveBeenCalled();
   });
 });

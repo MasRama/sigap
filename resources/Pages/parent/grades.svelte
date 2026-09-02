@@ -2,9 +2,14 @@
   import Sidebar from '../../Components/Sidebar.svelte';
   import { fly } from 'svelte/transition';
   import { Lock } from '@lucide/svelte';
-  import type { SubjectGradeSummary } from '../../types';
+  import type { SubjectGradeSummary, StudentGradeProgression } from '../../types';
 
-  let { studentName = '', gradesPublished = false, summaries = [] }: { studentName?: string; gradesPublished?: boolean; summaries?: SubjectGradeSummary[] } = $props();
+  let { studentName = '', gradesPublished = false, summaries = [], progression = [] }: {
+    studentName?: string;
+    gradesPublished?: boolean;
+    summaries?: SubjectGradeSummary[];
+    progression?: StudentGradeProgression[];
+  } = $props();
 
   function typeLabel(type: string): string {
     switch (type) {
@@ -69,6 +74,32 @@
         </article>
       {/each}
     </div>
+  {/if}
+
+  {#if gradesPublished && progression.length > 0}
+    <section class="mt-10" in:fly={{ y: 20, duration: 700, delay: 150 }}>
+      <div class="mb-4">
+        <p class="font-mono-accent text-[10px] uppercase tracking-[0.25em] text-muted-foreground mb-2">Riwayat Penilaian</p>
+        <h2 class="font-heading font-semibold tracking-tight text-xl">Perkembangan Akademik</h2>
+        <p class="text-sm text-muted-foreground mt-1">Perubahan nilai anak dari setiap penilaian yang sudah dipublikasikan.</p>
+      </div>
+      <div class="bg-card border border-border rounded-lg overflow-hidden">
+        {#each progression as point (point.id)}
+          <article class="px-5 py-4 border-b border-border last:border-b-0">
+            <div class="flex items-start justify-between gap-4">
+              <div class="min-w-0">
+                <p class="font-heading text-sm font-semibold text-foreground truncate">{point.subject_name}</p>
+                <p class="text-xs text-muted-foreground mt-1">{typeLabel(point.type)} · {new Date(point.date).toLocaleDateString('id-ID', { dateStyle: 'medium' })}</p>
+              </div>
+              <span class="font-heading font-semibold text-foreground shrink-0">{point.score}</span>
+            </div>
+            <div class="h-2 mt-3 rounded-full bg-secondary overflow-hidden" aria-hidden="true">
+              <div class="h-full rounded-full bg-primary transition-all" style={`width: ${Math.max(0, Math.min(100, point.score))}%`}></div>
+            </div>
+          </article>
+        {/each}
+      </div>
+    </section>
   {/if}
 </div>
 

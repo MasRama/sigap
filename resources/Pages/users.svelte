@@ -58,6 +58,9 @@
   function openEditUser(userItem: User): void {
     mode = 'edit';
     form = userToForm(userItem);
+    if (userItem.roles?.includes('parent')) {
+      form.student_id = students.find(student => student.nis.toLowerCase() === userItem.username.toLowerCase())?.id ?? null;
+    }
     showUserModal = true;
   }
 
@@ -75,6 +78,10 @@
     const formData = event.detail;
     if (!formData.name || !formData.username) {
       Toast('Nama dan username wajib diisi', 'error');
+      return;
+    }
+    if (formData.roles?.includes('parent') && !formData.student_id) {
+      Toast('Pilih siswa yang diwakili akun orang tua', 'error');
       return;
     }
 

@@ -2,11 +2,11 @@ import type { NaraRequest, NaraResponse } from '@core';
 import { jsonSuccess, jsonError } from '@core';
 import { findAttendanceByStudent } from '@queries/studentAttendance';
 import { findStudentById } from '@queries/students';
-import { isAdmin, hasPermission } from '@queries/users';
+import { isAdmin, hasPermission, hasRole } from '@queries/users';
 
 export const attendanceReportData = (req: NaraRequest, res: NaraResponse) => {
   if (!req.user) return jsonError(res, 'Unauthorized', 401);
-  if (isAdmin(req.user.id) || !hasPermission(req.user.id, 'attendance.view')) {
+  if (isAdmin(req.user.id) || hasRole(req.user.id, 'parent') || !hasPermission(req.user.id, 'attendance.view')) {
     return jsonError(res, 'Forbidden', 403);
   }
 

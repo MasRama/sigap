@@ -14,11 +14,11 @@ import {
   isTeacherHomeroomOfClass,
 } from '@queries/teacherClassAssignments';
 import { findTodayConfirmationByTeacher } from '@queries/teacherConfirmations';
-import { isAdmin, hasPermission } from '@queries/users';
+import { isAdmin, hasPermission, hasRole } from '@queries/users';
 import { GradeSchema, zodToErrors } from '@validators';
 
-const isTeacherActor = (userId: string): boolean => !isAdmin(userId) && isTeacherUser(userId);
-const canView = (userId: string): boolean => !isAdmin(userId) && hasPermission(userId, 'grades.view');
+const isTeacherActor = (userId: string): boolean => !hasRole(userId, 'parent') && !isAdmin(userId) && isTeacherUser(userId);
+const canView = (userId: string): boolean => !hasRole(userId, 'parent') && !isAdmin(userId) && hasPermission(userId, 'grades.view');
 const hasConfirmedToday = (userId: string): boolean => !!findTodayConfirmationByTeacher(userId);
 const canViewTeacherGrade = (userId: string, classId: string, subjectId: string): boolean =>
   isTeacherHomeroomOfClass(userId, classId) || isTeacherAssignedToClassSubject(userId, classId, subjectId);
@@ -109,7 +109,7 @@ export const listGrades = (req: NaraRequest, res: NaraResponse) => {
 
 export const gradesByStudent = (req: NaraRequest, res: NaraResponse) => {
   if (!req.user) return jsonError(res, 'Unauthorized', 401);
-  if (!canView(req.user.id) && req.user.id !== req.params.studentId) return jsonError(res, 'Forbidden', 403);
+  if (hasRole(req.user.id, 'parent') || (!canView(req.user.id) && req.user.id !== req.params.studentId)) return jsonError(res, 'Forbidden', 403);
 
   const studentId = req.params.studentId;
   if (!studentId) return jsonError(res, 'Student ID required', 400);

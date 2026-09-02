@@ -160,7 +160,10 @@
                   </div>
                   <div class="flex flex-col gap-2">
                     <Label for="username" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground">Username</Label>
-                    <Input id="username" type="text" bind:value={user.username} placeholder="username Anda" class="h-12 rounded-xl" />
+                    <Input id="username" type="text" bind:value={user.username} placeholder="username Anda" disabled={user.roles?.includes('parent')} />
+                    {#if user.roles?.includes('parent')}
+                      <p class="text-xs text-muted-foreground">Username akun orang tua mengikuti NIS anak yang terhubung.</p>
+                    {/if}
                   </div>
                   <div class="flex justify-end pt-2">
                     <Button type="submit" disabled={isLoading} size="lg">

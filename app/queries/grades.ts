@@ -1,6 +1,6 @@
 import SQLite from '@services/SQLite';
 import type { Grade } from '@types';
-import type { GradeSummaryRow, SubjectGradeSummary, GradeSummaryComponent, ClassSubjectSummary } from '../types/shared';
+import type { GradeSummaryRow, SubjectGradeSummary, GradeSummaryComponent, ClassSubjectSummary, StudentGradeProgression } from '../types/shared';
 import { computeFinalScore, predikatOf, isPassed } from '@services/GradeCalculator';
 import { randomUUID } from 'crypto';
 
@@ -191,7 +191,8 @@ export const getClassSubjectSummary = (classId: string, subjectId: string): Clas
   return { className: meta.className, subjectName: meta.subjectName, kkm: meta.kkm, components, rows };
 };
 
-export const getStudentGradeSummaries = (studentId: string): { published: boolean; summaries: SubjectGradeSummary[] } => {  const published = getGradesPublicationForStudent(studentId);
+export const getStudentGradeSummaries = (studentId: string): { published: boolean; summaries: SubjectGradeSummary[] } => {
+  const published = getGradesPublicationForStudent(studentId);
 
   const meta = SQLite.get<{ yearId: string }>(
     `SELECT c.academic_year_id AS yearId FROM students st JOIN classes c ON c.id = st.class_id WHERE st.id = ?`,
@@ -234,6 +235,15 @@ export const getStudentGradeSummaries = (studentId: string): { published: boolea
 
   return { published, summaries: [...bySubject.values()] };
 };
+
+export const findGradeProgressionByStudent = (studentId: string): StudentGradeProgression[] =>
+  SQLite.many<StudentGradeProgression>`
+    SELECT g.id, g.subject_id, s.name AS subject_name, g.type, g.score, g.date
+    FROM grades g
+    INNER JOIN subjects s ON s.id = g.subject_id
+    WHERE g.student_id = ${studentId}
+    ORDER BY g.date ASC, s.name ASC, g.type ASC, g.id ASC
+  `;
 
 export const getStudentContext = (studentId: string): { class_name: string; year_name: string } | null => {
   const row = SQLite.get<{ class_name: string; year_name: string }>(

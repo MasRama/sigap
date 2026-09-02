@@ -6,11 +6,11 @@ import { getStudentsPaginated, findStudentById, createStudent, updateStudent, de
 import { findAllClasses, findClassByName } from '@queries/classes';
 import { getUsersWithRole } from '@queries/roles';
 import { parseStudentCsv } from '@services/StudentCsvParser';
-import { isAdmin, hasPermission } from '@queries/users';
+import { isAdmin, hasPermission, hasRole } from '@queries/users';
 import { StudentSchema, UpdateStudentSchema, zodToErrors } from '@validators';
 
-const canView = (userId: string): boolean => isAdmin(userId) || hasPermission(userId, 'students.view');
-const canManage = (userId: string): boolean => isAdmin(userId) || hasPermission(userId, 'students.create');
+const canView = (userId: string): boolean => !hasRole(userId, 'parent') && (isAdmin(userId) || hasPermission(userId, 'students.view'));
+const canManage = (userId: string): boolean => !hasRole(userId, 'parent') && (isAdmin(userId) || hasPermission(userId, 'students.create'));
 
 export const studentsPage = (req: NaraRequest, res: NaraResponse) => {
   const userId = req.user?.id;
@@ -18,8 +18,8 @@ export const studentsPage = (req: NaraRequest, res: NaraResponse) => {
   const permissions = {
     canView: canViewFlag,
     canCreate: userId ? canManage(userId) : false,
-    canEdit: userId ? isAdmin(userId) || hasPermission(userId, 'students.edit') : false,
-    canDelete: userId ? isAdmin(userId) || hasPermission(userId, 'students.delete') : false,
+    canEdit: userId ? !hasRole(userId, 'parent') && (isAdmin(userId) || hasPermission(userId, 'students.edit')) : false,
+    canDelete: userId ? !hasRole(userId, 'parent') && (isAdmin(userId) || hasPermission(userId, 'students.delete')) : false,
   };
 
   if (!canViewFlag) {
@@ -100,7 +100,7 @@ export const addStudent = (req: NaraRequest, res: NaraResponse) => {
 
 export const editStudent = (req: NaraRequest, res: NaraResponse) => {
   if (!req.user) return jsonError(res, 'Unauthorized', 401);
-  if (!isAdmin(req.user.id) && !hasPermission(req.user.id, 'students.edit')) return jsonError(res, 'Forbidden', 403);
+  if (hasRole(req.user.id, 'parent') || (!isAdmin(req.user.id) && !hasPermission(req.user.id, 'students.edit'))) return jsonError(res, 'Forbidden', 403);
 
   const id = req.params.id;
   if (!id) return jsonError(res, 'ID required', 400);
@@ -120,7 +120,7 @@ export const editStudent = (req: NaraRequest, res: NaraResponse) => {
 
 export const removeStudent = (req: NaraRequest, res: NaraResponse) => {
   if (!req.user) return jsonError(res, 'Unauthorized', 401);
-  if (!isAdmin(req.user.id) && !hasPermission(req.user.id, 'students.delete')) return jsonError(res, 'Forbidden', 403);
+  if (hasRole(req.user.id, 'parent') || (!isAdmin(req.user.id) && !hasPermission(req.user.id, 'students.delete'))) return jsonError(res, 'Forbidden', 403);
 
   const id = req.params.id;
   if (!id) return jsonError(res, 'ID required', 400);

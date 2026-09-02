@@ -36,9 +36,10 @@ export const UpdateUserSchema = z.object({
   username: usernameSchema.optional(),
   password: z.string().min(8, 'Kata sandi minimal 8 karakter').max(100, 'Kata sandi maksimal 100 karakter').optional().or(z.literal('')),
   roles: z.array(z.string()).optional(),
+  student_id: z.string().uuid('ID siswa tidak valid').optional().nullable(),
 }).refine(
   data => data.name !== undefined || data.username !== undefined ||
-          data.password !== undefined || data.roles !== undefined,
+          data.password !== undefined || data.roles !== undefined || data.student_id !== undefined,
   { message: 'Minimal satu kolom wajib diubah', path: ['_root'] }
 );
 

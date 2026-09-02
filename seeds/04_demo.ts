@@ -45,7 +45,7 @@ export function run(SQLite: typeof SQLiteType): void {
     { id: randomUUID(), name: 'Siti Rahayu', username: 'siti', password: hashPassword('teacher123') },
   ];
 
-  const parentUser = { id: randomUUID(), name: 'Andi Wijaya', username: 'andi', password: hashPassword('parent123') };
+  const parentUser = { id: randomUUID(), name: 'Andi Wijaya', username: '10001', password: hashPassword('parent123') };
 
   for (const user of teacherUsers) {
     SQLite.exec`

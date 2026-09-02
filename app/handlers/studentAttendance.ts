@@ -5,12 +5,11 @@ import { findAttendanceByJournal, findAttendanceByStudent, findStudentAttendance
 import { findJournalById } from '@queries/journals';
 import { findScheduleById } from '@queries/schedules';
 import { isTeacherUser } from '@queries/teacherClassAssignments';
-import { isAdmin, hasPermission } from '@queries/users';
+import { isAdmin, hasPermission, hasRole } from '@queries/users';
 import { StudentAttendanceSchema, zodToErrors } from '@validators';
 
-const isTeacherActor = (userId: string): boolean => !isAdmin(userId) && isTeacherUser(userId);
-const canView = (userId: string): boolean => !isAdmin(userId) && hasPermission(userId, 'attendance.view');
-
+const isTeacherActor = (userId: string): boolean => !hasRole(userId, 'parent') && !isAdmin(userId) && isTeacherUser(userId);
+const canView = (userId: string): boolean => !hasRole(userId, 'parent') && !isAdmin(userId) && hasPermission(userId, 'attendance.view');
 export const studentAttendancePage = (req: NaraRequest, res: NaraResponse) => {
   if (!req.user) return res.redirect('/login');
   const userId = req.user.id;
@@ -44,8 +43,7 @@ export const listAttendanceByStudent = (req: NaraRequest, res: NaraResponse) => 
   const studentId = req.params.studentId;
   if (!studentId) return jsonError(res, 'Student ID required', 400);
 
-  // Parents can view their own children's attendance; teachers/admins can view any
-  // Simplified: require view permission
+  // Parent attendance is served through the ownership-checked parent handler.
   if (!canView(req.user.id)) return jsonError(res, 'Forbidden', 403);
 
   return jsonSuccess(res, 'OK', findAttendanceByStudent(studentId));

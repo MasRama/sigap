@@ -36,6 +36,18 @@ vi.mock('@queries/roles', () => ({
   getUsersWithRole: vi.fn(() => [{ id: 'user-123' }]),
 }));
 
+vi.mock('@queries/parents', () => ({
+  createParent: vi.fn(),
+  findParentByUserId: vi.fn(),
+}));
+
+vi.mock('@queries/students', () => ({
+  findStudentsForParentSelect: vi.fn(() => []),
+  findStudentById: vi.fn(),
+  findStudentsByParent: vi.fn(() => []),
+  linkStudentToParent: vi.fn(),
+}));
+
 vi.mock('@services/Authenticate', () => ({
   hashPassword: vi.fn((pw: string) => `hashed-${pw}`),
   comparePassword: vi.fn(),
@@ -46,13 +58,15 @@ vi.mock('@services/Logger', () => ({
 }));
 
 import { addUser, editUser, removeUsers, changeProfile } from '../../app/handlers/users';
-import { createUser, updateUser, deleteUsers, isAdmin, hasPermission } from '@queries';
+import { createUser, updateUser, deleteUsers, getUserRoles, isAdmin, hasPermission } from '@queries';
 import { findRoleBySlug, getUsersWithRole } from '@queries/roles';
 import { hashPassword } from '@services/Authenticate';
+import { findStudentById, findStudentsByParent, linkStudentToParent } from '@queries/students';
 
 const UUID_ME = '00000000-0000-4000-8000-000000000001';
 const UUID_OTHER = '00000000-0000-4000-8000-000000000002';
 const UUID_ADMIN2 = '00000000-0000-4000-8000-000000000003';
+const UUID_STUDENT1 = '00000000-0000-4000-8000-000000000004';
 
 describe('users handler', () => {
   beforeEach(() => vi.clearAllMocks());
@@ -100,6 +114,65 @@ describe('users handler', () => {
       expect(res._status).toBe(201);
       expect(res._body.success).toBe(true);
       expect(res._body.data.user.username).toBe('alice');
+    });
+
+    it('requires a linked student for parent accounts', () => {
+      const req = mockRequest({
+        user: mockUser(),
+        body: { name: 'Orang Tua', username: '10001', password: 'password123', roles: ['parent'] },
+      });
+      const res = mockResponse();
+      vi.mocked(isAdmin).mockReturnValue(true);
+
+      addUser(req, res);
+
+      expect(res._status).toBe(400);
+      expect(res._body).toMatchObject({ code: 'PARENT_STUDENT_REQUIRED' });
+      expect(createUser).not.toHaveBeenCalled();
+    });
+
+    it('requires the parent username to match the linked student NIS', () => {
+      vi.mocked(findStudentById).mockReturnValue({
+        id: UUID_STUDENT1,
+        nis: '10001',
+        parent_user_id: null,
+      } as never);
+      const req = mockRequest({
+        user: mockUser(),
+        body: { name: 'Orang Tua', username: '10002', password: 'password123', roles: ['parent'], student_id: UUID_STUDENT1 },
+      });
+      const res = mockResponse();
+      vi.mocked(isAdmin).mockReturnValue(true);
+
+      addUser(req, res);
+
+      expect(res._status).toBe(400);
+      expect(res._body).toMatchObject({ code: 'USERNAME_NIS_MISMATCH' });
+      expect(createUser).not.toHaveBeenCalled();
+    });
+
+    it('links the selected student when creating a valid parent account', () => {
+      vi.mocked(findStudentById).mockReturnValue({
+        id: UUID_STUDENT1,
+        nis: '10001',
+        parent_user_id: null,
+      } as never);
+      vi.mocked(createUser).mockReturnValue({
+        id: 'parent-1',
+        name: 'Orang Tua',
+        username: '10001',
+      } as never);
+      const req = mockRequest({
+        user: mockUser(),
+        body: { name: 'Orang Tua', username: '10001', password: 'password123', roles: ['parent'], student_id: UUID_STUDENT1 },
+      });
+      const res = mockResponse();
+      vi.mocked(isAdmin).mockReturnValue(true);
+
+      addUser(req, res);
+
+      expect(res._status).toBe(201);
+      expect(linkStudentToParent).toHaveBeenCalledWith(UUID_STUDENT1, 'parent-1');
     });
 
     it('returns 400 DUPLICATE_USERNAME on unique constraint', () => {
@@ -152,6 +225,23 @@ describe('users handler', () => {
       (updateUser as any).mockReturnValue({ id: 'me', name: 'New Me', username: 'me' });
       editUser(req as any, res as any);
       expect(res._status).toBe(200);
+    });
+
+    it('prevents a parent from linking an additional student', () => {
+      vi.mocked(isAdmin).mockReturnValue(false);
+      vi.mocked(getUserRoles).mockReturnValue([{ slug: 'parent' }] as never);
+      const req = mockRequest({
+        user: mockUser({ id: 'parent-1', roles: ['parent'] }),
+        params: { id: 'parent-1' },
+        body: { student_id: UUID_STUDENT1 },
+      });
+      const res = mockResponse();
+
+      editUser(req, res);
+
+      expect(res._status).toBe(403);
+      expect(res._body).toMatchObject({ code: 'PARENT_STUDENT_ADMIN_ONLY' });
+      expect(linkStudentToParent).not.toHaveBeenCalled();
     });
 
     it('returns 422 if no fields provided', () => {
@@ -246,12 +336,28 @@ describe('users handler', () => {
     });
 
     it('updates and returns success', () => {
+      vi.mocked(getUserRoles).mockReturnValue([]);
       const req = mockRequest({ user: mockUser(), body: { name: 'New Name', username: 'newuser' } });
       const res = mockResponse();
       (updateUser as any).mockReturnValue({ id: 'me', name: 'New Name', username: 'newuser' });
       changeProfile(req as any, res as any);
       expect(res._status).toBe(200);
       expect(res._body.success).toBe(true);
+    });
+    it('keeps parent usernames tied to one of their children NIS values', () => {
+      vi.mocked(getUserRoles).mockReturnValue([{ slug: 'parent' }] as never);
+      vi.mocked(findStudentsByParent).mockReturnValue([{ nis: '10001' }] as never);
+      const req = mockRequest({
+        user: mockUser({ id: 'parent-1' }),
+        body: { name: 'Orang Tua', username: '10002' },
+      });
+      const res = mockResponse();
+
+      changeProfile(req, res);
+
+      expect(res._status).toBe(400);
+      expect(res._body).toMatchObject({ code: 'USERNAME_NIS_MISMATCH' });
+      expect(updateUser).not.toHaveBeenCalled();
     });
   });
 });

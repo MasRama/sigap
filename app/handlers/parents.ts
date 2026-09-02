@@ -3,11 +3,13 @@ import { jsonSuccess, jsonCreated, jsonError, jsonServerError, jsonValidationErr
 import Logger from '@services/Logger';
 import { getParentsPaginated, findParentById, findParentByUserId, createParent, updateParent, deleteParent } from '@queries/parents';
 import { findStudentsByParent } from '@queries/students';
-import { findUsersForParentSelect, isAdmin, hasPermission } from '@queries/users';
+import { findUsersForParentSelect, isAdmin, hasPermission, hasRole } from '@queries/users';
 import { ParentSchema, UpdateParentSchema, zodToErrors } from '@validators';
 
-const canView = (userId: string): boolean => isAdmin(userId) || hasPermission(userId, 'parents.view');
-const canManage = (userId: string): boolean => isAdmin(userId) || hasPermission(userId, 'parents.create');
+const canView = (userId: string): boolean => !hasRole(userId, 'parent') && (isAdmin(userId) || hasPermission(userId, 'parents.view'));
+const canManage = (userId: string): boolean => !hasRole(userId, 'parent') && (isAdmin(userId) || hasPermission(userId, 'parents.create'));
+const canEdit = (userId: string): boolean => !hasRole(userId, 'parent') && (isAdmin(userId) || hasPermission(userId, 'parents.edit'));
+const canDelete = (userId: string): boolean => !hasRole(userId, 'parent') && (isAdmin(userId) || hasPermission(userId, 'parents.delete'));
 
 export const parentsPage = (req: NaraRequest, res: NaraResponse) => {
   const userId = req.user?.id;
@@ -15,8 +17,8 @@ export const parentsPage = (req: NaraRequest, res: NaraResponse) => {
   const permissions = {
     canView: canViewFlag,
     canCreate: userId ? canManage(userId) : false,
-    canEdit: userId ? isAdmin(userId) || hasPermission(userId, 'parents.edit') : false,
-    canDelete: userId ? isAdmin(userId) || hasPermission(userId, 'parents.delete') : false,
+    canEdit: userId ? canEdit(userId) : false,
+    canDelete: userId ? canDelete(userId) : false,
   };
   if (!canViewFlag) {
     return res.inertia('parents', {
@@ -66,6 +68,7 @@ export const parentData = (req: NaraRequest, res: NaraResponse) => {
 
 export const parentByUser = (req: NaraRequest, res: NaraResponse) => {
   if (!req.user) return jsonError(res, 'Unauthorized', 401);
+  if (!canView(req.user.id)) return jsonError(res, 'Forbidden', 403);
   const item = findParentByUserId(req.params.userId || '');
   if (!item) return jsonError(res, 'Not found', 404);
   return jsonSuccess(res, 'OK', { ...item, children: findStudentsByParent(item.user_id) });
@@ -96,7 +99,7 @@ export const addParent = (req: NaraRequest, res: NaraResponse) => {
 
 export const editParent = (req: NaraRequest, res: NaraResponse) => {
   if (!req.user) return jsonError(res, 'Unauthorized', 401);
-  if (!isAdmin(req.user.id) && !hasPermission(req.user.id, 'parents.edit')) return jsonError(res, 'Forbidden', 403);
+  if (!canEdit(req.user.id)) return jsonError(res, 'Forbidden', 403);
 
   const id = req.params.id;
   if (!id) return jsonError(res, 'ID required', 400);
@@ -116,7 +119,7 @@ export const editParent = (req: NaraRequest, res: NaraResponse) => {
 
 export const removeParent = (req: NaraRequest, res: NaraResponse) => {
   if (!req.user) return jsonError(res, 'Unauthorized', 401);
-  if (!isAdmin(req.user.id) && !hasPermission(req.user.id, 'parents.delete')) return jsonError(res, 'Forbidden', 403);
+  if (!canDelete(req.user.id)) return jsonError(res, 'Forbidden', 403);
 
   const id = req.params.id;
   if (!id) return jsonError(res, 'ID required', 400);

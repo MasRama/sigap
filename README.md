@@ -44,7 +44,7 @@ After `npm run migrate:fresh` the seeders create these accounts:
 | `admin` | `admin123` | admin |
 | `budi` | `teacher123` | teacher |
 | `siti` | `teacher123` | teacher |
-| `andi` | `parent123` | parent |
+| `10001` | `parent123` | parent (NIS anak) |
 
 The demo also seeds:
 - 1 academic year (`2025/2026`)

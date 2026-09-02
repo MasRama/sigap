@@ -209,7 +209,7 @@ Route.get('/reports/class-subject', [Auth], reports.classSubjectReport);
 // Parent Dashboard
 Route.get('/parent/dashboard', [Auth], parent.parentDashboardPage);
 Route.get('/parent/dashboard/data', [Auth], parent.parentDashboardData);
-Route.get('/parent/child/:studentId/attendance', [Auth], parent.childAttendanceData);
+Route.get('/parent/child/:studentId/attendance', [Auth], parent.childAttendancePage);
 Route.get('/parent/child/:studentId/grades', [Auth], parent.parentGradesPage);
 
 // Headmaster Dashboard

@@ -34,6 +34,7 @@ vi.mock('@queries/academicYears', () => ({ findAllAcademicYears: vi.fn(() => [])
 vi.mock('@queries/users', () => ({
   isAdmin: vi.fn(() => false),
   hasPermission: vi.fn(() => false),
+  hasRole: vi.fn(() => false),
 }));
 vi.mock('@queries/teacherClassAssignments', () => ({
   isTeacherUser: vi.fn(() => false),
@@ -51,7 +52,7 @@ import { addGrade, editGrade, removeGrade, gradeData } from '../../app/handlers/
 import { createGrade, updateGrade, deleteGrade, findGradeById } from '@queries/grades';
 import { logGradeChange } from '@queries/gradeAuditLogs';
 import { findTodayConfirmationByTeacher } from '@queries/teacherConfirmations';
-import { isAdmin, hasPermission } from '@queries/users';
+import { isAdmin, hasPermission, hasRole } from '@queries/users';
 import { isTeacherUser, isTeacherAssignedToClassSubject, isTeacherHomeroomOfClass } from '@queries/teacherClassAssignments';
 
 const uuid = (n: number) => `00000000-0000-4000-8000-${String(n).padStart(12, '0')}`;
@@ -206,8 +207,21 @@ describe('grades handler audit hooks', () => {
     expect(res._status).toBe(403);
   });
 
-  it('requires the daily attendance confirmation before grade entry', () => {
+  it('denies parent access to the generic grade endpoint', () => {
     vi.mocked(isAdmin).mockReturnValue(false);
+    vi.mocked(hasRole).mockReturnValue(true);
+    vi.mocked(hasPermission).mockReturnValue(true);
+    const req = mockRequest({ params: { id: 'grade-1' }, user: mockUser({ id: 'parent-1', roles: ['parent'] }) });
+    const res = mockResponse();
+
+    gradeData(req, res);
+
+    expect(res._status).toBe(403);
+    expect(findGradeById).not.toHaveBeenCalled();
+  });
+
+  it('requires the daily attendance confirmation before grade entry', () => {
+    vi.mocked(hasRole).mockReturnValue(false);
     vi.mocked(hasPermission).mockReturnValue(true);
     vi.mocked(isTeacherUser).mockReturnValue(true);
     vi.mocked(isTeacherAssignedToClassSubject).mockReturnValue(true);

@@ -65,11 +65,7 @@ export function run(SQLite: typeof SQLiteType): void {
       'grades.view', 'grades.create', 'grades.edit',
       'attendance.view', 'attendance.create', 'attendance.edit',
     ],
-    parent: [
-      'students.view',
-      'grades.view',
-      'attendance.view',
-    ],
+    parent: [],
   };
 
   for (const [roleSlug, permissionSlugs] of Object.entries(rolePermissions)) {
