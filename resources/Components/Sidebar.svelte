@@ -9,7 +9,7 @@
   import { useMachine, normalizeProps, portal } from "@zag-js/svelte";
   import {
     Menu, LogOut, LayoutDashboard, CalendarCheck, BookOpen, GraduationCap,
-    Users, ChartColumn, Calendar, School, BookMarked, UserCog,
+    Users, ChartColumn, Calendar, School, BookMarked, UserCheck, UserCog,
     CalendarClock, MapPin, Shield, User, History, Bell, Megaphone, QrCode,
   } from '@lucide/svelte';
   import type { NotificationView } from '../types';
