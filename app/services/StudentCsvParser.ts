@@ -18,7 +18,7 @@ export interface CsvImportResult {
 
 const HEADER_HINT = /^\s*nis\s*,/i;
 
-export const parseStudentCsv = (csv: string, classNames: Set<string>, existingNis: Set<string>): CsvImportResult => {
+export const parseStudentCsv = (csv: string, classNames: Set<string>, existingNis: Set<string>, forcedClassName?: string): CsvImportResult => {
   const result: CsvImportResult = { rows: [], errors: [] };
   const lines = csv.split(/\r?\n/).filter(line => line.trim() !== '');
 
@@ -29,10 +29,9 @@ export const parseStudentCsv = (csv: string, classNames: Set<string>, existingNi
 
     const nis = cells[0] ?? '';
     const name = cells[1] ?? '';
-    const className = cells[2] ?? '';
-    const phone = cells[3]?.trim() || null;
-    const address = cells[4]?.trim() || null;
-
+    const className = forcedClassName ?? cells[2] ?? '';
+    const phone = cells[forcedClassName ? 2 : 3]?.trim() || null;
+    const address = cells[forcedClassName ? 3 : 4]?.trim() || null;
     if (!nis) {
       result.errors.push({ line: lineNumber, message: 'NIS kosong' });
       return;

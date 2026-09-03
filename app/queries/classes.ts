@@ -5,6 +5,7 @@ import { randomUUID } from 'crypto';
 export interface ClassWithHomeroom extends Class {
   homeroom_teacher_name: string | null;
   homeroom_teacher_username: string | null;
+  student_count: number;
 }
 
 export const findAllClasses = (): Class[] =>
@@ -14,12 +15,15 @@ export const findAllClassesWithHomeroom = (): ClassWithHomeroom[] =>
   SQLite.many<ClassWithHomeroom>`
     SELECT c.*,
            u.name AS homeroom_teacher_name,
-           u.username AS homeroom_teacher_username
+           u.username AS homeroom_teacher_username,
+           COUNT(DISTINCT s.id) AS student_count
     FROM classes c
     LEFT JOIN teacher_class_assignments tca
       ON tca.class_id = c.id AND tca.academic_year_id = c.academic_year_id AND tca.is_homeroom = 1
     LEFT JOIN teachers t ON t.id = tca.teacher_id
     LEFT JOIN users u ON u.id = t.user_id
+    LEFT JOIN students s ON s.class_id = c.id
+    GROUP BY c.id, u.name, u.username
     ORDER BY c.grade, c.name
   `;
 
@@ -27,13 +31,16 @@ export const findClassesByAcademicYearWithHomeroom = (academicYearId: string): C
   SQLite.many<ClassWithHomeroom>`
     SELECT c.*,
            u.name AS homeroom_teacher_name,
-           u.username AS homeroom_teacher_username
+           u.username AS homeroom_teacher_username,
+           COUNT(DISTINCT s.id) AS student_count
     FROM classes c
     LEFT JOIN teacher_class_assignments tca
       ON tca.class_id = c.id AND tca.academic_year_id = c.academic_year_id AND tca.is_homeroom = 1
     LEFT JOIN teachers t ON t.id = tca.teacher_id
     LEFT JOIN users u ON u.id = t.user_id
+    LEFT JOIN students s ON s.class_id = c.id
     WHERE c.academic_year_id = ${academicYearId}
+    GROUP BY c.id, u.name, u.username
     ORDER BY c.grade, c.name
   `;
 

@@ -63,10 +63,10 @@
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4 auto-rows-[minmax(160px,auto)]">
-      {#if hasPermission('students.view')}
-        <BentoCard title="Siswa" description="Lihat dan kelola data siswa.">
-          <a href="/students" use:inertia class="mt-auto inline-flex items-center gap-1.5 text-sm text-primary hover:text-primary/80 transition-colors">
-            Kelola siswa <ArrowRight class="w-4 h-4" />
+      {#if hasPermission('classes.view') && hasPermission('students.view')}
+        <BentoCard title="Kelas & Siswa" description="Kelola kelas lalu buka daftar siswa per kelas.">
+          <a href="/classes" use:inertia class="mt-auto inline-flex items-center gap-1.5 text-sm text-primary hover:text-primary/80 transition-colors">
+            Kelola kelas & siswa <ArrowRight class="w-4 h-4" />
           </a>
         </BentoCard>
       {/if}

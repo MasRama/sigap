@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { router } from '@inertiajs/svelte';
+  import { inertia, router } from '@inertiajs/svelte';
   import axios from 'axios';
   import { api } from '$lib/api';
   import Sidebar from '../Components/Sidebar.svelte';
@@ -13,7 +13,7 @@
   import Pagination from '../Components/Pagination.svelte';
   import type { Student, StudentForm, Class, User } from '../types';
   import { createEmptyStudentForm, studentToForm } from '../types';
-  import { Pencil, Trash2, Upload } from '@lucide/svelte';
+  import { ArrowLeft, Pencil, Trash2, Upload } from '@lucide/svelte';
   import { fly } from 'svelte/transition';
 
   let {
@@ -22,12 +22,20 @@
     classes = [],
     parents = [],
     meta,
+    search = '',
+    classId = null,
+    classContext = null,
+    classScoped = false,
   }: {
     permissions: { canCreate?: boolean; canEdit?: boolean; canDelete?: boolean };
     students?: Student[];
     classes?: Class[];
     parents?: User[];
     meta?: import('../types').PaginationMeta;
+    search?: string;
+    classId?: string | null;
+    classContext?: Class | null;
+    classScoped?: boolean;
   } = $props();
 
   let isOpen = $state(false);
@@ -38,6 +46,13 @@
   let isImporting = $state(false);
   let form: StudentForm = $state(createEmptyStudentForm());
   let selected: Student | null = $state(null);
+  let searchValue = $state('');
+  let selectedClassId = $state('');
+
+  $effect(() => {
+    searchValue = search;
+    selectedClassId = classId ?? '';
+  });
 
   function openImport(): void {
     importFile = null;
@@ -50,6 +65,7 @@
     isImporting = true;
     const formData = new FormData();
     formData.append('file', importFile);
+    if (classScoped && classContext) formData.append('class_id', classContext.id);
     const result = await api(() => axios.post('/students/import', formData, { headers: { 'Content-Type': 'multipart/form-data' } }));
     if (result.success && result.data) {
       importResult = result.data as { inserted: number; errors: { line: number; message: string }[] };
@@ -58,22 +74,45 @@
     isImporting = false;
   }
 
-  function openCreate(): void { form = createEmptyStudentForm(); selected = null; isOpen = true; }
+  function openCreate(): void {
+    const emptyForm = createEmptyStudentForm();
+    form = classScoped && classContext ? { ...emptyForm, class_id: classContext.id } : emptyForm;
+    selected = null;
+    isOpen = true;
+  }
   function openEdit(item: Student): void { selected = item; form = studentToForm(item); isOpen = true; }
   function confirmDelete(item: Student): void { selected = item; isDeleteOpen = true; }
 
+  function studentPagePath(): string {
+    return classScoped && classContext ? `/classes/${classContext.id}/students` : '/students';
+  }
+
+  function submitSearch(): void {
+    const query = searchValue.trim();
+    router.visit(query ? `${studentPagePath()}?search=${encodeURIComponent(query)}` : studentPagePath(), { preserveScroll: true });
+  }
+
+  function selectClass(): void {
+    router.visit(selectedClassId ? `/classes/${selectedClassId}/students` : '/students', { preserveScroll: true });
+  }
+
   async function submit(): Promise<void> {
-    const payload = { ...form, parent_user_id: form.parent_user_id || null };
+    const payload = {
+      ...form,
+      class_id: classScoped && classContext ? classContext.id : form.class_id,
+      parent_user_id: form.parent_user_id || null,
+    };
     const result = selected
       ? await api(() => axios.put(`/students/${selected!.id}`, payload))
       : await api(() => axios.post('/students', payload));
-    if (result.success) { isOpen = false; router.visit('/students', { preserveScroll: true }); }
+    if (result.success) { isOpen = false; router.visit(studentPagePath(), { preserveScroll: true }); }
   }
   async function remove(): Promise<void> {
     if (!selected) return;
     const result = await api(() => axios.delete(`/students/${selected!.id}`));
-    if (result.success) { isDeleteOpen = false; router.visit('/students', { preserveScroll: true }); }
+    if (result.success) { isDeleteOpen = false; router.visit(studentPagePath(), { preserveScroll: true }); }
   }
+
 
   const classById = $derived(new Map(classes.map(c => [c.id, c.name])));
 
@@ -93,16 +132,23 @@
   {#if permissions.canDelete}<Button variant="ghost" size="icon" onclick={() => confirmDelete(item)}><Trash2 class="w-4 h-4 text-destructive" /></Button>{/if}
 {/snippet}
 
-<Sidebar group="students" />
+<Sidebar group={classScoped ? 'classes' : 'students'} />
 <div class="min-h-[100dvh] bg-background text-foreground font-body antialiased pt-20 lg:pt-8 lg:pl-80 px-6 sm:px-10 lg:pr-16 pb-16">
-  <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12" in:fly={{ y: 20, duration: 800 }}>
+  <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-8" in:fly={{ y: 20, duration: 800 }}>
     <div>
+      {#if classScoped && classContext}
+        <a href="/classes" use:inertia class="inline-flex items-center gap-1 text-sm text-primary hover:text-primary/80 transition-colors mb-6">
+          <ArrowLeft class="w-4 h-4" /> Kembali ke daftar kelas
+        </a>
+      {/if}
       <p class="font-mono-accent text-[10px] uppercase tracking-[0.25em] text-muted-foreground mb-4">Manajemen Siswa</p>
       <h1 class="font-heading font-semibold tracking-[-0.03em] leading-[1] text-[clamp(2rem,5vw,3.5rem)] text-foreground">
-        Siswa.
+        {classScoped && classContext ? `Siswa ${classContext.name}.` : 'Siswa.'}
       </h1>
       <p class="mt-4 text-base text-muted-foreground leading-relaxed max-w-[52ch]">
-        Daftar siswa terdaftar. Tambah, edit, atau hapus data siswa.
+        {classScoped && classContext
+          ? `Kelola daftar siswa kelas ${classContext.name}. Gunakan pencarian untuk menemukan siswa dengan cepat.`
+          : 'Pilih kelas untuk mengelola data siswa secara lebih terarah.'}
       </p>
     </div>
     {#if permissions.canCreate}
@@ -112,16 +158,28 @@
       </div>
     {/if}
   </div>
+  <div class="flex flex-col md:flex-row gap-3 mb-6">
+    {#if !classScoped}
+      <Select id="student-class-filter" bind:value={selectedClassId} onchange={selectClass}>
+        <option value="">Semua kelas</option>
+        {#each classes as c}<option value={c.id}>{c.name}</option>{/each}
+      </Select>
+    {/if}
+    <form class="flex flex-1 gap-2" onsubmit={(event) => { event.preventDefault(); submitSearch(); }}>
+      <Input type="search" placeholder="Cari NIS atau nama siswa..." bind:value={searchValue} class="flex-1" />
+      <Button type="submit" variant="outline">Cari</Button>
+    </form>
+  </div>
   <DataTable {columns} rows={displayRows} rowAction={rowActions} />
   {#if meta}<Pagination {meta} />{/if}
 </div>
 
-<Modal bind:open={isOpen} title={selected ? 'Edit Siswa' : 'Tambah Siswa'} description="Tambah atau ubah data siswa. Isi NIS, nama, kelas, dan orang tua.">
+<Modal bind:open={isOpen} title={selected ? 'Edit Siswa' : 'Tambah Siswa'} description={classScoped && classContext ? `Tambah atau ubah data siswa kelas ${classContext.name}.` : 'Tambah atau ubah data siswa. Isi NIS, nama, kelas, dan orang tua.'}>
   <form class="flex flex-col gap-4" onsubmit={(e) => { e.preventDefault(); submit(); }}>
     <div class="flex flex-col gap-0"><Label for="nis" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">NIS</Label><Input id="nis" bind:value={form.nis} required /></div>
     <div class="flex flex-col gap-0"><Label for="name" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Nama</Label><Input id="name" bind:value={form.name} required /></div>
     <div class="flex flex-col gap-0"><Label for="class" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Kelas</Label>
-      <Select id="class" bind:value={form.class_id} placeholder="Pilih kelas">
+      <Select id="class" bind:value={form.class_id} placeholder="Pilih kelas" disabled={classScoped}>
         {#each classes as c}<option value={c.id}>{c.name}</option>{/each}
       </Select>
     </div>
@@ -140,7 +198,7 @@
   </form>
 </Modal>
 
-<Modal bind:open={isImportOpen} title="Import Siswa (CSV)" description="Upload file CSV dengan kolom: nis,name,class,phone,address. Baris pertama opsional sebagai header. Kelas harus sesuai nama kelas yang sudah ada.">
+<Modal bind:open={isImportOpen} title="Import Siswa (CSV)" description={classScoped && classContext ? `Upload CSV siswa untuk kelas ${classContext.name}. Kolom: nis,name,phone,address.` : 'Upload file CSV dengan kolom: nis,name,class,phone,address. Baris pertama opsional sebagai header. Kelas harus sesuai nama kelas yang sudah ada.'}>
   <form class="flex flex-col gap-4" onsubmit={(e) => { e.preventDefault(); submitImport(); }}>
     <input
       type="file"
@@ -148,8 +206,13 @@
       class="block w-full text-sm text-muted-foreground file:mr-3 file:rounded-md file:border file:border-border file:bg-secondary/60 file:px-3 file:py-1.5 file:text-xs file:font-medium file:text-foreground hover:file:bg-secondary"
       onchange={(e) => { importFile = (e.currentTarget as HTMLInputElement).files?.[0] ?? null; importResult = null; }}
     />
-    <pre class="bg-secondary/40 rounded-md px-3 py-2 text-xs text-muted-foreground overflow-x-auto">10011,Andi Saputra,10A,08123456780,Jl. Melati No. 6
+    {#if classScoped}
+      <pre class="bg-secondary/40 rounded-md px-3 py-2 text-xs text-muted-foreground overflow-x-auto">10011,Andi Saputra,08123456780,Jl. Melati No. 6
+10012,Budi Hartono,,</pre>
+    {:else}
+      <pre class="bg-secondary/40 rounded-md px-3 py-2 text-xs text-muted-foreground overflow-x-auto">10011,Andi Saputra,10A,08123456780,Jl. Melati No. 6
 10012,Budi Hartono,10B,,</pre>
+    {/if}
     {#if importResult}
       <div class="bg-card border border-border rounded-md px-4 py-3 text-sm">
         <p class="font-medium text-foreground">{importResult.inserted} siswa berhasil diimpor.</p>

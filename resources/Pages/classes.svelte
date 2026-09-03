@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { router } from '@inertiajs/svelte';
+  import { inertia, router } from '@inertiajs/svelte';
   import axios from 'axios';
   import { api } from '$lib/api';
   import Sidebar from '../Components/Sidebar.svelte';
@@ -12,10 +12,23 @@
   import Select from '../Components/Select.svelte';
   import type { Class, ClassForm, AcademicYear } from '../types';
   import { createEmptyClassForm, classToForm } from '../types';
-  import { Pencil, Trash2 } from '@lucide/svelte';
+  import { ArrowRight, Pencil, Trash2 } from '@lucide/svelte';
   import { fly } from 'svelte/transition';
 
-  let { permissions, classes = [], years = [] }: { permissions: { canCreate?: boolean; canEdit?: boolean; canDelete?: boolean }; classes?: (Class & { academic_year_name?: string; homeroom_teacher_name?: string | null; homeroom_teacher_username?: string | null })[]; years?: AcademicYear[] } = $props();
+  let {
+    permissions,
+    classes = [],
+    years = [],
+  }: {
+    permissions: { canCreate?: boolean; canEdit?: boolean; canDelete?: boolean; canViewStudents?: boolean };
+    classes?: (Class & {
+      academic_year_name?: string;
+      homeroom_teacher_name?: string | null;
+      homeroom_teacher_username?: string | null;
+      student_count?: number;
+    })[];
+    years?: AcademicYear[];
+  } = $props();
 
   let isOpen = $state(false);
   let isDeleteOpen = $state(false);
@@ -38,10 +51,21 @@
     if (result.success) { isDeleteOpen = false; router.visit('/classes', { preserveScroll: true }); }
   }
 
-  const columns = [{ key: 'name', label: 'Nama' }, { key: 'grade', label: 'Tingkat' }, { key: 'homeroom_teacher_name', label: 'Wali Kelas' }, { key: 'academic_year_name', label: 'Tahun Ajaran' }];
+  const columns = [
+    { key: 'name', label: 'Nama' },
+    { key: 'grade', label: 'Tingkat' },
+    { key: 'student_count', label: 'Jumlah Siswa', align: 'right' as const },
+    { key: 'homeroom_teacher_name', label: 'Wali Kelas' },
+    { key: 'academic_year_name', label: 'Tahun Ajaran' },
+  ];
 </script>
 
-{#snippet rowActions(item: Class)}
+{#snippet rowActions(item: Class & { student_count?: number })}
+  {#if permissions.canViewStudents}
+    <a href={`/classes/${item.id}/students`} use:inertia class="inline-flex items-center gap-1 text-xs text-primary hover:text-primary/80 transition-colors mr-2">
+      Kelola siswa <ArrowRight class="w-3.5 h-3.5" />
+    </a>
+  {/if}
   {#if permissions.canEdit}<Button variant="ghost" size="icon" onclick={() => openEdit(item)}><Pencil class="w-4 h-4" /></Button>{/if}
   {#if permissions.canDelete}<Button variant="ghost" size="icon" onclick={() => confirmDelete(item)}><Trash2 class="w-4 h-4 text-destructive" /></Button>{/if}
 {/snippet}
@@ -55,7 +79,7 @@
         Kelas.
       </h1>
       <p class="mt-4 text-base text-muted-foreground leading-relaxed max-w-[52ch]">
-        Daftar kelas sekolah per tahun ajaran. Tambah, edit, atau hapus kelas.
+        Daftar kelas sekolah per tahun ajaran. Kelola siswa dari kelas yang dipilih.
       </p>
     </div>
     {#if permissions.canCreate}<Button onclick={openCreate} size="lg">Tambah Kelas</Button>{/if}
@@ -79,4 +103,4 @@
   </form>
 </Modal>
 
-<ConfirmDialog bind:open={isDeleteOpen} title="Hapus Kelas" onConfirm={remove} destructive />
+<ConfirmDialog bind:open={isDeleteOpen} title="Hapus Kelas" description="Menghapus kelas akan menghapus seluruh data siswa di dalamnya." onConfirm={remove} destructive />

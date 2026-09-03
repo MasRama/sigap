@@ -16,6 +16,17 @@ describe('parseStudentCsv', () => {
     ]);
   });
 
+  it('uses the selected class for four-column scoped imports', () => {
+    const { classNames, existingNis } = freshSets();
+    const csv = 'nis,name,phone,address\n10011,Andi Saputra,0812,Jl. Melati';
+    const result = parseStudentCsv(csv, classNames, existingNis, '10A');
+
+    expect(result.errors).toEqual([]);
+    expect(result.rows).toEqual([
+      { nis: '10011', name: 'Andi Saputra', class_name: '10A', phone: '0812', address: 'Jl. Melati' },
+    ]);
+  });
+
   it('rejects duplicate NIS within the file', () => {
     const { classNames, existingNis } = freshSets();
     const csv = '10011,A,10A,\n10011,B,10B,';

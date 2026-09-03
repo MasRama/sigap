@@ -80,6 +80,7 @@ Route.get('/classes/:id', [Auth], classes.classData);
 Route.post('/classes', [Auth], classes.addClass);
 Route.put('/classes/:id', [Auth], classes.editClass);
 Route.delete('/classes/:id', [Auth], classes.removeClass);
+Route.get('/classes/:id/students', [Auth], students.classStudentsPage);
 
 // Subjects
 Route.get('/subjects', [Auth], subjects.subjectsPage);

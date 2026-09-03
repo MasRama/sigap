@@ -3,7 +3,7 @@ import { jsonSuccess, jsonCreated, jsonError, jsonServerError, jsonValidationErr
 import Logger from '@services/Logger';
 import multer from 'multer';
 import { getStudentsPaginated, findStudentById, createStudent, updateStudent, deleteStudent, findStudentsByClass, findAllNis, importStudents } from '@queries/students';
-import { findAllClasses, findClassByName } from '@queries/classes';
+import { findAllClasses, findClassById, findClassByName } from '@queries/classes';
 import { getUsersWithRole } from '@queries/roles';
 import { parseStudentCsv } from '@services/StudentCsvParser';
 import { isAdmin, hasPermission, hasRole } from '@queries/users';
@@ -12,35 +12,49 @@ import { StudentSchema, UpdateStudentSchema, zodToErrors } from '@validators';
 const canView = (userId: string): boolean => !hasRole(userId, 'parent') && (isAdmin(userId) || hasPermission(userId, 'students.view'));
 const canManage = (userId: string): boolean => !hasRole(userId, 'parent') && (isAdmin(userId) || hasPermission(userId, 'students.create'));
 
-export const studentsPage = (req: NaraRequest, res: NaraResponse) => {
+const renderStudentsPage = (req: NaraRequest, res: NaraResponse, classId?: string) => {
   const userId = req.user?.id;
-  const canViewFlag = userId ? canView(userId) : false;
   const permissions = {
-    canView: canViewFlag,
+    canView: userId ? canView(userId) : false,
     canCreate: userId ? canManage(userId) : false,
     canEdit: userId ? !hasRole(userId, 'parent') && (isAdmin(userId) || hasPermission(userId, 'students.edit')) : false,
     canDelete: userId ? !hasRole(userId, 'parent') && (isAdmin(userId) || hasPermission(userId, 'students.delete')) : false,
   };
 
-  if (!canViewFlag) {
-    return res.inertia('students', { permissions, students: [], classes: [], parents: [], meta: undefined });
+  if (!permissions.canView) {
+    return res.inertia('students', {
+      permissions, students: [], classes: [], parents: [], meta: undefined,
+      search: '', classId: null, classContext: null, classScoped: false,
+    });
   }
+
+  const classContext = classId ? findClassById(classId) : undefined;
+  if (classId && !classContext) return res.redirect('/classes');
 
   const page = queryInt(req, 'page', 1);
   const limit = queryInt(req, 'limit', 10);
   const search = queryString(req, 'search');
-  const classId = queryString(req, 'class_id');
-
-  const { data, total } = getStudentsPaginated(page, limit, search, classId || undefined);
+  const { data, total } = getStudentsPaginated(page, limit, search, classContext?.id);
   const totalPages = Math.ceil(total / limit);
+
   return res.inertia('students', {
     permissions,
     students: data,
-    classes: findAllClasses(),
+    classes: classContext ? [classContext] : findAllClasses(),
     parents: getUsersWithRole('parent'),
+    search,
+    classId: classContext?.id ?? null,
+    classContext: classContext ?? null,
+    classScoped: Boolean(classContext),
     meta: { total, page, limit, totalPages, hasNext: page < totalPages, hasPrev: page > 1 },
   });
 };
+
+export const studentsPage = (req: NaraRequest, res: NaraResponse) =>
+  renderStudentsPage(req, res, queryString(req, 'class_id') || undefined);
+
+export const classStudentsPage = (req: NaraRequest, res: NaraResponse) =>
+  renderStudentsPage(req, res, req.params.id);
 
 export const listStudents = (req: NaraRequest, res: NaraResponse) => {
   if (!req.user) return jsonError(res, 'Unauthorized', 401);
@@ -152,15 +166,19 @@ export const importStudentsFromCsv = (req: NaraRequest, res: NaraResponse) => {
 
   try {
     const csv = file.buffer.toString('utf-8');
+    const requestedClassId = typeof req.body?.class_id === 'string' ? req.body.class_id : undefined;
+    const targetClass = requestedClassId ? findClassById(requestedClassId) : undefined;
+    if (requestedClassId && !targetClass) return jsonError(res, 'Kelas tidak ditemukan', 404, 'CLASS_NOT_FOUND');
+
     const classNames = new Set(findAllClasses().map(c => c.name));
     const existingNis = new Set(findAllNis());
-    const parsed = parseStudentCsv(csv, classNames, existingNis);
+    const parsed = parseStudentCsv(csv, classNames, existingNis, targetClass?.name);
 
     if (parsed.rows.length > 0) {
       importStudents(parsed.rows.map(row => ({
         nis: row.nis,
         name: row.name,
-        class_id: findClassByName(row.class_name)!.id,
+        class_id: targetClass?.id ?? findClassByName(row.class_name)!.id,
         phone: row.phone,
         address: row.address,
       })));

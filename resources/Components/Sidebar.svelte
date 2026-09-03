@@ -9,7 +9,7 @@
   import { useMachine, normalizeProps, portal } from "@zag-js/svelte";
   import {
     Menu, LogOut, LayoutDashboard, CalendarCheck, BookOpen, GraduationCap,
-    Users, ChartColumn, Calendar, School, BookMarked, UserCheck, UserCog,
+    Users, ChartColumn, Calendar, School, BookMarked, UserCog,
     CalendarClock, MapPin, Shield, User, History, Bell, Megaphone, QrCode,
   } from '@lucide/svelte';
   import type { NotificationView } from '../types';
@@ -100,8 +100,7 @@
         { href: '/school-locations', label: 'Profil Sekolah', group: 'school-locations', icon: MapPin, show: isAdmin || isHeadmaster },
         { href: '/academic-years', label: 'Periode Akademik', group: 'academic-years', icon: Calendar, show: isAdmin || isHeadmaster },
         { href: '/subjects', label: 'Mata Pelajaran', group: 'subjects', icon: BookMarked, show: isAdmin || isHeadmaster },
-        { href: '/classes', label: 'Kelas', group: 'classes', icon: School, show: isAdmin || isHeadmaster },
-        { href: '/students', label: 'Data Siswa', group: 'students', icon: UserCheck, show: isAdmin || isHeadmaster },
+        { href: '/classes', label: 'Kelas & Siswa', group: 'classes', icon: School, show: isAdmin || isHeadmaster },
         { href: '/teachers', label: 'Data Guru', group: 'teachers', icon: UserCog, show: isAdmin || isHeadmaster },
         { href: '/parents', label: 'Data Orang Tua', group: 'parents', icon: Users, show: isAdmin || isHeadmaster },
       ],

@@ -18,6 +18,7 @@ export const classesPage = (req: NaraRequest, res: NaraResponse) => {
     canCreate: userId ? canManage(userId) : false,
     canEdit: userId ? isAdmin(userId) || hasPermission(userId, 'classes.edit') : false,
     canDelete: userId ? isAdmin(userId) || hasPermission(userId, 'classes.delete') : false,
+    canViewStudents: userId ? isAdmin(userId) || hasPermission(userId, 'students.view') : false,
   };
   const years = canViewFlag ? findAllAcademicYears() : [];
   const classes = canViewFlag

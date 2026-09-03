@@ -3,9 +3,10 @@
     "0": [
       "app_core_adapters_svelte",
       "app_core_router_nararouter_group",
-      "axios",
+      "app_services_logger_error",
       "dialog",
       "easing",
+      "menu",
       "resources_components_badge",
       "resources_components_bentocard",
       "resources_components_button",
@@ -68,16 +69,13 @@
       "resources_pages_gradeaudit_typelabel",
       "resources_pages_grades",
       "resources_pages_grades_rowactions",
-      "resources_pages_headmaster_class_grades",
       "resources_pages_headmaster_dashboard",
       "resources_pages_headmaster_reports",
-      "resources_pages_headmaster_teacher_attendance",
       "resources_pages_journals",
       "resources_pages_landing",
       "resources_pages_parent_attendance",
       "resources_pages_parent_dashboard",
       "resources_pages_parent_grades",
-      "resources_pages_parent_grades_typelabel",
       "resources_pages_parents",
       "resources_pages_profile",
       "resources_pages_qrdisplay",
@@ -105,100 +103,6 @@
       "transition"
     ],
     "1": [
-      "app_handlers_attendance",
-      "app_handlers_attendance_attendancereportdata",
-      "app_handlers_parent",
-      "app_handlers_parent_childattendancepage",
-      "app_handlers_parent_parentdashboarddata",
-      "app_handlers_parent_parentdashboardpage",
-      "app_handlers_parent_parentgradespage",
-      "app_handlers_parents",
-      "app_handlers_parents_addparent",
-      "app_handlers_parents_candelete",
-      "app_handlers_parents_canedit",
-      "app_handlers_parents_canmanage",
-      "app_handlers_parents_canview",
-      "app_handlers_parents_editparent",
-      "app_handlers_parents_listparents",
-      "app_handlers_parents_parentbyuser",
-      "app_handlers_parents_parentdata",
-      "app_handlers_parents_parentspage",
-      "app_handlers_parents_removeparent",
-      "app_handlers_rapor",
-      "app_handlers_rapor_raporpage",
-      "app_handlers_students",
-      "app_handlers_students_addstudent",
-      "app_handlers_students_canmanage",
-      "app_handlers_students_canview",
-      "app_handlers_students_editstudent",
-      "app_handlers_students_importstudentsfromcsv",
-      "app_handlers_students_importstudentsmiddleware",
-      "app_handlers_students_liststudents",
-      "app_handlers_students_removestudent",
-      "app_handlers_students_studentcsvupload",
-      "app_handlers_students_studentdata",
-      "app_handlers_students_studentsbyclass",
-      "app_handlers_students_studentspage",
-      "app_handlers_users",
-      "app_handlers_users_adduser",
-      "app_handlers_users_changeprofile",
-      "app_handlers_users_dashboardpage",
-      "app_handlers_users_edituser",
-      "app_handlers_users_profilepage",
-      "app_handlers_users_removeusers",
-      "app_handlers_users_userspage",
-      "app_queries_classes_findclassbyname",
-      "app_queries_grades_findgradeprogressionbystudent",
-      "app_queries_grades_getgradespublicationforstudent",
-      "app_queries_grades_getstudentcontext",
-      "app_queries_grades_getstudentgradesummaries",
-      "app_queries_parents",
-      "app_queries_parents_createparent",
-      "app_queries_parents_deleteparent",
-      "app_queries_parents_findallparents",
-      "app_queries_parents_findparentbyid",
-      "app_queries_parents_findparentbyuserid",
-      "app_queries_parents_getparentspaginated",
-      "app_queries_parents_parentlistitem",
-      "app_queries_parents_updateparent",
-      "app_queries_roles_findrolebyslug",
-      "app_queries_roles_getuserswithrole",
-      "app_queries_studentattendance_findattendancebystudent",
-      "app_queries_students",
-      "app_queries_students_createstudent",
-      "app_queries_students_deletestudent",
-      "app_queries_students_deletestudents",
-      "app_queries_students_findallnis",
-      "app_queries_students_findstudentbyid",
-      "app_queries_students_findstudentsbyclass",
-      "app_queries_students_findstudentsbyparent",
-      "app_queries_students_findstudentsforparentselect",
-      "app_queries_students_getstudentspaginated",
-      "app_queries_students_importstudents",
-      "app_queries_students_linkstudenttoparent",
-      "app_queries_students_searchstudents",
-      "app_queries_students_updatestudent",
-      "app_queries_users_findusersforparentselect",
-      "app_queries_users_hasrole",
-      "app_services_logger_error",
-      "app_services_studentcsvparser",
-      "app_services_studentcsvparser_csvimportresult",
-      "app_services_studentcsvparser_csvstudentrow",
-      "app_services_studentcsvparser_parsestudentcsv",
-      "app_types_models_parent",
-      "tests_handlers_parent_test",
-      "tests_handlers_parent_test_child",
-      "tests_handlers_parent_test_parent",
-      "tests_handlers_parent_test_summary",
-      "tests_handlers_parents_test",
-      "tests_handlers_parents_test_parent",
-      "tests_handlers_rapor_test",
-      "tests_handlers_students_test",
-      "tests_handlers_users_test",
-      "tests_services_studentcsvparser_test",
-      "tests_services_studentcsvparser_test_freshsets"
-    ],
-    "2": [
       "app_validators_index",
       "app_validators_schemas",
       "app_validators_schemas_academicyearinput",
@@ -274,20 +178,19 @@
       "app_validators_schemas_usernameschema",
       "tests_validators_schemas_test"
     ],
-    "3": [
+    "2": [
       "app_types_shared",
       "app_types_shared_academicyear",
+      "app_types_shared_announcementview",
       "app_types_shared_apierrorresponse",
       "app_types_shared_apiresponse",
       "app_types_shared_apisuccessresponse",
       "app_types_shared_appsetting",
       "app_types_shared_class",
       "app_types_shared_grade",
-      "app_types_shared_gradeauditlogrow",
       "app_types_shared_gradecomponent",
       "app_types_shared_groupedpermissions",
       "app_types_shared_journal",
-      "app_types_shared_notificationview",
       "app_types_shared_paginatedresponse",
       "app_types_shared_paginationmeta",
       "app_types_shared_parent",
@@ -348,6 +251,76 @@
       "resources_types_forms_userform",
       "resources_types_forms_usertoform"
     ],
+    "3": [
+      "app_handlers_parent",
+      "app_handlers_parent_childattendancedata",
+      "app_handlers_parent_parentdashboarddata",
+      "app_handlers_parent_parentdashboardpage",
+      "app_handlers_parent_parentgradespage",
+      "app_handlers_parents",
+      "app_handlers_parents_addparent",
+      "app_handlers_parents_canmanage",
+      "app_handlers_parents_canview",
+      "app_handlers_parents_listparents",
+      "app_handlers_parents_parentbyuser",
+      "app_handlers_parents_parentdata",
+      "app_handlers_parents_parentspage",
+      "app_handlers_parents_removeparent",
+      "app_handlers_rapor",
+      "app_handlers_rapor_raporpage",
+      "app_handlers_students",
+      "app_handlers_students_addstudent",
+      "app_handlers_students_canmanage",
+      "app_handlers_students_canview",
+      "app_handlers_students_importstudentsfromcsv",
+      "app_handlers_students_importstudentsmiddleware",
+      "app_handlers_students_liststudents",
+      "app_handlers_students_studentcsvupload",
+      "app_handlers_students_studentdata",
+      "app_handlers_students_studentsbyclass",
+      "app_handlers_students_studentspage",
+      "app_queries_classes_findclassbyname",
+      "app_queries_grades_findgradesbystudent",
+      "app_queries_grades_getgradespublicationforstudent",
+      "app_queries_grades_getstudentcontext",
+      "app_queries_parents",
+      "app_queries_parents_createparent",
+      "app_queries_parents_deleteparent",
+      "app_queries_parents_findallparents",
+      "app_queries_parents_findparentbyid",
+      "app_queries_parents_findparentbyuserid",
+      "app_queries_parents_getparentspaginated",
+      "app_queries_parents_parentlistitem",
+      "app_queries_parents_updateparent",
+      "app_queries_studentattendance_findattendancebystudent",
+      "app_queries_students",
+      "app_queries_students_createstudent",
+      "app_queries_students_deletestudent",
+      "app_queries_students_deletestudents",
+      "app_queries_students_findallnis",
+      "app_queries_students_findstudentbyid",
+      "app_queries_students_findstudentsbyclass",
+      "app_queries_students_findstudentsbyparent",
+      "app_queries_students_getstudentspaginated",
+      "app_queries_students_importstudents",
+      "app_queries_students_searchstudents",
+      "app_queries_students_updatestudent",
+      "app_queries_users_findusersforparentselect",
+      "app_services_studentcsvparser",
+      "app_services_studentcsvparser_csvimportresult",
+      "app_services_studentcsvparser_csvstudentrow",
+      "app_services_studentcsvparser_parsestudentcsv",
+      "app_types_models_parent",
+      "app_types_models_student",
+      "tests_handlers_parent_test",
+      "tests_handlers_parent_test_child",
+      "tests_handlers_parent_test_parent",
+      "tests_handlers_parent_test_summary",
+      "tests_handlers_parents_test",
+      "tests_handlers_parents_test_parent",
+      "tests_services_studentcsvparser_test",
+      "tests_services_studentcsvparser_test_freshsets"
+    ],
     "4": [
       "app_handlers_grades",
       "app_handlers_grades_addgrade",
@@ -365,7 +338,6 @@
       "app_handlers_grades_listgrades",
       "app_handlers_grades_removegrade",
       "app_queries_classes_findclassesbyteacheruser",
-      "app_queries_gradeauditlogs",
       "app_queries_gradeauditlogs_loggradechange",
       "app_queries_grades",
       "app_queries_grades_creategrade",
@@ -375,11 +347,11 @@
       "app_queries_grades_findcomponentsbyyear",
       "app_queries_grades_findgradebyid",
       "app_queries_grades_findgradesbyclasssubject",
-      "app_queries_grades_findgradesbystudent",
       "app_queries_grades_findgradesbystudentforteacher",
       "app_queries_grades_findgradesbyteacher",
       "app_queries_grades_getclasssubjectsummary",
       "app_queries_grades_getgradespaginated",
+      "app_queries_grades_getstudentgradesummaries",
       "app_queries_grades_teachergradescopesql",
       "app_queries_grades_updategrade",
       "app_queries_students_findallstudents",
@@ -390,8 +362,6 @@
       "app_queries_teacherclassassignments_isteacherassignedtoclasssubject",
       "app_queries_teacherclassassignments_isteacherassignedtostudent",
       "app_queries_teacherclassassignments_isteacherhomeroomofclass",
-      "app_queries_teacherclassassignments_isteacheruser",
-      "app_queries_teacherclassassignments_syncteacherclassassignments",
       "app_queries_teacherclassassignments_teacherclassassignmentview",
       "app_services_gradecalculator",
       "app_services_gradecalculator_computefinalscore",
@@ -403,7 +373,6 @@
       "app_types_shared_classsubjectsummary",
       "app_types_shared_gradesummarycomponent",
       "app_types_shared_gradesummaryrow",
-      "app_types_shared_studentgradeprogression",
       "app_types_shared_subjectgradesummary",
       "tests_handlers_grades_test",
       "tests_handlers_grades_test_gradebody",
@@ -413,13 +382,6 @@
       "tests_services_gradecalculator_test_components"
     ],
     "5": [
-      "app_handlers_qrsettings",
-      "app_handlers_qrsettings_canmanage",
-      "app_handlers_qrsettings_qrcodedata",
-      "app_handlers_qrsettings_qrdisplaypage",
-      "app_handlers_qrsettings_qrsettingspage",
-      "app_handlers_qrsettings_saveqrsettings",
-      "app_handlers_schoollocations_activeschoollocationdata",
       "app_handlers_teacherconfirmations",
       "app_handlers_teacherconfirmations_canview",
       "app_handlers_teacherconfirmations_confirmpage",
@@ -429,11 +391,13 @@
       "app_handlers_teacherconfirmations_submitteacherconfirmation",
       "app_handlers_teacherconfirmations_teacherconfirmationdata",
       "app_handlers_teacherconfirmations_teacherconfirmationspage",
-      "app_queries_appsettings",
-      "app_queries_appsettings_findsetting",
-      "app_queries_appsettings_findsettingnumber",
-      "app_queries_appsettings_upsertsetting",
-      "app_queries_schoollocations_findactiveschoollocation",
+      "app_handlers_teacherschedule",
+      "app_handlers_teacherschedule_confirmationrequired",
+      "app_handlers_teacherschedule_isteacheractor",
+      "app_handlers_teacherschedule_listtodayschedules",
+      "app_handlers_teacherschedule_teacherschedulepage",
+      "app_handlers_teacherschedule_todayscheduledetail",
+      "app_queries_schedules_findteacherschedulesbyday",
       "app_queries_teacherconfirmations",
       "app_queries_teacherconfirmations_createteacherconfirmation",
       "app_queries_teacherconfirmations_deleteteacherconfirmation",
@@ -462,160 +426,15 @@
       "app_services_qrcode_qrtokenpayload",
       "app_services_qrcode_signtoken",
       "app_services_qrcode_verifyqrtoken",
-      "app_types_models_appsetting",
       "app_types_models_teacherconfirmation",
-      "tests_handlers_teacherconfirmations_test",
-      "tests_handlers_teacherconfirmations_test_createdconfirmation",
-      "tests_handlers_teacherconfirmations_test_teacher",
-      "tests_handlers_teacherconfirmations_test_validbody",
-      "tests_services_qrcode_test"
-    ],
-    "6": [
-      "app_handlers_announcements",
-      "app_handlers_announcements_addannouncement",
-      "app_handlers_announcements_announcementspage",
-      "app_handlers_announcements_editannouncement",
-      "app_handlers_announcements_latestannouncementsdata",
-      "app_handlers_announcements_listannouncements",
-      "app_handlers_announcements_removeannouncement",
-      "app_queries_announcements",
-      "app_queries_announcements_createannouncement",
-      "app_queries_announcements_deleteannouncement",
-      "app_queries_announcements_findallannouncements",
-      "app_queries_announcements_findannouncementbyid",
-      "app_queries_announcements_findlatestannouncements",
-      "app_queries_announcements_updateannouncement",
-      "app_services_logger",
-      "app_services_logger_child",
-      "app_services_logger_debug",
-      "app_services_logger_fatal",
-      "app_services_logger_flush",
-      "app_services_logger_info",
-      "app_services_logger_logauth",
-      "app_services_logger_logger",
-      "app_services_logger_logquery",
-      "app_services_logger_logrequest",
-      "app_services_logger_logsdir",
-      "app_services_logger_logsecurity",
-      "app_services_logger_pinoconfig",
-      "app_services_logger_trace",
-      "app_services_logger_transport",
-      "app_services_logger_warn",
-      "app_services_loginthrottle",
-      "app_services_loginthrottle_cleanup",
-      "app_services_loginthrottle_clearattempts",
-      "app_services_loginthrottle_config",
-      "app_services_loginthrottle_configure",
-      "app_services_loginthrottle_entry",
-      "app_services_loginthrottle_getattemptcounts",
-      "app_services_loginthrottle_getentry",
-      "app_services_loginthrottle_getremaininglockouttime",
-      "app_services_loginthrottle_islockedout",
-      "app_services_loginthrottle_recordfailedattempt",
-      "app_services_loginthrottle_resetifexpired",
-      "app_services_loginthrottle_store",
-      "app_types_shared_announcementview",
-      "tests_handlers_announcements_test",
-      "tests_services_logger_test",
-      "tests_services_loginthrottle_test"
-    ],
-    "7": [
-      "app_handlers_gradeaudit",
-      "app_handlers_gradeaudit_canviewaudit",
-      "app_handlers_gradeaudit_gradeauditdata",
-      "app_handlers_gradeaudit_gradeauditpage",
-      "app_handlers_reports",
-      "app_handlers_reports_classsubjectreport",
-      "app_handlers_teacherschedule",
-      "app_handlers_teacherschedule_confirmationrequired",
-      "app_handlers_teacherschedule_isteacheractor",
-      "app_handlers_teacherschedule_listtodayschedules",
-      "app_handlers_teacherschedule_teacherschedulepage",
-      "app_handlers_teacherschedule_todayscheduledetail",
-      "app_queries_gradeauditlogs_getgradeauditlogspaginated",
-      "app_queries_schedules_findteacherschedulesbyday",
-      "app_queries_stats",
-      "app_queries_stats_classsubjectstats",
-      "app_queries_stats_dashboardstats",
-      "app_queries_stats_getclasssubjectstats",
-      "tests_handlers_attendance_test",
-      "tests_handlers_attendance_test_parentrequest",
-      "tests_handlers_gradeaudit_test",
-      "tests_handlers_gradeaudit_test_logrow",
-      "tests_handlers_headmaster_test",
-      "tests_handlers_headmaster_test_classitem",
-      "tests_handlers_headmaster_test_classoverview",
-      "tests_handlers_headmaster_test_teachersummary",
-      "tests_handlers_reports_test",
-      "tests_handlers_reports_test_parentrequest",
-      "tests_handlers_studentattendance_test",
-      "tests_handlers_studentattendance_test_parentrequest",
-      "tests_handlers_students_test_parentrequest",
-      "tests_handlers_teacherassignments_test",
-      "tests_handlers_teacherassignments_test_validbody",
+      "app_types_models_teacherconfirmationlogview",
       "tests_handlers_teacherschedule_test",
       "tests_handlers_teacherschedule_test_pageresponse",
       "tests_handlers_teacherschedule_test_schedule",
       "tests_handlers_teacherschedule_test_teacher",
-      "tests_helpers_mocks",
-      "tests_helpers_mocks_failingvalidator",
-      "tests_helpers_mocks_mockrequest",
-      "tests_helpers_mocks_mockresponse",
-      "tests_helpers_mocks_mockuser",
-      "tests_helpers_mocks_mockvalidator",
-      "tests_helpers_mocks_runmiddleware",
-      "tests_middlewares_requestid_test",
-      "tests_middlewares_securityheaders_test"
+      "tests_services_qrcode_test"
     ],
-    "8": [
-      "app_middlewares_renderer",
-      "app_middlewares_renderer_renderer",
-      "app_services_cachestore",
-      "app_services_cachestore_assetcache",
-      "app_services_cachestore_cacheentry",
-      "app_services_cachestore_cachestats",
-      "app_services_cachestore_cachestore",
-      "app_services_cachestore_cachestore_clear",
-      "app_services_cachestore_cachestore_delete",
-      "app_services_cachestore_cachestore_get",
-      "app_services_cachestore_cachestore_has",
-      "app_services_cachestore_cachestore_set",
-      "app_services_cachestore_cachestore_stats",
-      "app_services_cachestore_cachestoreoptions",
-      "app_services_cachestore_createcachestore",
-      "app_services_cachestore_defaultmeasure",
-      "app_services_cachestore_templatecache",
-      "app_services_cameraupload",
-      "app_services_cameraupload_camerauploadresult",
-      "app_services_cameraupload_deleteconfirmationphoto",
-      "app_services_index",
-      "app_services_storage",
-      "app_services_storage_config",
-      "app_services_storage_configure",
-      "app_services_storage_del",
-      "app_services_storage_exists",
-      "app_services_storage_filepath",
-      "app_services_storage_get",
-      "app_services_storage_getbasepath",
-      "app_services_storage_put",
-      "app_services_storage_putfile",
-      "app_services_storage_storage",
-      "app_services_storage_storageconfig",
-      "app_services_storage_storedfile",
-      "app_services_storage_storeoptions",
-      "app_services_storage_url",
-      "app_services_view",
-      "app_services_view_escapehtml",
-      "app_services_view_escapejsonforscripttag",
-      "app_services_view_getviewsdirectory",
-      "app_services_view_loadtemplate",
-      "app_services_view_view",
-      "tests_services_cachestore_test",
-      "tests_services_cachestore_test_buf",
-      "tests_services_cachestore_test_makestore",
-      "tests_services_storage_test"
-    ],
-    "9": [
+    "6": [
       "app_handlers_journals",
       "app_handlers_journals_addjournal",
       "app_handlers_journals_canmanage",
@@ -654,56 +473,16 @@
       "app_queries_studentattendance_findstudentattendancebyid",
       "app_queries_studentattendance_updatestudentattendance",
       "app_queries_studentattendance_upsertstudentattendance",
+      "app_queries_teacherclassassignments_isteacheruser",
       "app_types_models_journal",
       "app_types_models_studentattendance"
     ],
-    "10": [
-      "app_core_adapters_types",
-      "app_core_adapters_types_adaptermiddlewarehandler",
-      "app_core_adapters_types_frontendadapter",
-      "app_core_app_appoptions",
-      "app_core_types_nararequest",
-      "app_core_types_nararesponse",
-      "app_core_types_nararesponse_flash",
-      "app_core_types_nararesponse_view",
-      "app_middlewares_auth",
-      "app_middlewares_csrf_csrfoptions",
-      "app_middlewares_index",
-      "app_middlewares_inputsanitize",
-      "app_middlewares_inputsanitize_inputsanitize",
-      "app_middlewares_inputsanitize_sanitizevalue",
-      "app_middlewares_inputsanitize_striphtml",
-      "app_middlewares_inputsanitize_striptags",
-      "app_middlewares_ratelimit_ratelimitoptions",
-      "app_middlewares_requestid",
-      "app_middlewares_requestid_requestid",
-      "app_middlewares_requestlogger",
-      "app_middlewares_requestlogger_default_skip_paths",
-      "app_middlewares_requestlogger_isstaticasset",
-      "app_middlewares_requestlogger_requestlogger",
-      "app_middlewares_requestlogger_requestloggeroptions",
-      "app_middlewares_requestlogger_static_extensions",
-      "app_middlewares_securityheaders",
-      "app_middlewares_securityheaders_buildcspheader",
-      "app_middlewares_securityheaders_buildpermissionspolicy",
-      "app_middlewares_securityheaders_cspdirectives",
-      "app_middlewares_securityheaders_cspoptions",
-      "app_middlewares_securityheaders_default_csp_directives",
-      "app_middlewares_securityheaders_default_permissions_policy",
-      "app_middlewares_securityheaders_hstsoptions",
-      "app_middlewares_securityheaders_securityheaders",
-      "app_middlewares_securityheaders_securityheadersoptions",
-      "app_queries_sessions_getuserbysessionid",
-      "app_queries_users_getuserpermissions",
-      "app_queries_users_getuserroles"
-    ],
-    "11": [
+    "7": [
       "app_config_constants",
       "app_config_constants_auth",
       "app_config_constants_cache",
       "app_config_constants_logging",
       "app_config_constants_qr",
-      "app_config_constants_qr_refresh_interval_default",
       "app_config_constants_rate_limit",
       "app_config_constants_server",
       "app_config_constants_upload",
@@ -720,6 +499,7 @@
       "app_core_app",
       "app_core_app_createapiapp",
       "app_core_app_createapp",
+      "app_core_app_createwebapp",
       "app_core_app_default_options",
       "app_core_app_naraapp",
       "app_core_app_naraapp_close",
@@ -728,9 +508,114 @@
       "app_core_app_naraapp_isrunning",
       "app_core_app_naraapp_mount",
       "app_core_app_naraapp_start",
-      "app_core_app_naraapp_use"
+      "app_core_app_naraapp_use",
+      "app_core_errors_isnaraerror",
+      "app_core_errors_isvalidationerror",
+      "app_middlewares_requestid",
+      "app_middlewares_requestid_requestid"
     ],
-    "12": [
+    "8": [
+      "app_core_errors",
+      "app_core_errors_autherror",
+      "app_core_errors_badrequesterror",
+      "app_core_errors_conflicterror",
+      "app_core_errors_forbiddenerror",
+      "app_core_errors_httperror",
+      "app_core_errors_internalerror",
+      "app_core_errors_isuniqueconstrainterror",
+      "app_core_errors_naraerror",
+      "app_core_errors_notfounderror",
+      "app_core_errors_toomanyrequestserror",
+      "app_core_errors_validationerror",
+      "app_core_index",
+      "app_core_response",
+      "app_core_response_apierrorresponse",
+      "app_core_response_apiresponse",
+      "app_core_response_apisuccessresponse",
+      "app_core_response_jsoncreated",
+      "app_core_response_jsonerror",
+      "app_core_response_jsonnocontent",
+      "app_core_response_jsonnotfound",
+      "app_core_response_jsonpaginated",
+      "app_core_response_jsonservererror",
+      "app_core_response_jsonsuccess",
+      "app_core_response_jsonunauthorized",
+      "app_core_response_jsonvalidationerror",
+      "app_core_response_paginatedmeta",
+      "app_core_response_paginationmeta",
+      "app_core_response_queryint",
+      "app_core_response_querystring",
+      "app_core_response_responsemeta",
+      "tests_core_errors_test",
+      "tests_core_response_test"
+    ],
+    "9": [
+      "app_middlewares_auth",
+      "app_queries_assets",
+      "app_queries_assets_findassetsbyuserid",
+      "app_queries_sessions",
+      "app_queries_sessions_cleanupexpiredsessions",
+      "app_queries_sessions_getuserbysessionid",
+      "app_queries_users",
+      "app_queries_users_assignrole",
+      "app_queries_users_deleteuser",
+      "app_queries_users_getuserpermissions",
+      "app_queries_users_getuserroles",
+      "app_queries_users_hasrole",
+      "app_queries_users_removerole",
+      "app_queries_users_searchusers",
+      "app_queries_users_usernameexists",
+      "app_types_models",
+      "app_types_models_academicyear",
+      "app_types_models_announcement",
+      "app_types_models_asset",
+      "app_types_models_classsubject",
+      "app_types_models_gradeauditlog",
+      "app_types_models_gradecomponent",
+      "app_types_models_notification",
+      "app_types_models_permission",
+      "app_types_models_role",
+      "app_types_models_rolepermission",
+      "app_types_models_schoollocation",
+      "app_types_models_session",
+      "app_types_models_subject",
+      "app_types_models_teachersubject",
+      "app_types_models_user",
+      "app_types_models_userrole"
+    ],
+    "10": [
+      "app_config_constants_qr_refresh_interval_default",
+      "app_handlers_qrsettings",
+      "app_handlers_qrsettings_canmanage",
+      "app_handlers_qrsettings_qrcodedata",
+      "app_handlers_qrsettings_qrdisplaypage",
+      "app_handlers_qrsettings_qrsettingspage",
+      "app_handlers_qrsettings_saveqrsettings",
+      "app_handlers_schoollocations",
+      "app_handlers_schoollocations_activateschoollocation",
+      "app_handlers_schoollocations_activeschoollocationdata",
+      "app_handlers_schoollocations_addschoollocation",
+      "app_handlers_schoollocations_canmanage",
+      "app_handlers_schoollocations_canview",
+      "app_handlers_schoollocations_listschoollocations",
+      "app_handlers_schoollocations_removeschoollocation",
+      "app_handlers_schoollocations_schoollocationdata",
+      "app_handlers_schoollocations_schoollocationspage",
+      "app_queries_appsettings",
+      "app_queries_appsettings_findsetting",
+      "app_queries_appsettings_findsettingnumber",
+      "app_queries_appsettings_upsertsetting",
+      "app_queries_schoollocations",
+      "app_queries_schoollocations_createschoollocation",
+      "app_queries_schoollocations_deleteschoollocation",
+      "app_queries_schoollocations_findactiveschoollocation",
+      "app_queries_schoollocations_findallschoollocations",
+      "app_queries_schoollocations_findschoollocationbyid",
+      "app_queries_schoollocations_setactiveschoollocation",
+      "app_queries_schoollocations_updateschoollocation",
+      "app_types_models_appsetting"
+    ],
+    "11": [
       "app_handlers_index",
       "app_handlers_index_academicyears",
       "app_handlers_index_announcements",
@@ -762,37 +647,7 @@
       "app_handlers_index_teacherschedule",
       "app_handlers_index_users"
     ],
-    "13": [
-      "app_handlers_headmaster",
-      "app_handlers_headmaster_headmasterclassgradespage",
-      "app_handlers_headmaster_headmasterdashboarddata",
-      "app_handlers_headmaster_headmasterdashboardpage",
-      "app_handlers_headmaster_headmasterreportspage",
-      "app_handlers_headmaster_headmasterteacherattendancepage",
-      "app_handlers_headmaster_isheadmaster",
-      "app_handlers_headmaster_listoutsideconfirmations",
-      "app_queries_headmaster_datekey",
-      "app_queries_headmaster_findactiveyearschedules",
-      "app_queries_headmaster_findclassgradedetails",
-      "app_queries_headmaster_findteacherconfirmationsinrange",
-      "app_queries_headmaster_getclassoverview",
-      "app_queries_headmaster_getgradeprogress",
-      "app_queries_headmaster_getjournalcompleteness",
-      "app_queries_headmaster_getmissedsessions",
-      "app_queries_headmaster_getoutsideconfirmations",
-      "app_queries_headmaster_getteacherattendancehistory",
-      "app_queries_headmaster_getteacherattendanceoverview",
-      "app_queries_headmaster_gettodaysessions",
-      "app_queries_headmaster_occurrencesbetween",
-      "app_queries_headmaster_periodrange",
-      "app_queries_headmaster_startofday",
-      "tests_queries_headmaster_test",
-      "tests_queries_headmaster_test_dayofweek",
-      "tests_queries_headmaster_test_daystart",
-      "tests_queries_headmaster_test_now",
-      "tests_queries_headmaster_test_schedule"
-    ],
-    "14": [
+    "12": [
       "app_handlers_roles",
       "app_handlers_roles_addrole",
       "app_handlers_roles_editrole",
@@ -822,35 +677,64 @@
       "vitest_config",
       "vitest_config_r"
     ],
-    "15": [
-      "app_handlers_teachers",
-      "app_handlers_teachers_addteacher",
-      "app_handlers_teachers_assignteachersubjects",
-      "app_handlers_teachers_canmanage",
-      "app_handlers_teachers_canview",
-      "app_handlers_teachers_editteacher",
-      "app_handlers_teachers_listteachers",
-      "app_handlers_teachers_removeteacher",
-      "app_handlers_teachers_teacherbyuser",
-      "app_handlers_teachers_teacherdata",
-      "app_handlers_teachers_teacherspage",
-      "app_queries_teachers",
-      "app_queries_teachers_createteacher",
-      "app_queries_teachers_deleteteacher",
-      "app_queries_teachers_findallteachers",
-      "app_queries_teachers_findteacherbyid",
-      "app_queries_teachers_findteacherbyuserid",
-      "app_queries_teachers_findteachersbysubject",
-      "app_queries_teachers_findusersforteacherselect",
-      "app_queries_teachers_getteacherspaginated",
-      "app_queries_teachers_getteachersubjects",
-      "app_queries_teachers_syncteachersubjects",
-      "app_queries_teachers_teacherlistitem",
-      "app_queries_teachers_updateteacher",
-      "app_types_models_teacher",
-      "tests_queries_teachers_test"
+    "13": [
+      "app_core_router_nararouter_use",
+      "app_core_types_naramiddleware",
+      "app_core_types_nararequest",
+      "app_middlewares_csrf_csrfoptions",
+      "app_middlewares_index",
+      "app_middlewares_inputsanitize",
+      "app_middlewares_inputsanitize_inputsanitize",
+      "app_middlewares_inputsanitize_sanitizevalue",
+      "app_middlewares_inputsanitize_striphtml",
+      "app_middlewares_inputsanitize_striptags",
+      "app_middlewares_ratelimit_ratelimitoptions",
+      "app_middlewares_requestlogger",
+      "app_middlewares_requestlogger_default_skip_paths",
+      "app_middlewares_requestlogger_isstaticasset",
+      "app_middlewares_requestlogger_requestlogger",
+      "app_middlewares_requestlogger_requestloggeroptions",
+      "app_middlewares_requestlogger_static_extensions",
+      "app_middlewares_securityheaders",
+      "app_middlewares_securityheaders_buildcspheader",
+      "app_middlewares_securityheaders_buildpermissionspolicy",
+      "app_middlewares_securityheaders_cspdirectives",
+      "app_middlewares_securityheaders_cspoptions",
+      "app_middlewares_securityheaders_default_csp_directives",
+      "app_middlewares_securityheaders_default_permissions_policy",
+      "app_middlewares_securityheaders_hstsoptions",
+      "app_middlewares_securityheaders_securityheaders",
+      "app_middlewares_securityheaders_securityheadersoptions"
     ],
-    "16": [
+    "14": [
+      "app_middlewares_renderer",
+      "app_middlewares_renderer_renderer",
+      "app_services_cachestore",
+      "app_services_cachestore_assetcache",
+      "app_services_cachestore_cacheentry",
+      "app_services_cachestore_cachestats",
+      "app_services_cachestore_cachestore",
+      "app_services_cachestore_cachestore_clear",
+      "app_services_cachestore_cachestore_delete",
+      "app_services_cachestore_cachestore_get",
+      "app_services_cachestore_cachestore_has",
+      "app_services_cachestore_cachestore_set",
+      "app_services_cachestore_cachestore_stats",
+      "app_services_cachestore_cachestoreoptions",
+      "app_services_cachestore_createcachestore",
+      "app_services_cachestore_defaultmeasure",
+      "app_services_cachestore_templatecache",
+      "app_services_view",
+      "app_services_view_escapehtml",
+      "app_services_view_escapejsonforscripttag",
+      "app_services_view_getviewsdirectory",
+      "app_services_view_loadtemplate",
+      "app_services_view_view",
+      "tests_services_cachestore_test",
+      "tests_services_cachestore_test_buf",
+      "tests_services_cachestore_test_makestore"
+    ],
+    "15": [
       "docref_adr_0001",
       "docref_adr_0002",
       "docref_adr_0009",
@@ -878,59 +762,86 @@
       "scripts_gen_resource_updateagentsstructuretable",
       "scripts_gen_resource_writefilesync"
     ],
+    "16": [
+      "app_handlers_auth",
+      "app_handlers_auth_changepassword",
+      "app_handlers_auth_loginpage",
+      "app_handlers_auth_logout",
+      "app_handlers_auth_submitlogin",
+      "app_queries_index",
+      "app_queries_sessions_createsession",
+      "app_queries_sessions_deletesession",
+      "app_queries_sessions_deletesessionsbyuserid",
+      "app_queries_users_finduserbyusername",
+      "app_queries_users_updatepassword",
+      "app_services_authenticate",
+      "app_services_authenticate_comparepassword",
+      "app_services_authenticate_getsecurecookieoptions",
+      "app_services_authenticate_hashpassword",
+      "app_services_authenticate_logout",
+      "app_services_authenticate_processlogin",
+      "app_services_index",
+      "seeds_03_admin",
+      "seeds_03_admin_run",
+      "seeds_04_demo",
+      "seeds_04_demo_run",
+      "tests_handlers_auth_test",
+      "tests_handlers_auth_test_user",
+      "tests_services_authenticate_test"
+    ],
     "17": [
-      "app_core_adapters_svelte_svelteadapter",
-      "app_core_app_createwebapp",
-      "app_core_index",
-      "app_core_response",
-      "app_core_response_apierrorresponse",
-      "app_core_response_apiresponse",
-      "app_core_response_apisuccessresponse",
-      "app_core_response_jsoncreated",
-      "app_core_response_jsonerror",
-      "app_core_response_jsonforbidden",
-      "app_core_response_jsonnocontent",
-      "app_core_response_jsonnotfound",
-      "app_core_response_jsonpaginated",
-      "app_core_response_jsonservererror",
-      "app_core_response_jsonsuccess",
-      "app_core_response_jsonunauthorized",
-      "app_core_response_jsonvalidationerror",
-      "app_core_response_paginatedmeta",
-      "app_core_response_paginationmeta",
-      "app_core_response_queryint",
-      "app_core_response_querystring",
-      "app_core_response_responsemeta",
-      "server",
-      "server_app",
-      "tests_core_response_test"
+      "app_handlers_headmaster",
+      "app_handlers_headmaster_headmasterdashboarddata",
+      "app_handlers_headmaster_headmasterdashboardpage",
+      "app_handlers_headmaster_headmasterreportspage",
+      "app_handlers_headmaster_isheadmaster",
+      "app_handlers_headmaster_listoutsideconfirmations",
+      "app_queries_headmaster",
+      "app_queries_headmaster_findactiveyearschedules",
+      "app_queries_headmaster_getgradeprogress",
+      "app_queries_headmaster_getjournalcompleteness",
+      "app_queries_headmaster_getmissedsessions",
+      "app_queries_headmaster_getoutsideconfirmations",
+      "app_queries_headmaster_gettodaysessions",
+      "app_queries_headmaster_gradeprogressrow",
+      "app_queries_headmaster_journalcompletenessrow",
+      "app_queries_headmaster_occurrencesbetween",
+      "app_queries_headmaster_outsideconfirmationrow",
+      "app_queries_headmaster_scheduletemplate",
+      "app_queries_headmaster_sessionstatus",
+      "app_queries_headmaster_startofday",
+      "app_queries_stats_getdashboardstats",
+      "app_types_shared_gradeprogressview",
+      "app_types_shared_journalcompletenessview",
+      "app_types_shared_outsideconfirmationview",
+      "app_types_shared_sessionstatusview"
     ],
     "18": [
-      "app_core_router",
-      "app_core_router_createrouter",
-      "app_core_router_httpmethod",
-      "app_core_router_nararouter",
-      "app_core_router_nararouter_any",
-      "app_core_router_nararouter_delete",
-      "app_core_router_nararouter_get",
-      "app_core_router_nararouter_getrouter",
-      "app_core_router_nararouter_head",
-      "app_core_router_nararouter_mount",
-      "app_core_router_nararouter_options",
-      "app_core_router_nararouter_patch",
-      "app_core_router_nararouter_post",
-      "app_core_router_nararouter_put",
-      "app_core_router_nararouter_use",
-      "app_core_router_routeargs",
-      "app_core_types",
-      "app_core_types_authuser",
-      "app_core_types_narahandler",
-      "app_core_types_naramiddleware",
-      "app_core_types_routecallback",
-      "app_core_types_routemiddlewares",
-      "app_types_shared_user",
-      "tests_core_router_test",
-      "tests_core_router_test_getinternalrouter"
+      "app_handlers_teachers",
+      "app_handlers_teachers_addteacher",
+      "app_handlers_teachers_assignteachersubjects",
+      "app_handlers_teachers_canmanage",
+      "app_handlers_teachers_canview",
+      "app_handlers_teachers_listteachers",
+      "app_handlers_teachers_removeteacher",
+      "app_handlers_teachers_teacherbyuser",
+      "app_handlers_teachers_teacherdata",
+      "app_handlers_teachers_teacherspage",
+      "app_queries_teachers",
+      "app_queries_teachers_createteacher",
+      "app_queries_teachers_deleteteacher",
+      "app_queries_teachers_findallteachers",
+      "app_queries_teachers_findteacherbyid",
+      "app_queries_teachers_findteacherbyuserid",
+      "app_queries_teachers_findteachersbysubject",
+      "app_queries_teachers_findusersforteacherselect",
+      "app_queries_teachers_getteacherspaginated",
+      "app_queries_teachers_getteachersubjects",
+      "app_queries_teachers_syncteachersubjects",
+      "app_queries_teachers_teacherlistitem",
+      "app_queries_teachers_updateteacher",
+      "app_types_models_teacher",
+      "tests_queries_teachers_test"
     ],
     "19": [
       "package_scripts",
@@ -960,81 +871,6 @@
       "package_scripts_typecheck"
     ],
     "20": [
-      "app_handlers_academicyears",
-      "app_handlers_academicyears_academicyearspage",
-      "app_handlers_academicyears_activateacademicyear",
-      "app_handlers_academicyears_activeacademicyeardata",
-      "app_handlers_academicyears_addacademicyear",
-      "app_handlers_academicyears_canmanage",
-      "app_handlers_academicyears_canview",
-      "app_handlers_academicyears_editacademicyear",
-      "app_handlers_academicyears_gradecomponentsdata",
-      "app_handlers_academicyears_listacademicyears",
-      "app_handlers_academicyears_removeacademicyear",
-      "app_handlers_academicyears_savegradecomponents",
-      "app_handlers_academicyears_togglegradespublication",
-      "app_queries_academicyears",
-      "app_queries_academicyears_createacademicyear",
-      "app_queries_academicyears_deleteacademicyear",
-      "app_queries_academicyears_findacademicyearbyid",
-      "app_queries_academicyears_setactiveacademicyear",
-      "app_queries_academicyears_updateacademicyear",
-      "app_queries_gradecomponents",
-      "app_queries_gradecomponents_findgradecomponentsbyyear",
-      "app_queries_gradecomponents_upsertgradecomponents",
-      "app_queries_users_haspermission"
-    ],
-    "21": [
-      "app_handlers_auth",
-      "app_handlers_auth_changepassword",
-      "app_handlers_auth_loginpage",
-      "app_handlers_auth_logout",
-      "app_handlers_auth_submitlogin",
-      "app_queries_sessions_createsession",
-      "app_queries_sessions_deletesession",
-      "app_queries_sessions_deletesessionsbyuserid",
-      "app_queries_users_finduserbyusername",
-      "app_queries_users_updatepassword",
-      "app_services_authenticate",
-      "app_services_authenticate_comparepassword",
-      "app_services_authenticate_getsecurecookieoptions",
-      "app_services_authenticate_hashpassword",
-      "app_services_authenticate_logout",
-      "app_services_authenticate_processlogin",
-      "seeds_03_admin",
-      "seeds_03_admin_run",
-      "seeds_04_demo",
-      "seeds_04_demo_run",
-      "tests_handlers_auth_test",
-      "tests_handlers_auth_test_user",
-      "tests_services_authenticate_test"
-    ],
-    "22": [
-      "app_handlers_schedules",
-      "app_handlers_schedules_addschedule",
-      "app_handlers_schedules_canmanage",
-      "app_handlers_schedules_canview",
-      "app_handlers_schedules_editschedule",
-      "app_handlers_schedules_isteacheractor",
-      "app_handlers_schedules_listschedules",
-      "app_handlers_schedules_removeschedule",
-      "app_handlers_schedules_scheduledata",
-      "app_handlers_schedules_schedulespage",
-      "app_queries_schedules",
-      "app_queries_schedules_createschedule",
-      "app_queries_schedules_deleteschedule",
-      "app_queries_schedules_findallschedules",
-      "app_queries_schedules_findschedulesbyclass",
-      "app_queries_schedules_findschedulesbyday",
-      "app_queries_schedules_findschedulesbyteacher",
-      "app_queries_schedules_teacherdailyschedule",
-      "app_queries_schedules_updateschedule",
-      "app_queries_teachers_findteacherusersforschedule",
-      "app_types_models_schedule",
-      "tests_handlers_schedules_test",
-      "tests_handlers_schedules_test_schedule"
-    ],
-    "23": [
       "ref_es2021",
       "tsconfig_compileroptions",
       "tsconfig_compileroptions_allowsyntheticdefaultimports",
@@ -1059,14 +895,61 @@
       "tsconfig_compileroptions_strictnullchecks",
       "tsconfig_compileroptions_target"
     ],
-    "24": [
+    "21": [
+      "app_handlers_academicyears",
+      "app_handlers_academicyears_academicyearspage",
+      "app_handlers_academicyears_activateacademicyear",
+      "app_handlers_academicyears_activeacademicyeardata",
+      "app_handlers_academicyears_addacademicyear",
+      "app_handlers_academicyears_canmanage",
+      "app_handlers_academicyears_canview",
+      "app_handlers_academicyears_gradecomponentsdata",
+      "app_handlers_academicyears_listacademicyears",
+      "app_handlers_academicyears_removeacademicyear",
+      "app_handlers_academicyears_savegradecomponents",
+      "app_handlers_academicyears_togglegradespublication",
+      "app_queries_academicyears",
+      "app_queries_academicyears_createacademicyear",
+      "app_queries_academicyears_deleteacademicyear",
+      "app_queries_academicyears_findacademicyearbyid",
+      "app_queries_academicyears_findallacademicyears",
+      "app_queries_academicyears_setactiveacademicyear",
+      "app_queries_academicyears_updateacademicyear",
+      "app_queries_gradecomponents",
+      "app_queries_gradecomponents_findgradecomponentsbyyear",
+      "app_queries_gradecomponents_upsertgradecomponents"
+    ],
+    "22": [
+      "app_handlers_schedules",
+      "app_handlers_schedules_addschedule",
+      "app_handlers_schedules_canmanage",
+      "app_handlers_schedules_canview",
+      "app_handlers_schedules_isteacheractor",
+      "app_handlers_schedules_listschedules",
+      "app_handlers_schedules_removeschedule",
+      "app_handlers_schedules_scheduledata",
+      "app_handlers_schedules_schedulespage",
+      "app_queries_schedules",
+      "app_queries_schedules_createschedule",
+      "app_queries_schedules_deleteschedule",
+      "app_queries_schedules_findallschedules",
+      "app_queries_schedules_findschedulesbyclass",
+      "app_queries_schedules_findschedulesbyday",
+      "app_queries_schedules_findschedulesbyteacher",
+      "app_queries_schedules_teacherdailyschedule",
+      "app_queries_schedules_updateschedule",
+      "app_queries_teachers_findteacherusersforschedule",
+      "app_types_models_schedule",
+      "tests_handlers_schedules_test",
+      "tests_handlers_schedules_test_schedule"
+    ],
+    "23": [
       "app_handlers_classes",
       "app_handlers_classes_addclass",
       "app_handlers_classes_canmanage",
       "app_handlers_classes_canview",
       "app_handlers_classes_classdata",
       "app_handlers_classes_classespage",
-      "app_handlers_classes_editclass",
       "app_handlers_classes_listclasses",
       "app_handlers_classes_removeclass",
       "app_queries_classes",
@@ -1083,71 +966,49 @@
       "app_queries_classes_updateclass",
       "app_types_models_class"
     ],
+    "24": [
+      "app_core_router",
+      "app_core_router_createrouter",
+      "app_core_router_httpmethod",
+      "app_core_router_nararouter",
+      "app_core_router_nararouter_any",
+      "app_core_router_nararouter_delete",
+      "app_core_router_nararouter_get",
+      "app_core_router_nararouter_getrouter",
+      "app_core_router_nararouter_head",
+      "app_core_router_nararouter_mount",
+      "app_core_router_nararouter_options",
+      "app_core_router_nararouter_patch",
+      "app_core_router_nararouter_post",
+      "app_core_router_nararouter_put",
+      "app_core_router_routeargs",
+      "app_core_types_narahandler",
+      "app_core_types_routemiddlewares",
+      "tests_core_router_test",
+      "tests_core_router_test_getinternalrouter"
+    ],
     "25": [
-      "app_services_sqlite",
-      "app_services_sqlite_getstmt",
-      "app_services_sqlite_nativedb",
-      "app_services_sqlite_prodenvpath",
-      "app_services_sqlite_sql",
-      "app_services_sqlite_statementcache",
-      "app_services_sqlite_toarray",
-      "migrations_20260820000002_backfill_teacher_class_assignments",
-      "migrations_20260820000002_backfill_teacher_class_assignments_up",
-      "seeds_01_permissions",
-      "seeds_01_permissions_run",
-      "seeds_02_roles",
-      "seeds_02_roles_run",
-      "seeds_06_grade_components",
-      "seeds_06_grade_components_default_components",
-      "seeds_06_grade_components_run",
-      "seeds_08_qr_settings",
-      "seeds_08_qr_settings_run",
-      "tests_queries_grades_test",
-      "tests_queries_grades_test_progression"
+      "app_services_cameraupload",
+      "app_services_cameraupload_camerauploadresult",
+      "app_services_cameraupload_deleteconfirmationphoto",
+      "app_services_storage",
+      "app_services_storage_config",
+      "app_services_storage_configure",
+      "app_services_storage_del",
+      "app_services_storage_exists",
+      "app_services_storage_filepath",
+      "app_services_storage_get",
+      "app_services_storage_getbasepath",
+      "app_services_storage_put",
+      "app_services_storage_putfile",
+      "app_services_storage_storage",
+      "app_services_storage_storageconfig",
+      "app_services_storage_storedfile",
+      "app_services_storage_storeoptions",
+      "app_services_storage_url",
+      "tests_services_storage_test"
     ],
     "26": [
-      "app_core_types_nararesponse_inertia",
-      "app_handlers_home",
-      "app_handlers_home_landingpage",
-      "app_queries_sessions_findsessionbyid",
-      "app_queries_users",
-      "app_queries_users_assignrole",
-      "app_queries_users_createuser",
-      "app_queries_users_deleteuser",
-      "app_queries_users_deleteusers",
-      "app_queries_users_finduserbyid",
-      "app_queries_users_getrolesforusers",
-      "app_queries_users_getuserspaginated",
-      "app_queries_users_removerole",
-      "app_queries_users_searchusers",
-      "app_queries_users_syncroles",
-      "app_queries_users_updateuser",
-      "app_queries_users_usernameexists",
-      "app_types_models_permission",
-      "app_types_models_userrole"
-    ],
-    "27": [
-      "app_handlers_schoollocations",
-      "app_handlers_schoollocations_activateschoollocation",
-      "app_handlers_schoollocations_addschoollocation",
-      "app_handlers_schoollocations_canmanage",
-      "app_handlers_schoollocations_canview",
-      "app_handlers_schoollocations_editschoollocation",
-      "app_handlers_schoollocations_listschoollocations",
-      "app_handlers_schoollocations_removeschoollocation",
-      "app_handlers_schoollocations_schoollocationdata",
-      "app_handlers_schoollocations_schoollocationspage",
-      "app_queries_schoollocations",
-      "app_queries_schoollocations_createschoollocation",
-      "app_queries_schoollocations_deleteschoollocation",
-      "app_queries_schoollocations_findallschoollocations",
-      "app_queries_schoollocations_findschoollocationbyid",
-      "app_queries_schoollocations_setactiveschoollocation",
-      "app_queries_schoollocations_updateschoollocation",
-      "app_queries_users_isadmin",
-      "app_validators_index_zodtoerrors"
-    ],
-    "28": [
       "nodemon",
       "package_devdependencies",
       "package_devdependencies_nodemon",
@@ -1168,7 +1029,7 @@
       "vite",
       "vitest"
     ],
-    "29": [
+    "27": [
       "scripts_eval_agent",
       "scripts_eval_agent_appended_files",
       "scripts_eval_agent_created_files",
@@ -1189,47 +1050,27 @@
       "scripts_eval_agent_verifyfiles",
       "scripts_eval_agent_verifygates"
     ],
-    "30": [
-      "app_queries_headmaster",
-      "app_queries_headmaster_classoverviewqueryrow",
-      "app_queries_headmaster_confirmationdayrow",
-      "app_queries_headmaster_findteachernames",
-      "app_queries_headmaster_gradeprogressrow",
-      "app_queries_headmaster_journalcompletenessrow",
-      "app_queries_headmaster_outsideconfirmationrow",
-      "app_queries_headmaster_scheduletemplate",
-      "app_queries_headmaster_sessionstatus",
-      "app_queries_headmaster_teachernamerow",
-      "app_types_shared_gradeprogressview",
-      "app_types_shared_headmasterclassoverviewview",
-      "app_types_shared_headmastergradedetailview",
-      "app_types_shared_headmasterteacherattendancehistoryview",
-      "app_types_shared_headmasterteacherattendanceview",
-      "app_types_shared_journalcompletenessview",
-      "app_types_shared_outsideconfirmationview",
-      "app_types_shared_sessionstatusview"
+    "28": [
+      "app_handlers_users",
+      "app_handlers_users_adduser",
+      "app_handlers_users_changeprofile",
+      "app_handlers_users_dashboardpage",
+      "app_handlers_users_profilepage",
+      "app_handlers_users_removeusers",
+      "app_handlers_users_userspage",
+      "app_queries_roles_findrolebyslug",
+      "app_queries_roles_getuserswithrole",
+      "app_queries_students_findstudentsforparentselect",
+      "app_queries_students_linkstudenttoparent",
+      "app_queries_users_createuser",
+      "app_queries_users_deleteusers",
+      "app_queries_users_getrolesforusers",
+      "app_queries_users_getuserspaginated",
+      "app_queries_users_syncroles",
+      "app_queries_users_updateuser",
+      "tests_handlers_users_test"
     ],
-    "31": [
-      "app_queries_sessions",
-      "app_queries_sessions_cleanupexpiredsessions",
-      "app_types_models",
-      "app_types_models_academicyear",
-      "app_types_models_announcement",
-      "app_types_models_classsubject",
-      "app_types_models_gradeauditlog",
-      "app_types_models_gradecomponent",
-      "app_types_models_notification",
-      "app_types_models_role",
-      "app_types_models_rolepermission",
-      "app_types_models_schoollocation",
-      "app_types_models_session",
-      "app_types_models_student",
-      "app_types_models_subject",
-      "app_types_models_teacherconfirmationlogview",
-      "app_types_models_teachersubject",
-      "app_types_models_user"
-    ],
-    "32": [
+    "29": [
       "scripts_codemap",
       "scripts_codemap_collectadrs",
       "scripts_codemap_countlines",
@@ -1249,7 +1090,45 @@
       "scripts_codemap_skip_dirs",
       "scripts_codemap_walk"
     ],
-    "33": [
+    "30": [
+      "app_core_adapters_svelte_svelteadapter",
+      "app_middlewares_ratelimit",
+      "app_middlewares_ratelimit_apiratelimit",
+      "app_middlewares_ratelimit_getrequestcount",
+      "app_middlewares_ratelimit_getresettime",
+      "app_middlewares_ratelimit_ratelimit",
+      "app_middlewares_ratelimit_ratelimitentry",
+      "app_middlewares_ratelimit_recordrequest",
+      "app_middlewares_ratelimit_resetratelimit",
+      "app_middlewares_ratelimit_startcleanup",
+      "app_middlewares_ratelimit_store",
+      "app_middlewares_ratelimit_strictratelimit",
+      "routes_web",
+      "routes_web_route",
+      "server",
+      "server_app",
+      "tests_middlewares_ratelimit_test"
+    ],
+    "31": [
+      "app_services_logger",
+      "app_services_logger_child",
+      "app_services_logger_debug",
+      "app_services_logger_fatal",
+      "app_services_logger_flush",
+      "app_services_logger_info",
+      "app_services_logger_logauth",
+      "app_services_logger_logger",
+      "app_services_logger_logquery",
+      "app_services_logger_logrequest",
+      "app_services_logger_logsdir",
+      "app_services_logger_logsecurity",
+      "app_services_logger_pinoconfig",
+      "app_services_logger_trace",
+      "app_services_logger_transport",
+      "app_services_logger_warn",
+      "tests_services_logger_test"
+    ],
+    "32": [
       "app_handlers_subjects",
       "app_handlers_subjects_addsubject",
       "app_handlers_subjects_canmanage",
@@ -1267,7 +1146,7 @@
       "app_queries_subjects_findsubjectbyid",
       "app_queries_subjects_updatesubject"
     ],
-    "34": [
+    "33": [
       "ref",
       "ref_app_handlers",
       "ref_app_handlers_index_ts",
@@ -1285,7 +1164,7 @@
       "tsconfig_paths_services",
       "tsconfig_paths_validators"
     ],
-    "35": [
+    "34": [
       "scripts_check_types",
       "scripts_check_types_any_patterns",
       "scripts_check_types_baseline_file",
@@ -1303,24 +1182,90 @@
       "scripts_check_types_violation",
       "scripts_check_types_walk"
     ],
+    "35": [
+      "app_handlers_announcements",
+      "app_handlers_announcements_addannouncement",
+      "app_handlers_announcements_announcementspage",
+      "app_handlers_announcements_editannouncement",
+      "app_handlers_announcements_latestannouncementsdata",
+      "app_handlers_announcements_listannouncements",
+      "app_handlers_announcements_removeannouncement",
+      "app_queries_announcements",
+      "app_queries_announcements_createannouncement",
+      "app_queries_announcements_deleteannouncement",
+      "app_queries_announcements_findallannouncements",
+      "app_queries_announcements_findannouncementbyid",
+      "app_queries_announcements_findlatestannouncements",
+      "app_queries_announcements_updateannouncement",
+      "tests_handlers_announcements_test"
+    ],
     "36": [
-      "app_core_errors",
-      "app_core_errors_autherror",
-      "app_core_errors_badrequesterror",
-      "app_core_errors_conflicterror",
-      "app_core_errors_forbiddenerror",
-      "app_core_errors_httperror",
-      "app_core_errors_internalerror",
-      "app_core_errors_isnaraerror",
-      "app_core_errors_isuniqueconstrainterror",
-      "app_core_errors_isvalidationerror",
-      "app_core_errors_naraerror",
-      "app_core_errors_notfounderror",
-      "app_core_errors_toomanyrequestserror",
-      "app_core_errors_validationerror",
-      "tests_core_errors_test"
+      "app_services_sqlite",
+      "app_services_sqlite_getstmt",
+      "app_services_sqlite_nativedb",
+      "app_services_sqlite_prodenvpath",
+      "app_services_sqlite_sql",
+      "app_services_sqlite_statementcache",
+      "app_services_sqlite_toarray",
+      "migrations_20260820000002_backfill_teacher_class_assignments",
+      "migrations_20260820000002_backfill_teacher_class_assignments_up",
+      "seeds_01_permissions",
+      "seeds_01_permissions_run",
+      "seeds_02_roles",
+      "seeds_02_roles_run",
+      "seeds_08_qr_settings",
+      "seeds_08_qr_settings_run"
     ],
     "37": [
+      "tests_handlers_teacherassignments_test",
+      "tests_handlers_teacherassignments_test_validbody",
+      "tests_handlers_teacherconfirmations_test",
+      "tests_handlers_teacherconfirmations_test_createdconfirmation",
+      "tests_handlers_teacherconfirmations_test_teacher",
+      "tests_handlers_teacherconfirmations_test_validbody",
+      "tests_helpers_mocks",
+      "tests_helpers_mocks_failingvalidator",
+      "tests_helpers_mocks_mockrequest",
+      "tests_helpers_mocks_mockresponse",
+      "tests_helpers_mocks_mockuser",
+      "tests_helpers_mocks_mockvalidator",
+      "tests_helpers_mocks_runmiddleware",
+      "tests_middlewares_requestid_test",
+      "tests_middlewares_securityheaders_test"
+    ],
+    "38": [
+      "app_handlers_academicyears_editacademicyear",
+      "app_handlers_attendance",
+      "app_handlers_attendance_attendancereportdata",
+      "app_handlers_classes_editclass",
+      "app_handlers_parents_editparent",
+      "app_handlers_schedules_editschedule",
+      "app_handlers_schoollocations_editschoollocation",
+      "app_handlers_students_editstudent",
+      "app_handlers_students_removestudent",
+      "app_handlers_teachers_editteacher",
+      "app_handlers_users_edituser",
+      "app_queries_users_haspermission",
+      "app_queries_users_isadmin",
+      "app_validators_index_zodtoerrors"
+    ],
+    "39": [
+      "app_services_loginthrottle",
+      "app_services_loginthrottle_cleanup",
+      "app_services_loginthrottle_clearattempts",
+      "app_services_loginthrottle_config",
+      "app_services_loginthrottle_configure",
+      "app_services_loginthrottle_entry",
+      "app_services_loginthrottle_getattemptcounts",
+      "app_services_loginthrottle_getentry",
+      "app_services_loginthrottle_getremaininglockouttime",
+      "app_services_loginthrottle_islockedout",
+      "app_services_loginthrottle_recordfailedattempt",
+      "app_services_loginthrottle_resetifexpired",
+      "app_services_loginthrottle_store",
+      "tests_services_loginthrottle_test"
+    ],
+    "40": [
       "app_services_migrator",
       "app_services_migrator_appliedmigrations",
       "app_services_migrator_ensuremigrationstable",
@@ -1336,14 +1281,26 @@
       "app_services_migrator_migrationstep",
       "scripts_migrate"
     ],
-    "38": [
+    "41": [
+      "app_core_adapters_types",
+      "app_core_adapters_types_adaptermiddlewarehandler",
+      "app_core_adapters_types_frontendadapter",
+      "app_core_app_appoptions",
+      "app_core_types",
+      "app_core_types_authuser",
+      "app_core_types_nararesponse",
+      "app_core_types_nararesponse_flash",
+      "app_core_types_nararesponse_inertia",
+      "app_core_types_nararesponse_view",
+      "app_core_types_routecallback",
+      "app_types_shared_user"
+    ],
+    "42": [
+      "migrations_20260830000001_align_operator_roles",
+      "migrations_20260830000001_align_operator_roles_revokedpermissions",
+      "migrations_20260830000001_align_operator_roles_rolepermissionupdate",
+      "migrations_20260830000001_align_operator_roles_roleupdates",
       "migrations_20260830000001_align_operator_roles_up",
-      "migrations_20260902000001_scope_parent_accounts",
-      "migrations_20260902000001_scope_parent_accounts_parent_read_permissions",
-      "migrations_20260902000001_scope_parent_accounts_parentuser",
-      "migrations_20260902000001_scope_parent_accounts_studentnis",
-      "migrations_20260902000001_scope_parent_accounts_up",
-      "migrations_20260902000001_scope_parent_accounts_usernamerow",
       "resources_lib_permissions",
       "resources_lib_permissions_can",
       "resources_lib_permissions_currentuserpermissions",
@@ -1352,7 +1309,7 @@
       "resources_lib_permissions_permissionresource",
       "resources_lib_permissions_permissionslug"
     ],
-    "39": [
+    "43": [
       "app_handlers_assets",
       "app_handlers_assets_avatarmiddleware",
       "app_handlers_assets_avatarupload",
@@ -1361,13 +1318,10 @@
       "app_handlers_assets_servepublicasset",
       "app_handlers_assets_uploadasset",
       "app_handlers_assets_validatemagicbytes",
-      "app_queries_assets",
       "app_queries_assets_createasset",
-      "app_queries_assets_findassetsbyuserid",
-      "app_queries_users_updateavatar",
-      "app_types_models_asset"
+      "app_queries_users_updateavatar"
     ],
-    "40": [
+    "44": [
       "app_handlers_dashboard",
       "app_handlers_dashboard_dashboardpage",
       "app_handlers_teacherassignments",
@@ -1375,40 +1329,23 @@
       "app_handlers_teacherassignments_saveteacherassignments",
       "app_handlers_teacherassignments_teacherassignmentspage",
       "app_queries_academicyears_findactiveacademicyear",
-      "app_queries_academicyears_findallacademicyears",
-      "app_queries_stats_getdashboardstats",
       "app_queries_teacherclassassignments_findteacherclassassignmentsbyacademicyear",
-      "app_queries_teachers_findallteachersforassignment",
-      "routes_web",
-      "routes_web_route"
+      "app_queries_teacherclassassignments_syncteacherclassassignments",
+      "app_queries_teachers_findallteachersforassignment"
     ],
-    "41": [
-      "app_middlewares_ratelimit",
-      "app_middlewares_ratelimit_apiratelimit",
-      "app_middlewares_ratelimit_getrequestcount",
-      "app_middlewares_ratelimit_getresettime",
-      "app_middlewares_ratelimit_ratelimit",
-      "app_middlewares_ratelimit_ratelimitentry",
-      "app_middlewares_ratelimit_recordrequest",
-      "app_middlewares_ratelimit_resetratelimit",
-      "app_middlewares_ratelimit_startcleanup",
-      "app_middlewares_ratelimit_store",
-      "app_middlewares_ratelimit_strictratelimit",
-      "tests_middlewares_ratelimit_test"
-    ],
-    "42": [
+    "45": [
       "app_handlers_notifications",
       "app_handlers_notifications_marknotificationsread",
       "app_handlers_notifications_notificationsdata",
-      "app_queries_index",
       "app_queries_notifications",
       "app_queries_notifications_creategradepublishednotifications",
       "app_queries_notifications_findnotificationsbyuser",
       "app_queries_notifications_getunreadnotificationcount",
       "app_queries_notifications_markallnotificationsread",
+      "app_types_shared_notificationview",
       "tests_handlers_notifications_test"
     ],
-    "43": [
+    "46": [
       "scripts_check_filesize",
       "scripts_check_filesize_check_dirs",
       "scripts_check_filesize_check_ext",
@@ -1420,7 +1357,29 @@
       "scripts_check_filesize_walk",
       "scripts_check_filesize_whitelist"
     ],
-    "44": [
+    "47": [
+      "app_core_response_jsonforbidden",
+      "app_middlewares_csrf",
+      "app_middlewares_csrf_buildcookieoptions",
+      "app_middlewares_csrf_csrf",
+      "app_middlewares_csrf_csrftoken",
+      "app_middlewares_csrf_ensuretoken",
+      "app_middlewares_csrf_getcsrftoken",
+      "app_middlewares_csrf_safe_methods",
+      "tests_middlewares_csrf_test"
+    ],
+    "48": [
+      "app_handlers_gradeaudit",
+      "app_handlers_gradeaudit_canviewaudit",
+      "app_handlers_gradeaudit_gradeauditdata",
+      "app_handlers_gradeaudit_gradeauditpage",
+      "app_queries_gradeauditlogs",
+      "app_queries_gradeauditlogs_getgradeauditlogspaginated",
+      "app_types_shared_gradeauditlogrow",
+      "tests_handlers_gradeaudit_test",
+      "tests_handlers_gradeaudit_test_logrow"
+    ],
+    "49": [
       "app_services_seeder",
       "app_services_seeder_listseedfiles",
       "app_services_seeder_loadseed",
@@ -1431,7 +1390,7 @@
       "scripts_seed_result",
       "tests_services_sqlite_test"
     ],
-    "45": [
+    "50": [
       "better_sqlite3",
       "package_dependencies",
       "package_dependencies_better_sqlite3",
@@ -1442,7 +1401,7 @@
       "zag_js_dialog",
       "zag_js_menu"
     ],
-    "46": [
+    "51": [
       "scripts_check_agents",
       "scripts_check_agents_check",
       "scripts_check_agents_checkone",
@@ -1453,7 +1412,7 @@
       "scripts_check_agents_root",
       "scripts_check_agents_violation"
     ],
-    "47": [
+    "52": [
       "scripts_check_links",
       "scripts_check_links_brokenlink",
       "scripts_check_links_checkfile",
@@ -1464,17 +1423,7 @@
       "scripts_check_links_root",
       "scripts_check_links_scan_files"
     ],
-    "48": [
-      "app_middlewares_csrf",
-      "app_middlewares_csrf_buildcookieoptions",
-      "app_middlewares_csrf_csrf",
-      "app_middlewares_csrf_csrftoken",
-      "app_middlewares_csrf_ensuretoken",
-      "app_middlewares_csrf_getcsrftoken",
-      "app_middlewares_csrf_safe_methods",
-      "tests_middlewares_csrf_test"
-    ],
-    "49": [
+    "53": [
       "package",
       "package_author",
       "package_description",
@@ -1484,7 +1433,7 @@
       "package_private",
       "package_version"
     ],
-    "50": [
+    "54": [
       "ref_app",
       "ref_migrations",
       "ref_routes",
@@ -1494,7 +1443,7 @@
       "tsconfig_include",
       "tsconfig_paths_routes"
     ],
-    "51": [
+    "55": [
       "scripts_check_security",
       "scripts_check_security_checkfile",
       "scripts_check_security_main",
@@ -1504,7 +1453,7 @@
       "scripts_check_security_violations",
       "scripts_check_security_walk"
     ],
-    "52": [
+    "56": [
       "scripts_lint_layers",
       "scripts_lint_layers_checkfile",
       "scripts_lint_layers_main",
@@ -1514,7 +1463,7 @@
       "scripts_lint_layers_violations",
       "scripts_lint_layers_walk"
     ],
-    "53": [
+    "57": [
       "seeds_05_demo_operations",
       "seeds_05_demo_operations_classrow",
       "seeds_05_demo_operations_materials",
@@ -1524,7 +1473,7 @@
       "seeds_05_demo_operations_subjectrow",
       "seeds_05_demo_operations_teacherrow"
     ],
-    "54": [
+    "58": [
       "scripts_check_freshness",
       "scripts_check_freshness_codemap",
       "scripts_check_freshness_main",
@@ -1533,7 +1482,15 @@
       "scripts_check_freshness_tracked_ext",
       "scripts_check_freshness_walk"
     ],
-    "55": [
+    "59": [
+      "app_handlers_reports",
+      "app_handlers_reports_classsubjectreport",
+      "app_queries_stats",
+      "app_queries_stats_classsubjectstats",
+      "app_queries_stats_dashboardstats",
+      "app_queries_stats_getclasssubjectstats"
+    ],
+    "60": [
       "resources_app",
       "resources_app_setup",
       "resources_lib_csrf",
@@ -1541,7 +1498,7 @@
       "resources_lib_csrf_getcsrftoken",
       "resources_lib_tests_csrf_test"
     ],
-    "56": [
+    "61": [
       "seeds_07_demo_data",
       "seeds_07_demo_data_materials",
       "seeds_07_demo_data_occurrencesbetween",
@@ -1549,7 +1506,7 @@
       "seeds_07_demo_data_schedulerow",
       "seeds_07_demo_data_status_cycle"
     ],
-    "57": [
+    "62": [
       "vite_config",
       "vite_config_configureserver",
       "vite_config_dirname",
@@ -1557,442 +1514,453 @@
       "vite_config_files",
       "vite_config_input"
     ],
-    "58": [
+    "63": [
       "migrations_20260820000003_rename_user_email_to_username",
       "migrations_20260820000003_rename_user_email_to_username_down",
       "migrations_20260820000003_rename_user_email_to_username_normalizeusername",
       "migrations_20260820000003_rename_user_email_to_username_up",
       "migrations_20260820000003_rename_user_email_to_username_userrow"
     ],
-    "59": [
+    "64": [
       "ref_build",
       "ref_dist",
       "ref_node_modules",
       "tsconfig",
       "tsconfig_exclude"
     ],
-    "60": [
-      "migrations_20260830000001_align_operator_roles",
-      "migrations_20260830000001_align_operator_roles_revokedpermissions",
-      "migrations_20260830000001_align_operator_roles_rolepermissionupdate",
-      "migrations_20260830000001_align_operator_roles_roleupdates"
+    "65": [
+      "app_handlers_home",
+      "app_handlers_home_landingpage",
+      "app_queries_sessions_findsessionbyid",
+      "app_queries_users_finduserbyid"
     ],
-    "61": [
+    "66": [
       "migrations_20230513055909_users",
       "migrations_20230513055909_users_down",
       "migrations_20230513055909_users_up"
     ],
-    "62": [
+    "67": [
       "migrations_20230514062913_sessions",
       "migrations_20230514062913_sessions_down",
       "migrations_20230514062913_sessions_up"
     ],
-    "63": [
+    "68": [
       "migrations_20250110233301_assets",
       "migrations_20250110233301_assets_down",
       "migrations_20250110233301_assets_up"
     ],
-    "64": [
+    "69": [
       "migrations_20260214120000_create_roles",
       "migrations_20260214120000_create_roles_down",
       "migrations_20260214120000_create_roles_up"
     ],
-    "65": [
+    "70": [
       "migrations_20260214120001_create_permissions",
       "migrations_20260214120001_create_permissions_down",
       "migrations_20260214120001_create_permissions_up"
     ],
-    "66": [
+    "71": [
       "migrations_20260214120002_create_role_permissions",
       "migrations_20260214120002_create_role_permissions_down",
       "migrations_20260214120002_create_role_permissions_up"
     ],
-    "67": [
+    "72": [
       "migrations_20260214120003_create_user_roles",
       "migrations_20260214120003_create_user_roles_down",
       "migrations_20260214120003_create_user_roles_up"
     ],
-    "68": [
+    "73": [
       "migrations_20260728000000_update_users_for_sigap",
       "migrations_20260728000000_update_users_for_sigap_down",
       "migrations_20260728000000_update_users_for_sigap_up"
     ],
-    "69": [
+    "74": [
       "migrations_20260728000001_create_academic_years",
       "migrations_20260728000001_create_academic_years_down",
       "migrations_20260728000001_create_academic_years_up"
     ],
-    "70": [
+    "75": [
       "migrations_20260728000002_create_classes",
       "migrations_20260728000002_create_classes_down",
       "migrations_20260728000002_create_classes_up"
     ],
-    "71": [
+    "76": [
       "migrations_20260728000003_create_subjects",
       "migrations_20260728000003_create_subjects_down",
       "migrations_20260728000003_create_subjects_up"
     ],
-    "72": [
+    "77": [
       "migrations_20260728000004_create_students",
       "migrations_20260728000004_create_students_down",
       "migrations_20260728000004_create_students_up"
     ],
-    "73": [
+    "78": [
       "migrations_20260728000005_create_teachers",
       "migrations_20260728000005_create_teachers_down",
       "migrations_20260728000005_create_teachers_up"
     ],
-    "74": [
+    "79": [
       "migrations_20260728000006_create_parents",
       "migrations_20260728000006_create_parents_down",
       "migrations_20260728000006_create_parents_up"
     ],
-    "75": [
+    "80": [
       "migrations_20260728000007_create_teacher_subjects",
       "migrations_20260728000007_create_teacher_subjects_down",
       "migrations_20260728000007_create_teacher_subjects_up"
     ],
-    "76": [
+    "81": [
       "migrations_20260728000008_create_class_subjects",
       "migrations_20260728000008_create_class_subjects_down",
       "migrations_20260728000008_create_class_subjects_up"
     ],
-    "77": [
+    "82": [
       "migrations_20260728000009_create_schedules",
       "migrations_20260728000009_create_schedules_down",
       "migrations_20260728000009_create_schedules_up"
     ],
-    "78": [
+    "83": [
       "migrations_20260728000010_create_school_locations",
       "migrations_20260728000010_create_school_locations_down",
       "migrations_20260728000010_create_school_locations_up"
     ],
-    "79": [
+    "84": [
       "migrations_20260728000011_create_teacher_confirmations",
       "migrations_20260728000011_create_teacher_confirmations_down",
       "migrations_20260728000011_create_teacher_confirmations_up"
     ],
-    "80": [
+    "85": [
       "migrations_20260728000012_create_journals",
       "migrations_20260728000012_create_journals_down",
       "migrations_20260728000012_create_journals_up"
     ],
-    "81": [
+    "86": [
       "migrations_20260728000013_create_student_attendance",
       "migrations_20260728000013_create_student_attendance_down",
       "migrations_20260728000013_create_student_attendance_up"
     ],
-    "82": [
+    "87": [
       "migrations_20260728000014_create_grades",
       "migrations_20260728000014_create_grades_down",
       "migrations_20260728000014_create_grades_up"
     ],
-    "83": [
+    "88": [
       "migrations_20260816000001_add_kkm_to_subjects",
       "migrations_20260816000001_add_kkm_to_subjects_down",
       "migrations_20260816000001_add_kkm_to_subjects_up"
     ],
-    "84": [
+    "89": [
       "migrations_20260816000002_create_grade_components",
       "migrations_20260816000002_create_grade_components_down",
       "migrations_20260816000002_create_grade_components_up"
     ],
-    "85": [
+    "90": [
       "migrations_20260816000003_add_grades_published_to_academic_years",
       "migrations_20260816000003_add_grades_published_to_academic_years_down",
       "migrations_20260816000003_add_grades_published_to_academic_years_up"
     ],
-    "86": [
+    "91": [
       "migrations_20260816000004_create_grade_audit_logs",
       "migrations_20260816000004_create_grade_audit_logs_down",
       "migrations_20260816000004_create_grade_audit_logs_up"
     ],
-    "87": [
+    "92": [
       "migrations_20260816000005_create_announcements",
       "migrations_20260816000005_create_announcements_down",
       "migrations_20260816000005_create_announcements_up"
     ],
-    "88": [
+    "93": [
       "migrations_20260816000006_create_notifications",
       "migrations_20260816000006_create_notifications_down",
       "migrations_20260816000006_create_notifications_up"
     ],
-    "89": [
+    "94": [
       "migrations_20260820000001_create_teacher_class_assignments",
       "migrations_20260820000001_create_teacher_class_assignments_down",
       "migrations_20260820000001_create_teacher_class_assignments_up"
     ],
-    "90": [
+    "95": [
       "migrations_20260820000004_school_profile_for_qr_flow",
       "migrations_20260820000004_school_profile_for_qr_flow_down",
       "migrations_20260820000004_school_profile_for_qr_flow_up"
     ],
-    "91": [
+    "96": [
       "migrations_20260820000005_create_app_settings",
       "migrations_20260820000005_create_app_settings_down",
       "migrations_20260820000005_create_app_settings_up"
     ],
-    "92": [
+    "97": [
       "migrations_20260820000006_teacher_confirmations_for_qr",
       "migrations_20260820000006_teacher_confirmations_for_qr_down",
       "migrations_20260820000006_teacher_confirmations_for_qr_up"
     ],
-    "93": [
+    "98": [
       "migrations_20260830000002_one_daily_teacher_confirmation",
       "migrations_20260830000002_one_daily_teacher_confirmation_down",
       "migrations_20260830000002_one_daily_teacher_confirmation_up"
     ],
-    "94": [
+    "99": [
       "ref_app_config",
       "ref_app_config_index_ts",
       "tsconfig_paths_config"
     ],
-    "95": [
+    "100": [
       "ref_app_core",
       "ref_app_core_index_ts",
       "tsconfig_paths_core"
     ],
-    "96": [
+    "101": [
       "ref_app_queries",
       "ref_app_queries_index_ts",
       "tsconfig_paths_queries"
     ],
-    "97": [
+    "102": [
       "ref_app_types",
       "ref_app_types_models_ts",
       "tsconfig_paths_types"
     ],
-    "98": [
+    "103": [
       "ref_resources_lib",
       "ref_resources_lib_index_ts",
       "tsconfig_paths_lib"
     ],
-    "99": [
+    "104": [
       "scripts_dev",
       "scripts_dev_start",
       "scripts_dev_vite"
     ],
-    "100": [
+    "105": [
+      "seeds_06_grade_components",
+      "seeds_06_grade_components_default_components",
+      "seeds_06_grade_components_run"
+    ],
+    "106": [
       "tests_conventions_test",
       "tests_conventions_test_readfile",
       "tests_conventions_test_root"
     ],
-    "101": [
+    "107": [
       "clsx",
       "package_dependencies_clsx"
     ],
-    "102": [
+    "108": [
       "compression",
       "package_dependencies_compression"
     ],
-    "103": [
+    "109": [
       "cookie_parser",
       "package_dependencies_cookie_parser"
     ],
-    "104": [
+    "110": [
       "cors",
       "package_dependencies_cors"
     ],
-    "105": [
+    "111": [
       "dotenv",
       "package_dependencies_dotenv"
     ],
-    "106": [
+    "112": [
       "inertiajs_svelte",
       "package_dependencies_inertiajs_svelte"
     ],
-    "107": [
+    "113": [
       "lucide_svelte",
       "package_dependencies_lucide_svelte"
     ],
-    "108": [
+    "114": [
       "mode_watcher",
       "package_dependencies_mode_watcher"
     ],
-    "109": [
+    "115": [
       "multer",
       "package_dependencies_multer"
     ],
-    "110": [
+    "116": [
       "package_dependencies_axios",
       "package_json_axios"
     ],
-    "111": [
+    "117": [
       "package_dependencies_pino",
       "pino"
     ],
-    "112": [
+    "118": [
       "package_dependencies_pino_pretty",
       "pino_pretty"
     ],
-    "113": [
+    "119": [
       "package_dependencies_pino_roll",
       "pino_roll"
     ],
-    "114": [
+    "120": [
       "package_dependencies_qrcode",
       "qrcode"
     ],
-    "115": [
+    "121": [
       "package_dependencies_sharp",
       "sharp"
     ],
-    "116": [
+    "122": [
       "package_dependencies_svelte_sonner",
       "svelte_sonner"
     ],
-    "117": [
+    "123": [
       "package_dependencies_tailwind_merge",
       "tailwind_merge"
     ],
-    "118": [
+    "124": [
       "package_dependencies_tailwind_variants",
       "tailwind_variants"
     ],
-    "119": [
+    "125": [
       "package_dependencies_tailwindcss",
       "tailwindcss"
     ],
-    "120": [
+    "126": [
       "package_dependencies_types_qrcode",
       "types_qrcode"
     ],
-    "121": [
+    "127": [
       "package_dependencies_ultimate_express",
       "ultimate_express"
     ],
-    "122": [
+    "128": [
       "package_dependencies_zag_js_pagination",
       "zag_js_pagination"
     ],
-    "123": [
+    "129": [
       "package_dependencies_zag_js_svelte",
       "zag_js_svelte"
     ],
-    "124": [
+    "130": [
       "package_dependencies_zag_js_switch",
       "zag_js_switch"
     ],
-    "125": [
+    "131": [
       "package_dependencies_zag_js_tabs",
       "zag_js_tabs"
     ],
-    "126": [
+    "132": [
       "package_dependencies_zod",
       "zod"
     ],
-    "127": [
+    "133": [
       "package_devdependencies_sveltejs_vite_plugin_svelte",
       "sveltejs_vite_plugin_svelte"
     ],
-    "128": [
+    "134": [
       "package_devdependencies_tsc_alias",
       "tsc_alias"
     ],
-    "129": [
+    "135": [
       "package_devdependencies_types_better_sqlite3",
       "types_better_sqlite3"
     ],
-    "130": [
+    "136": [
       "package_devdependencies_types_multer",
       "types_multer"
     ],
-    "131": [
+    "137": [
       "package_devdependencies_types_node",
       "types_node"
     ],
-    "132": [
+    "138": [
       "package_devdependencies_vitest_coverage_v8",
       "vitest_coverage_v8"
     ],
-    "133": [
+    "139": [
       "resources_config_theme",
       "resources_config_theme_theme"
     ],
-    "134": [
+    "140": [
       "scripts_pre_commit",
       "scripts_pre_commit__entry"
     ],
-    "135": [
+    "141": [
+      "axios_axios"
+    ],
+    "142": [
       "inertiajs_svelte_svelte"
     ],
-    "136": [
+    "143": [
       "lucide_svelte_svelte"
     ],
-    "137": [
+    "144": [
       "svelte_config"
     ],
-    "138": [
+    "145": [
+      "svelte_svelte"
+    ],
+    "146": [
       "zag_js_svelte_svelte"
     ]
   },
   "cohesion": {
-    "0": 0.07260726072607261,
-    "1": 0.06569517439082656,
-    "2": 0.055534987041836355,
-    "3": 0.03873239436619718,
-    "4": 0.08619777895293496,
-    "5": 0.07922077922077922,
-    "6": 0.06938020351526364,
-    "7": 0.10144927536231885,
-    "8": 0.07536231884057971,
-    "9": 0.13333333333333333,
-    "10": 0.09672830725462304,
-    "11": 0.11612903225806452,
-    "12": 0.06666666666666667,
-    "13": 0.15608465608465608,
-    "14": 0.17195767195767195,
-    "15": 0.16615384615384615,
-    "16": 0.2123076923076923,
-    "17": 0.2,
-    "18": 0.15666666666666668,
+    "0": 0.07191919191919192,
+    "1": 0.055534987041836355,
+    "2": 0.03903420523138833,
+    "3": 0.06935908691834942,
+    "4": 0.09376890502117362,
+    "5": 0.08862745098039215,
+    "6": 0.1329268292682927,
+    "7": 0.10756302521008404,
+    "8": 0.17045454545454544,
+    "9": 0.08266129032258064,
+    "10": 0.1425287356321839,
+    "11": 0.06666666666666667,
+    "12": 0.17195767195767195,
+    "13": 0.13675213675213677,
+    "14": 0.12,
+    "15": 0.2123076923076923,
+    "16": 0.18333333333333332,
+    "17": 0.15333333333333332,
+    "18": 0.17333333333333334,
     "19": 0.08,
-    "20": 0.22529644268774704,
-    "21": 0.1857707509881423,
-    "22": 0.20948616600790515,
-    "23": 0.08695652173913043,
-    "24": 0.20346320346320346,
-    "25": 0.1,
-    "26": 0.1286549707602339,
-    "27": 0.26900584795321636,
-    "28": 0.10526315789473684,
-    "29": 0.18128654970760233,
-    "30": 0.1111111111111111,
-    "31": 0.13071895424836602,
-    "32": 0.16339869281045752,
-    "33": 0.2833333333333333,
-    "34": 0.125,
-    "35": 0.175,
-    "36": 0.3142857142857143,
-    "37": 0.25274725274725274,
-    "38": 0.16483516483516483,
-    "39": 0.20512820512820512,
-    "40": 0.2948717948717949,
-    "41": 0.3181818181818182,
-    "42": 0.4666666666666667,
-    "43": 0.24444444444444444,
-    "44": 0.3055555555555556,
-    "45": 0.2222222222222222,
-    "46": 0.3055555555555556,
-    "47": 0.25,
-    "48": 0.5,
-    "49": 0.25,
-    "50": 0.25,
-    "51": 0.32142857142857145,
-    "52": 0.32142857142857145,
+    "20": 0.08695652173913043,
+    "21": 0.21645021645021645,
+    "22": 0.22077922077922077,
+    "23": 0.21428571428571427,
+    "24": 0.21637426900584794,
+    "25": 0.14619883040935672,
+    "26": 0.10526315789473684,
+    "27": 0.18128654970760233,
+    "28": 0.24183006535947713,
+    "29": 0.16339869281045752,
+    "30": 0.19852941176470587,
+    "31": 0.14705882352941177,
+    "32": 0.2833333333333333,
+    "33": 0.125,
+    "34": 0.175,
+    "35": 0.3523809523809524,
+    "36": 0.13333333333333333,
+    "37": 0.26666666666666666,
+    "38": 0.31868131868131866,
+    "39": 0.16483516483516483,
+    "40": 0.25274725274725274,
+    "41": 0.21212121212121213,
+    "42": 0.19696969696969696,
+    "43": 0.26666666666666666,
+    "44": 0.35555555555555557,
+    "45": 0.4666666666666667,
+    "46": 0.24444444444444444,
+    "47": 0.4444444444444444,
+    "48": 0.4722222222222222,
+    "49": 0.3055555555555556,
+    "50": 0.2222222222222222,
+    "51": 0.3055555555555556,
+    "52": 0.25,
     "53": 0.25,
-    "54": 0.3333333333333333,
-    "55": 0.5333333333333333,
-    "56": 0.4,
-    "57": 0.3333333333333333,
-    "58": 0.5,
-    "59": 0.4,
-    "60": 0.5,
-    "61": 0.6666666666666666,
-    "62": 0.6666666666666666,
-    "63": 0.6666666666666666,
-    "64": 0.6666666666666666,
-    "65": 0.6666666666666666,
+    "54": 0.25,
+    "55": 0.32142857142857145,
+    "56": 0.32142857142857145,
+    "57": 0.25,
+    "58": 0.3333333333333333,
+    "59": 0.4666666666666667,
+    "60": 0.5333333333333333,
+    "61": 0.4,
+    "62": 0.3333333333333333,
+    "63": 0.5,
+    "64": 0.4,
+    "65": 0.8333333333333334,
     "66": 0.6666666666666666,
     "67": 0.6666666666666666,
     "68": 0.6666666666666666,
@@ -2028,12 +1996,12 @@
     "98": 0.6666666666666666,
     "99": 0.6666666666666666,
     "100": 0.6666666666666666,
-    "101": 1.0,
-    "102": 1.0,
-    "103": 1.0,
-    "104": 1.0,
-    "105": 1.0,
-    "106": 1.0,
+    "101": 0.6666666666666666,
+    "102": 0.6666666666666666,
+    "103": 0.6666666666666666,
+    "104": 0.6666666666666666,
+    "105": 0.6666666666666666,
+    "106": 0.6666666666666666,
     "107": 1.0,
     "108": 1.0,
     "109": 1.0,
@@ -2065,38 +2033,31 @@
     "135": 1.0,
     "136": 1.0,
     "137": 1.0,
-    "138": 1.0
+    "138": 1.0,
+    "139": 1.0,
+    "140": 1.0,
+    "141": 1.0,
+    "142": 1.0,
+    "143": 1.0,
+    "144": 1.0,
+    "145": 1.0,
+    "146": 1.0
   },
   "gods": [
     {
       "id": "app_queries_users_isadmin",
       "label": "isAdmin()",
-      "degree": 104
+      "degree": 112
     },
     {
       "id": "app_queries_users_haspermission",
       "label": "hasPermission()",
-      "degree": 88
+      "degree": 89
     },
     {
       "id": "app_validators_index_zodtoerrors",
       "label": "zodToErrors()",
       "degree": 54
-    },
-    {
-      "id": "app_queries_users_hasrole",
-      "label": "hasRole()",
-      "degree": 33
-    },
-    {
-      "id": "tests_helpers_mocks_mockrequest",
-      "label": "mockRequest()",
-      "degree": 29
-    },
-    {
-      "id": "tests_helpers_mocks_mockresponse",
-      "label": "mockResponse()",
-      "degree": 27
     },
     {
       "id": "package_scripts",
@@ -2109,14 +2070,29 @@
       "degree": 23
     },
     {
-      "id": "tests_helpers_mocks_mockuser",
-      "label": "mockUser()",
-      "degree": 23
+      "id": "app_core_types_nararesponse",
+      "label": "NaraResponse",
+      "degree": 21
     },
     {
-      "id": "app_queries_students_findstudentbyid",
-      "label": "findStudentById",
-      "degree": 23
+      "id": "tests_helpers_mocks_mockresponse",
+      "label": "mockResponse()",
+      "degree": 21
+    },
+    {
+      "id": "app_queries_schedules_findschedulebyid",
+      "label": "findScheduleById",
+      "degree": 21
+    },
+    {
+      "id": "app_core_app_createapp",
+      "label": "createApp()",
+      "degree": 20
+    },
+    {
+      "id": "app_core_types_nararequest",
+      "label": "NaraRequest",
+      "degree": 20
     }
   ],
   "surprises": [
@@ -2176,8 +2152,41 @@
       "why": "inferred connection - not explicitly stated in source; connects across different repos/directories"
     }
   ],
-  "tokens": {
-    "input": 0,
-    "output": 0
-  }
+  "questions": [
+    {
+      "type": "bridge_node",
+      "question": "Why does `isAdmin()` connect `isAdmin` to `svelte.ts`, `handlers/students.ts`, `handlers/grades.ts`, `handlers/teacherConfirmations.ts`, `handlers/journals.ts`, `queries/users.ts`, `handlers/schoolLocations.ts`, `queries/roles.ts`, `handlers/teachers.ts`, `handlers/academicYears.ts`, `handlers/schedules.ts`, `handlers/classes.ts`, `handlers/users.ts`, `handlers/subjects.ts`, `handlers/announcements.ts`, `mocks.ts`, `teacherAssignments.ts`, `notifications.test.ts`, `gradeAudit.test.ts`, `stats.ts`?",
+      "why": "High betweenness centrality (0.061) - this node is a cross-community bridge."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `hasPermission()` connect `isAdmin` to `handlers/subjects.ts`, `handlers/students.ts`, `handlers/grades.ts`, `handlers/teacherConfirmations.ts`, `handlers/journals.ts`, `queries/users.ts`, `handlers/schoolLocations.ts`, `teacherAssignments.ts`, `queries/roles.ts`, `gradeAudit.test.ts`, `handlers/headmaster.ts`, `handlers/teachers.ts`, `handlers/academicYears.ts`, `handlers/schedules.ts`, `handlers/classes.ts`, `stats.ts`, `handlers/users.ts`?",
+      "why": "High betweenness centrality (0.015) - this node is a cross-community bridge."
+    },
+    {
+      "type": "isolated_nodes",
+      "question": "What connects `projectRoot`, `prodEnvPath`, `EnvSchema` to the rest of the system?",
+      "why": "405 weakly-connected nodes found - possible documentation gaps or missing edges."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `svelte.ts` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.07191919191919192 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `validators/index.ts` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.055534987041836355 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `forms.ts` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.03903420523138833 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `handlers/students.ts` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.06935908691834942 - nodes in this community are weakly interconnected."
+    }
+  ]
 }

@@ -98,7 +98,7 @@ export interface Class {
   name: string;
   grade: string;
   academic_year_id: string;
-  academic_year_name?: string;
+  student_count?: number;
   created_at?: number;
   updated_at?: number;
 }
