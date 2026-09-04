@@ -15,7 +15,6 @@ vi.mock('@services/Geolocation', () => ({
   haversineDistance: vi.fn(),
   validateCoordinates: vi.fn(() => true),
 }));
-vi.mock('@services/CameraUpload', () => ({ saveConfirmationPhoto: vi.fn() }));
 vi.mock('@services/QrCode', () => ({
   verifyQrToken: vi.fn(() => ({ valid: true, expired: false, date: '2026-08-30' })),
 }));
@@ -30,6 +29,8 @@ vi.mock('@services/Logger', () => ({
 
 import { submitTeacherConfirmation } from '../../app/handlers/teacherConfirmations';
 import { createTeacherConfirmation, findTodayConfirmationByTeacher } from '@queries/teacherConfirmations';
+import { findActiveSchoolLocation } from '@queries/schoolLocations';
+import { haversineDistance } from '@services/Geolocation';
 import { verifyQrToken } from '@services/QrCode';
 
 const teacher = mockUser({ id: 'teacher-1', roles: ['teacher'] });
@@ -101,5 +102,42 @@ describe('teacher QR confirmation workflow', () => {
     await submitTeacherConfirmation(mockRequest({ body: validBody, user: teacher }), expiredResponse);
     expect(expiredResponse._status).toBe(403);
     expect(expiredResponse._body).toMatchObject({ code: 'EXPIRED_QR_TOKEN' });
+  });
+  it('requires location when the school geofence is configured', async () => {
+    vi.mocked(findActiveSchoolLocation).mockReturnValue({ latitude: -6.2, longitude: 106.8, radius_meters: 100 } as never);
+    const res = mockResponse();
+
+    await submitTeacherConfirmation(mockRequest({ body: validBody, user: teacher }), res);
+
+    expect(res._status).toBe(403);
+    expect(res._body).toMatchObject({ code: 'LOCATION_REQUIRED' });
+    expect(createTeacherConfirmation).not.toHaveBeenCalled();
+  });
+
+  it('rejects confirmations outside the school radius', async () => {
+    vi.mocked(findActiveSchoolLocation).mockReturnValue({ latitude: -6.2, longitude: 106.8, radius_meters: 100 } as never);
+    vi.mocked(haversineDistance).mockReturnValue(500);
+    const res = mockResponse();
+
+    await submitTeacherConfirmation(mockRequest({ body: { ...validBody, latitude: -6.3, longitude: 106.9 }, user: teacher }), res);
+
+    expect(res._status).toBe(403);
+    expect(res._body).toMatchObject({ code: 'OUTSIDE_SCHOOL' });
+    expect(createTeacherConfirmation).not.toHaveBeenCalled();
+  });
+
+  it('accepts confirmations inside the school radius without any photo', async () => {
+    vi.mocked(findActiveSchoolLocation).mockReturnValue({ latitude: -6.2, longitude: 106.8, radius_meters: 100 } as never);
+    vi.mocked(haversineDistance).mockReturnValue(15);
+    const res = mockResponse();
+
+    await submitTeacherConfirmation(mockRequest({ body: { ...validBody, latitude: -6.2001, longitude: 106.8001 }, user: teacher }), res);
+
+    expect(res._status).toBe(201);
+    expect(createTeacherConfirmation).toHaveBeenCalledWith(expect.objectContaining({
+      photo_url: null,
+      distance_meters: 15,
+      is_inside_school: 1,
+    }));
   });
 });

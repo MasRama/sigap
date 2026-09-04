@@ -5,7 +5,6 @@ import { findTeacherConfirmationById, findAllTeacherConfirmations, findAllTeache
 import { findScheduleById } from '@queries/schedules';
 import { findActiveSchoolLocation } from '@queries/schoolLocations';
 import { haversineDistance, validateCoordinates } from '@services/Geolocation';
-import { saveConfirmationPhoto } from '@services/CameraUpload';
 import { verifyQrToken } from '@services/QrCode';
 import { isAdmin, hasPermission } from '@queries/users';
 import { isTeacherUser } from '@queries/teacherClassAssignments';
@@ -37,6 +36,8 @@ export const confirmPage = (req: NaraRequest, res: NaraResponse) => {
 
   const qrToken = typeof req.query.qr_token === 'string' ? req.query.qr_token : null;
   const qrStatus = qrToken ? verifyQrToken(qrToken) : null;
+  const school = findActiveSchoolLocation();
+  const geofenceRequired = !!school && school.latitude !== null && school.longitude !== null && school.radius_meters !== null;
   return res.inertia('teacher/confirm', {
     scheduleId: scheduleId || null,
     schedule,
@@ -44,6 +45,7 @@ export const confirmPage = (req: NaraRequest, res: NaraResponse) => {
     qrTokenValid: !!qrStatus?.valid && !qrStatus.expired,
     qrTokenExpired: !!qrStatus?.expired,
     alreadyConfirmed: !!findTodayConfirmationByTeacher(req.user.id),
+    geofenceRequired,
   });
 };
 
@@ -71,7 +73,7 @@ export const teacherConfirmationData = (req: NaraRequest, res: NaraResponse) => 
   return jsonSuccess(res, 'OK', item);
 };
 
-export const submitTeacherConfirmation = async (req: NaraRequest, res: NaraResponse) => {
+export const submitTeacherConfirmation = (req: NaraRequest, res: NaraResponse) => {
   if (!req.user) return jsonError(res, 'Unauthorized', 401);
   if (!isTeacherActor(req.user.id) || !hasPermission(req.user.id, 'confirmations.create')) {
     return jsonError(res, 'Forbidden', 403);
@@ -99,25 +101,27 @@ export const submitTeacherConfirmation = async (req: NaraRequest, res: NaraRespo
   }
 
   const location = findActiveSchoolLocation();
-  let isInside = false;
-  let distanceMeters: number | null = null;
-  let latitude: number | null = parsed.data.latitude ?? null;
-  let longitude: number | null = parsed.data.longitude ?? null;
+  const geofence = location && location.latitude !== null && location.longitude !== null && location.radius_meters !== null
+    ? { latitude: location.latitude, longitude: location.longitude, radius: location.radius_meters }
+    : null;
 
-  if (location && latitude !== null && longitude !== null && validateCoordinates(latitude, longitude)
-      && location.latitude !== null && location.longitude !== null && location.radius_meters !== null) {
-    distanceMeters = Math.round(haversineDistance({ latitude, longitude }, { latitude: location.latitude, longitude: location.longitude }));
-    isInside = distanceMeters <= location.radius_meters;
+  const requestLatitude: number | null = parsed.data.latitude ?? null;
+  const requestLongitude: number | null = parsed.data.longitude ?? null;
+  const coords = requestLatitude !== null && requestLongitude !== null && validateCoordinates(requestLatitude, requestLongitude)
+    ? { latitude: requestLatitude, longitude: requestLongitude }
+    : null;
+
+  if (geofence && !coords) {
+    return jsonError(res, 'Bagikan lokasi Anda untuk mencatat konfirmasi', 403, 'LOCATION_REQUIRED');
   }
 
-  let photoUrl: string | null = parsed.data.photo_url ?? null;
-  if (photoUrl && photoUrl.startsWith('data:image')) {
-    try {
-      const upload = await saveConfirmationPhoto(photoUrl, req.user.id);
-      photoUrl = upload.url;
-    } catch (error: unknown) {
-      Logger.error('Failed to save confirmation photo', error as Error);
-      return jsonServerError(res, 'Failed to save photo');
+  let distanceMeters: number | null = null;
+  let isInside = false;
+  if (geofence && coords) {
+    distanceMeters = Math.round(haversineDistance(coords, { latitude: geofence.latitude, longitude: geofence.longitude }));
+    isInside = distanceMeters <= geofence.radius;
+    if (!isInside) {
+      return jsonError(res, `Anda berada di luar area sekolah (${distanceMeters} m dari sekolah)`, 403, 'OUTSIDE_SCHOOL');
     }
   }
 
@@ -127,9 +131,9 @@ export const submitTeacherConfirmation = async (req: NaraRequest, res: NaraRespo
   const data: Omit<TeacherConfirmation, 'id' | 'created_at'> = {
     schedule_id: scheduleId,
     teacher_user_id: req.user.id,
-    photo_url: photoUrl,
-    latitude,
-    longitude,
+    photo_url: null,
+    latitude: coords?.latitude ?? null,
+    longitude: coords?.longitude ?? null,
     distance_meters: distanceMeters,
     is_inside_school: isInside ? 1 : 0,
     confirmation_date: startOfDay.getTime(),

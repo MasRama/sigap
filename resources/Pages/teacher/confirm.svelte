@@ -4,23 +4,23 @@
   import { api } from '$lib/api';
   import { extractQrTokenFromScan } from '$lib/qr';
   import Sidebar from '../../Components/Sidebar.svelte';
-  import CameraCapture from '../../Components/CameraCapture.svelte';
-  import GeoButton from '../../Components/GeoButton.svelte';
   import Button from '../../Components/Button.svelte';
   import QrScanner from '../../Components/QrScanner.svelte';
-
+  import { fly } from 'svelte/transition';
   let {
     scheduleId: initialScheduleId = null,
     qrToken: initialQrToken = null,
     qrTokenValid = false,
     qrTokenExpired = false,
     alreadyConfirmed = false,
+    geofenceRequired = false,
   }: {
     scheduleId?: string | null;
     qrToken?: string | null;
     qrTokenValid?: boolean;
     qrTokenExpired?: boolean;
     alreadyConfirmed?: boolean;
+    geofenceRequired?: boolean;
   } = $props();
 
   let scheduleId = $state(initialScheduleId ?? '');
@@ -28,9 +28,9 @@
     scheduleId = initialScheduleId ?? '';
   });
 
-  let photo = $state<string | null>(null);
   let coords = $state<{ latitude: number; longitude: number } | null>(null);
   let geoError = $state<string | null>(null);
+  let geoRequested = $state(false);
   let isLoading = $state(false);
   let scanError = $state<string | null>(null);
 
@@ -44,17 +44,38 @@
     router.visit(`/teacher/confirm?qr_token=${encodeURIComponent(token)}`);
   }
 
+  function requestLocation(): void {
+    if (!navigator.geolocation) {
+      geoError = 'Perangkat tidak mendukung geolokasi.';
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        coords = { latitude: position.coords.latitude, longitude: position.coords.longitude };
+        geoError = null;
+      },
+      () => {
+        geoError = 'Lokasi tidak didapatkan. Pastikan GPS aktif dan izin lokasi diizinkan, lalu perbarui lokasi.';
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 },
+    );
+  }
+
+  $effect(() => {
+    if (qrTokenValid && !alreadyConfirmed && !coords && !geoRequested) {
+      geoRequested = true;
+      requestLocation();
+    }
+  });
+
   async function submit(): Promise<void> {
     if (!initialQrToken || !qrTokenValid) { geoError = 'Silakan scan QR absen sekolah yang masih berlaku'; return; }
-    if (!photo) { geoError = 'Silakan ambil foto terlebih dahulu'; return; }
-    if (!coords) { geoError = 'Silakan bagikan lokasi Anda'; return; }
+    if (geofenceRequired && !coords) { geoError = 'Silakan bagikan lokasi Anda'; return; }
     isLoading = true;
     const payload = {
       qr_token: initialQrToken,
       ...(scheduleId ? { schedule_id: scheduleId } : {}),
-      photo_url: photo,
-      latitude: coords.latitude,
-      longitude: coords.longitude,
+      ...(coords ? { latitude: coords.latitude, longitude: coords.longitude } : {}),
     };
     const result = await api(() => axios.post('/teacher/confirmations', payload));
     isLoading = false;
@@ -68,7 +89,7 @@
   <div in:fly={{ y: 20, duration: 700 }}>
     <p class="font-mono-accent text-[10px] uppercase tracking-[0.25em] text-muted-foreground mb-4">Verifikasi Kehadiran</p>
     <h1 class="font-heading font-semibold tracking-[-0.03em] leading-[1] text-[clamp(2rem,5vw,3.5rem)] text-foreground mb-2">Konfirmasi Kehadiran</h1>
-    <p class="text-sm text-muted-foreground mb-8">Scan QR sekolah sekali setiap hari, lalu ambil foto dan bagikan lokasi Anda.</p>
+    <p class="text-sm text-muted-foreground mb-8">Scan QR sekolah sekali setiap hari untuk mencatat kehadiran.</p>
   </div>
 
   {#if alreadyConfirmed}
@@ -104,70 +125,46 @@
   {:else}
     <div class="mb-6 rounded-lg border border-primary/30 bg-primary/5 px-5 py-4" in:fly={{ y: 20, duration: 700, delay: 100 }}>
       <p class="font-heading font-medium text-foreground">QR absen valid</p>
-      <p class="text-sm text-muted-foreground mt-1">Selesaikan foto dan lokasi dari area sekolah untuk mencatat kehadiran hari ini.</p>
+      <p class="text-sm text-muted-foreground mt-1">Satu langkah lagi: pastikan lokasi aktif, lalu kirim konfirmasi.</p>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6" in:fly={{ y: 20, duration: 700, delay: 150 }}>
-      <div class="bg-card border border-border rounded-lg overflow-hidden">
-        <div class="px-5 py-3 bg-secondary/60 border-b border-border">
-          <span class="font-mono-accent text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Foto Konfirmasi</span>
-        </div>
-        <div class="p-5">
-          <CameraCapture onCapture={(data) => photo = data} />
-        </div>
-      </div>
-
-      <div class="flex flex-col gap-6">
-        <div class="bg-card border border-border rounded-lg overflow-hidden">
-          <div class="px-5 py-3 bg-secondary/60 border-b border-border flex items-center justify-between">
-            <span class="font-mono-accent text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Geolokasi</span>
-            {#if coords}
-              <span class="flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-primary"></span>
-                <span class="font-mono-accent text-[10px] uppercase tracking-[0.15em] text-primary">Aktif</span>
-              </span>
-            {/if}
-          </div>
-          <div class="p-5">
-            {#if coords}
-              <dl class="flex flex-col gap-2 font-mono-accent text-xs">
-                <div class="flex justify-between border-b border-border/60 pb-2">
-                  <dt class="text-muted-foreground">Latitude</dt>
-                  <dd class="text-foreground">{coords.latitude.toFixed(6)}°</dd>
-                </div>
-                <div class="flex justify-between">
-                  <dt class="text-muted-foreground">Longitude</dt>
-                  <dd class="text-foreground">{coords.longitude.toFixed(6)}°</dd>
-                </div>
-              </dl>
-            {:else}
-              <p class="text-sm text-muted-foreground">Lokasi belum didapatkan.</p>
-            {/if}
-            <GeoButton class="mt-4" onLocation={(c) => { coords = c; geoError = null; }} onError={(m) => geoError = m} />
-          </div>
-        </div>
-
-        {#if photo}
-          <div class="bg-card border border-border rounded-lg overflow-hidden">
-            <div class="px-5 py-3 bg-secondary/60 border-b border-border">
-              <span class="font-mono-accent text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Pratinjau Foto</span>
-            </div>
-            <div class="p-5">
-              <img src={photo} alt="Foto konfirmasi" class="w-full max-w-xs rounded-md" />
-            </div>
-          </div>
+    <div class="bg-card border border-border rounded-lg overflow-hidden max-w-2xl" in:fly={{ y: 20, duration: 700, delay: 150 }}>
+      <div class="px-5 py-3 bg-secondary/60 border-b border-border flex items-center justify-between">
+        <span class="font-mono-accent text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Lokasi Anda</span>
+        {#if coords}
+          <span class="flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-primary"></span>
+            <span class="font-mono-accent text-[10px] uppercase tracking-[0.15em] text-primary">Aktif</span>
+          </span>
         {/if}
-
+      </div>
+      <div class="p-5">
+        {#if coords}
+          <dl class="flex flex-col gap-2 font-mono-accent text-xs">
+            <div class="flex justify-between border-b border-border/60 pb-2">
+              <dt class="text-muted-foreground">Latitude</dt>
+              <dd class="text-foreground">{coords.latitude.toFixed(6)}°</dd>
+            </div>
+            <div class="flex justify-between">
+              <dt class="text-muted-foreground">Longitude</dt>
+              <dd class="text-foreground">{coords.longitude.toFixed(6)}°</dd>
+            </div>
+          </dl>
+        {:else}
+          <p class="text-sm text-muted-foreground">Menunggu izin lokasi...</p>
+        {/if}
+        <div class="flex flex-wrap items-center gap-2 mt-4">
+          <Button onclick={submit} disabled={isLoading || (geofenceRequired && !coords)} size="lg">
+            {isLoading ? 'Memproses...' : 'Kirim Konfirmasi'}
+          </Button>
+          <Button variant="outline" onclick={requestLocation}>Perbarui lokasi</Button>
+        </div>
         {#if geoError}
-          <div class="rounded-md border border-destructive/30 bg-destructive/5 px-4 py-3 flex items-start gap-3">
+          <div class="rounded-md border border-destructive/30 bg-destructive/5 px-4 py-3 flex items-start gap-3 mt-4">
             <span class="w-2 h-2 rounded-full bg-destructive shrink-0 mt-1.5"></span>
             <span class="text-sm text-destructive leading-relaxed">{geoError}</span>
           </div>
         {/if}
-
-        <Button onclick={submit} disabled={isLoading} size="lg" class="self-start">
-          {isLoading ? 'Memproses...' : 'Kirim Konfirmasi'}
-        </Button>
       </div>
     </div>
   {/if}

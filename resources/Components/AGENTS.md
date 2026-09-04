@@ -17,17 +17,16 @@ Reusable Svelte 5 UI components shared across pages. All use TypeScript and Tail
 | `Badge.svelte` | Inline status/label badge | `variant`, `href`, `children` |
 | `BentoCard.svelte` | Dashboard bento card | `title`, `description`, `children`, `class` |
 | `Button.svelte` | Button with variants | `variant`, `size`, `href`, `type`, `disabled`, `children` |
-| `CameraCapture.svelte` | Live selfie capture | `onCapture`, `facingMode`, `class` |
 | `Can.svelte` | Authorization wrapper | `permission` (string), `role` (string), `children` |
 | `ConfirmDialog.svelte` | Reusable confirm dialog | `open`, `title`, `description`, `onConfirm`, `destructive` |
 | `DarkModeToggle.svelte` | Dark mode toggle | `onchange?: (isDark: boolean) => void` |
 | `DataTable.svelte` | Master data table | `columns`, `rows`, `keyField`, `rowAction`, `emptyMessage` |
-| `GeoButton.svelte` | Location capture button | `onLocation`, `onError`, `label`, `loadingLabel` |
 | `Header.svelte` | Top nav bar + user menu | `group` (string — active nav section) |
 | `Input.svelte` | Styled text input | `value` (bindable), `type`, `class` |
 | `Label.svelte` | Form label | `for`, `children` |
 | `Modal.svelte` | Reusable dialog (Zag JS) | `open`, `title`, `description`, `children`, `footer` |
 | `Pagination.svelte` | Page navigation | `meta: PaginationMeta`, `preserveState?: boolean` |
+| `QrScanner.svelte` | In-web QR scanner (native + jsqr fallback, upload fallback) | `onDetected`, `onError`, `autoStart`, `class` |
 | `RoleModal.svelte` | Create/edit role modal | Zag JS dialog — open/close via `bind:open` |
 | `SimpatikIcon.svelte` | Reference logo image wrapper | — |
 | `Select.svelte` | Styled select dropdown | `value` (bindable), `placeholder`, `children` |

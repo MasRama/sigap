@@ -148,6 +148,10 @@
   async function startScanner(): Promise<void> {
     if (scannerActive || cameraStarting || scanLocked) return;
     scannerError = null;
+    if (typeof window !== 'undefined' && window.isSecureContext === false) {
+      reportScannerFailure('Kamera membutuhkan koneksi aman (HTTPS atau localhost). Akses lewat alamat IP tidak diizinkan browser — unggah foto QR sebagai gantinya.');
+      return;
+    }
     const mediaDevices = navigator.mediaDevices;
     if (!mediaDevices?.getUserMedia) {
       reportScannerFailure('Perangkat tidak mendukung akses kamera. Buka halaman ini lewat HTTPS atau unggah foto QR.');
