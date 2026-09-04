@@ -11,7 +11,7 @@
 ## Stats
 
 - Files indexed: 269
-- Total lines: 26692
+- Total lines: 26582
 - Total exports: 807
 - Entry points (★): `app/core/index.ts`, `resources/app.ts`, `routes/web.ts`, `server.ts`
 
@@ -200,7 +200,7 @@
 - `Label.svelte` (23L)
 - `Modal.svelte` (59L)
 - `Pagination.svelte` (69L)
-- `QrScanner.svelte` (319L)
+- `QrScanner.svelte` (209L)
 - `RoleModal.svelte` (153L)
 - `Select.svelte` (40L)
 - `Sidebar.svelte` (352L)
@@ -1724,7 +1724,6 @@
 - `resources/Components/Header.svelte` → `./DarkModeToggle.svelte`, `./SimpatikIcon.svelte`, `@inertiajs/svelte`, `@lucide/svelte`, `@zag-js/dialog`, `@zag-js/menu`, `@zag-js/svelte`
 - `resources/Components/Modal.svelte` → `@zag-js/dialog`, `@zag-js/svelte`
 - `resources/Components/Pagination.svelte` → `../types`, `@inertiajs/svelte`, `@lucide/svelte`
-- `resources/Components/QrScanner.svelte` → `./Button.svelte`, `@lucide/svelte`
 - `resources/Components/RoleModal.svelte` → `../types`, `./Button.svelte`, `./Input.svelte`, `./Label.svelte`, `./Switch.svelte`, `@lucide/svelte`, `@zag-js/dialog`, `@zag-js/svelte`
 - `resources/Components/Select.svelte` → `@lucide/svelte`
 - `resources/Components/Sidebar.svelte` → `../types`, `./DarkModeToggle.svelte`, `./SimpatikIcon.svelte`, `@inertiajs/svelte`, `@zag-js/dialog`, `@zag-js/svelte`
@@ -1836,3 +1835,4 @@
 - [`docs/decisions/0010-english-error-messages.md`](docs/decisions/0010-english-error-messages.md) — ADR 0010: Bahasa Indonesia for user-facing messages
 - [`docs/decisions/0011-camera-geolocation-anti-fraud.md`](docs/decisions/0011-camera-geolocation-anti-fraud.md) — ADR 0011: Camera + Geolocation for Anti-Fraud Teacher Confirmation
 - [`docs/decisions/0012-qr-code-attendance.md`](docs/decisions/0012-qr-code-attendance.md) — ADR 0012: QR Code for Teacher Attendance Confirmation
+- [`docs/decisions/0013-qr-in-web-scanning.md`](docs/decisions/0013-qr-in-web-scanning.md) — ADR 0013: In-Web QR Scanning with html5-qrcode

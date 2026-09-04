@@ -26,7 +26,7 @@ Reusable Svelte 5 UI components shared across pages. All use TypeScript and Tail
 | `Label.svelte` | Form label | `for`, `children` |
 | `Modal.svelte` | Reusable dialog (Zag JS) | `open`, `title`, `description`, `children`, `footer` |
 | `Pagination.svelte` | Page navigation | `meta: PaginationMeta`, `preserveState?: boolean` |
-| `QrScanner.svelte` | In-web QR scanner (native + jsqr fallback, upload fallback) | `onDetected`, `onError`, `autoStart`, `class` |
+| `QrScanner.svelte` | In-web QR scanner (`html5-qrcode`, kamera + unggah gambar) | `onDetected`, `onError`, `autoStart`, `class` |
 | `RoleModal.svelte` | Create/edit role modal | Zag JS dialog — open/close via `bind:open` |
 | `SimpatikIcon.svelte` | Reference logo image wrapper | — |
 | `Select.svelte` | Styled select dropdown | `value` (bindable), `placeholder`, `children` |

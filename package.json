@@ -50,7 +50,7 @@
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
-    "jsqr": "^1.4.0",
+    "html5-qrcode": "^2.3.8",
     "mode-watcher": "^1.1.0",
     "multer": "^2.1.1",
     "pino": "^10.1.0",
