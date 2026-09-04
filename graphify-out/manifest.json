@@ -500,9 +500,9 @@
     "semantic_hash": "ff4fd72c46b9ab85ddc57a166da51321"
   },
   "package.json": {
-    "mtime": 1788146274.8864615,
-    "ast_hash": "67c9311cefa5dde436553d2323fc44dd",
-    "semantic_hash": "67c9311cefa5dde436553d2323fc44dd"
+    "mtime": 1788480703.4140408,
+    "ast_hash": "f66f1b4097783575b29cc35aea81eca1",
+    "semantic_hash": "f66f1b4097783575b29cc35aea81eca1"
   },
   "resources/Components/Badge.svelte": {
     "mtime": 1785221035.0,
@@ -710,14 +710,14 @@
     "semantic_hash": "829cba1eea87da4ef3d219dadfa6a72e"
   },
   "resources/Pages/teacher/confirm.svelte": {
-    "mtime": 1788480591.9187868,
-    "ast_hash": "b492fc66d63ea21d8439284990f52b0b",
-    "semantic_hash": "b492fc66d63ea21d8439284990f52b0b"
+    "mtime": 1788480765.8956099,
+    "ast_hash": "a299f2946aa80f3e5eeefc81ed1be90d",
+    "semantic_hash": "a299f2946aa80f3e5eeefc81ed1be90d"
   },
   "resources/Pages/teacher/schedule.svelte": {
-    "mtime": 1788480591.9188795,
-    "ast_hash": "602b101c40d28758eea96ca883d1db94",
-    "semantic_hash": "602b101c40d28758eea96ca883d1db94"
+    "mtime": 1788480765.90161,
+    "ast_hash": "d155c7c468debc5fa3e745677f75e3d6",
+    "semantic_hash": "d155c7c468debc5fa3e745677f75e3d6"
   },
   "resources/Pages/teacherConfirmations.svelte": {
     "mtime": 1787218087.8427176,
@@ -1368,5 +1368,20 @@
     "mtime": 1788424870.5262094,
     "ast_hash": "9cc91c0c9f0c20cdeafd14c3682e3aeb",
     "semantic_hash": "9cc91c0c9f0c20cdeafd14c3682e3aeb"
+  },
+  "resources/Components/QrScanner.svelte": {
+    "mtime": 1788480751.8163695,
+    "ast_hash": "26e40fcd951ab15d65dbe58a9fe7c38b",
+    "semantic_hash": "26e40fcd951ab15d65dbe58a9fe7c38b"
+  },
+  "resources/lib/__tests__/qr.test.ts": {
+    "mtime": 1788480744.0964494,
+    "ast_hash": "df35400e1ace11c9b5553c60b543deff",
+    "semantic_hash": "df35400e1ace11c9b5553c60b543deff"
+  },
+  "resources/lib/qr.ts": {
+    "mtime": 1788480744.0932376,
+    "ast_hash": "c7723c06af6822347fd455abf022a955",
+    "semantic_hash": "c7723c06af6822347fd455abf022a955"
   }
 }

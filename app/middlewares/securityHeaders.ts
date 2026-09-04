@@ -59,8 +59,8 @@ const DEFAULT_CSP_DIRECTIVES: CSPDirectives = {
 
 const DEFAULT_PERMISSIONS_POLICY: Record<string, string[]> = {
   'accelerometer': [],
-  'camera': [],
-  'geolocation': [],
+  'camera': ['self'],
+  'geolocation': ['self'],
   'gyroscope': [],
   'magnetometer': [],
   'microphone': [],

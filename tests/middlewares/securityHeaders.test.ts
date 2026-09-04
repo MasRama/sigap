@@ -64,8 +64,8 @@ describe('securityHeaders middleware', () => {
       await runMiddleware(securityHeaders(), req, res as any);
 
       expect(res._headers['Permissions-Policy']).toBeDefined();
-      // Should include camera=(), microphone=(), etc.
-      expect(res._headers['Permissions-Policy']).toContain('camera=()');
+      // Camera + geolocation allowed for self (QR scanner + GeoButton); the rest blocked.
+      expect(res._headers['Permissions-Policy']).toContain('camera=(self)');
       expect(res._headers['Permissions-Policy']).toContain('microphone=()');
     });
 
