@@ -1,9 +1,10 @@
 <script lang="ts">
-  import { inertia } from '@inertiajs/svelte';
+  import { inertia, router } from '@inertiajs/svelte';
   import Sidebar from '../../Components/Sidebar.svelte';
   import Button from '../../Components/Button.svelte';
+  import QrScanner from '../../Components/QrScanner.svelte';
+  import { extractQrTokenFromScan } from '$lib/qr';
   import { fly } from 'svelte/transition';
-  import type { Schedule } from '../../types';
 
   interface TeacherDailySchedule extends Schedule {
     class_name: string;
@@ -23,6 +24,18 @@
   function formatTime(ts: number): string {
     return new Date(ts).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
   }
+  let showScanner = $state(false);
+  let scanError = $state<string | null>(null);
+
+  function handleScannedQr(rawText: string): void {
+    const token = extractQrTokenFromScan(rawText);
+    if (!token) {
+      scanError = 'QR tidak dikenali. Pastikan yang dipindai adalah QR absen sekolah.';
+      return;
+    }
+    scanError = null;
+    router.visit(`/teacher/confirm?qr_token=${encodeURIComponent(token)}`);
+  }
 </script>
 
 <Sidebar group="teacher" />
@@ -41,10 +54,23 @@
     <div class="bg-card border border-primary/30 rounded-lg px-6 py-10 max-w-2xl" in:fly={{ y: 20, duration: 700, delay: 100 }}>
       <p class="font-mono-accent text-[10px] uppercase tracking-[0.2em] text-primary mb-3">Akses terkunci</p>
       <h2 class="font-heading text-xl font-semibold text-foreground">Konfirmasi kehadiran sebelum membuka jadwal.</h2>
-      <p class="text-sm text-muted-foreground mt-2 leading-relaxed">Scan QR sekolah sekali setiap hari. Setelah verifikasi berhasil, daftar kelas dan menu penilaian hari ini akan terbuka.</p>
-      <a href="/teacher/confirm" use:inertia class="inline-flex mt-5">
-        <Button>Scan QR Absen</Button>
-      </a>
+      <p class="text-sm text-muted-foreground mt-2 leading-relaxed">Scan QR sekolah sekali setiap hari langsung dari halaman ini. Setelah verifikasi berhasil, daftar kelas dan menu penilaian hari ini akan terbuka.</p>
+      <div class="flex flex-wrap gap-2 mt-5">
+        <Button onclick={() => { showScanner = !showScanner; scanError = null; }}>
+          {showScanner ? 'Tutup pemindai' : 'Scan QR di sini'}
+        </Button>
+        <a href="/teacher/confirm" use:inertia class="inline-flex">
+          <Button variant="outline">Buka halaman konfirmasi</Button>
+        </a>
+      </div>
+      {#if showScanner}
+        <div class="mt-5 max-w-md">
+          <QrScanner onDetected={handleScannedQr} onError={(message) => scanError = message} />
+          {#if scanError}
+            <p class="text-sm text-destructive mt-3 leading-relaxed">{scanError}</p>
+          {/if}
+        </div>
+      {/if}
     </div>
   {:else if schedules.length === 0}
     <div class="bg-card border border-border rounded-lg px-6 py-12 text-center" in:fly={{ y: 20, duration: 700, delay: 100 }}>

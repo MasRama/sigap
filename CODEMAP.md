@@ -10,9 +10,9 @@
 
 ## Stats
 
-- Files indexed: 269
-- Total lines: 26419
-- Total exports: 809
+- Files indexed: 272
+- Total lines: 26838
+- Total exports: 810
 - Entry points (★): `app/core/index.ts`, `resources/app.ts`, `routes/web.ts`, `server.ts`
 
 ## File Tree
@@ -203,6 +203,7 @@
 - `Label.svelte` (23L)
 - `Modal.svelte` (59L)
 - `Pagination.svelte` (69L)
+- `QrScanner.svelte` (315L)
 - `RoleModal.svelte` (153L)
 - `Select.svelte` (40L)
 - `Sidebar.svelte` (352L)
@@ -260,8 +261,8 @@
 
 ### resources/Pages/teacher/
 
-- `confirm.svelte` (150L)
-- `schedule.svelte` (90L)
+- `confirm.svelte` (175L)
+- `schedule.svelte` (116L)
 
 ### resources/config/
 
@@ -272,6 +273,7 @@
 - `api.ts` (68L) — api, ApiResponse
 - `csrf.ts` (15L) — getCSRFToken, configureAxiosCSRF
 - `permissions.ts` (39L) — currentUserPermissions, permissionSlug, hasPermission, can, PermissionAction, PermissionResource
+- `qr.ts` (16L) — extractQrTokenFromScan
 - `toast.ts` (23L) — Toast, ToastType
 - `utils.ts` (7L) — cn
 
@@ -279,6 +281,7 @@
 
 - `csrf.test.ts` (25L)
 - `password.test.ts` (32L)
+- `qr.test.ts` (37L)
 - `toast.test.ts` (48L)
 - `utils.test.ts` (30L)
 
@@ -1502,6 +1505,10 @@
 - `type` **PermissionAction**
 - `type` **PermissionResource**
 
+### `resources/lib/qr.ts`
+
+- `const` **extractQrTokenFromScan**
+
 ### `resources/lib/toast.ts`
 
 - `fn` **Toast**
@@ -1727,6 +1734,7 @@
 - `resources/Components/Header.svelte` → `./DarkModeToggle.svelte`, `./SimpatikIcon.svelte`, `@inertiajs/svelte`, `@lucide/svelte`, `@zag-js/dialog`, `@zag-js/menu`, `@zag-js/svelte`
 - `resources/Components/Modal.svelte` → `@zag-js/dialog`, `@zag-js/svelte`
 - `resources/Components/Pagination.svelte` → `../types`, `@inertiajs/svelte`, `@lucide/svelte`
+- `resources/Components/QrScanner.svelte` → `./Button.svelte`, `@lucide/svelte`
 - `resources/Components/RoleModal.svelte` → `../types`, `./Button.svelte`, `./Input.svelte`, `./Label.svelte`, `./Switch.svelte`, `@lucide/svelte`, `@zag-js/dialog`, `@zag-js/svelte`
 - `resources/Components/Select.svelte` → `@lucide/svelte`
 - `resources/Components/Sidebar.svelte` → `../types`, `./DarkModeToggle.svelte`, `./SimpatikIcon.svelte`, `@inertiajs/svelte`, `@zag-js/dialog`, `@zag-js/svelte`
@@ -1761,8 +1769,8 @@
 - `resources/Pages/studentAttendance.svelte` → `../Components/DataTable.svelte`, `../Components/Sidebar.svelte`, `../types`
 - `resources/Pages/students.svelte` → `../Components/Button.svelte`, `../Components/ConfirmDialog.svelte`, `../Components/DataTable.svelte`, `../Components/Input.svelte`, `../Components/Label.svelte`, `../Components/Modal.svelte`, `../Components/Pagination.svelte`, `../Components/Select.svelte`, `../Components/Sidebar.svelte`, `../types`, `@inertiajs/svelte`, `@lucide/svelte`
 - `resources/Pages/subjects.svelte` → `../Components/Button.svelte`, `../Components/ConfirmDialog.svelte`, `../Components/DataTable.svelte`, `../Components/Input.svelte`, `../Components/Label.svelte`, `../Components/Modal.svelte`, `../Components/Select.svelte`, `../Components/Sidebar.svelte`, `../types`, `@inertiajs/svelte`, `@lucide/svelte`
-- `resources/Pages/teacher/confirm.svelte` → `../../Components/Button.svelte`, `../../Components/CameraCapture.svelte`, `../../Components/GeoButton.svelte`, `../../Components/Sidebar.svelte`, `@inertiajs/svelte`
-- `resources/Pages/teacher/schedule.svelte` → `../../Components/Button.svelte`, `../../Components/Sidebar.svelte`, `../../types`, `@inertiajs/svelte`
+- `resources/Pages/teacher/confirm.svelte` → `../../Components/Button.svelte`, `../../Components/CameraCapture.svelte`, `../../Components/GeoButton.svelte`, `../../Components/QrScanner.svelte`, `../../Components/Sidebar.svelte`, `@inertiajs/svelte`
+- `resources/Pages/teacher/schedule.svelte` → `../../Components/Button.svelte`, `../../Components/QrScanner.svelte`, `../../Components/Sidebar.svelte`, `@inertiajs/svelte`
 - `resources/Pages/teacherAssignments.svelte` → `../Components/Button.svelte`, `../Components/Label.svelte`, `../Components/Select.svelte`, `../Components/Sidebar.svelte`, `../types`, `@inertiajs/svelte`, `@lucide/svelte`
 - `resources/Pages/teacherConfirmations.svelte` → `../Components/DataTable.svelte`, `../Components/Sidebar.svelte`, `../types`
 - `resources/Pages/teachers.svelte` → `../Components/Button.svelte`, `../Components/ConfirmDialog.svelte`, `../Components/DataTable.svelte`, `../Components/Input.svelte`, `../Components/Label.svelte`, `../Components/Modal.svelte`, `../Components/Pagination.svelte`, `../Components/Select.svelte`, `../Components/Sidebar.svelte`, `../types`, `@inertiajs/svelte`, `@lucide/svelte`

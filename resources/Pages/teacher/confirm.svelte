@@ -2,11 +2,12 @@
   import { inertia, router } from '@inertiajs/svelte';
   import axios from 'axios';
   import { api } from '$lib/api';
+  import { extractQrTokenFromScan } from '$lib/qr';
   import Sidebar from '../../Components/Sidebar.svelte';
   import CameraCapture from '../../Components/CameraCapture.svelte';
   import GeoButton from '../../Components/GeoButton.svelte';
   import Button from '../../Components/Button.svelte';
-  import { fly } from 'svelte/transition';
+  import QrScanner from '../../Components/QrScanner.svelte';
 
   let {
     scheduleId: initialScheduleId = null,
@@ -31,6 +32,17 @@
   let coords = $state<{ latitude: number; longitude: number } | null>(null);
   let geoError = $state<string | null>(null);
   let isLoading = $state(false);
+  let scanError = $state<string | null>(null);
+
+  function handleScannedQr(rawText: string): void {
+    const token = extractQrTokenFromScan(rawText);
+    if (!token) {
+      scanError = 'QR tidak dikenali. Pastikan yang dipindai adalah QR absen sekolah.';
+      return;
+    }
+    scanError = null;
+    router.visit(`/teacher/confirm?qr_token=${encodeURIComponent(token)}`);
+  }
 
   async function submit(): Promise<void> {
     if (!initialQrToken || !qrTokenValid) { geoError = 'Silakan scan QR absen sekolah yang masih berlaku'; return; }
@@ -69,12 +81,25 @@
       </a>
     </div>
   {:else if !qrTokenValid}
-    <div class="bg-card border border-border rounded-lg p-6 max-w-2xl" in:fly={{ y: 20, duration: 700, delay: 100 }}>
-      <p class="font-mono-accent text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-3">QR diperlukan</p>
-      <h2 class="font-heading text-xl font-semibold text-foreground">
-        {qrTokenExpired ? 'QR absen sudah kedaluwarsa.' : 'Scan QR absen sekolah terlebih dahulu.'}
-      </h2>
-      <p class="text-sm text-muted-foreground mt-2">Gunakan kamera ponsel untuk scan QR yang ditampilkan sekolah. Halaman konfirmasi akan terbuka dari QR yang valid.</p>
+    <div class="bg-card border border-border rounded-lg overflow-hidden max-w-2xl" in:fly={{ y: 20, duration: 700, delay: 100 }}>
+      <div class="px-5 py-3 bg-secondary/60 border-b border-border">
+        <span class="font-mono-accent text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Scan QR Absen</span>
+      </div>
+      <div class="p-5">
+        <h2 class="font-heading text-xl font-semibold text-foreground">
+          {qrTokenExpired ? 'QR absen sudah kedaluwarsa.' : 'Scan QR absen sekolah.'}
+        </h2>
+        <p class="text-sm text-muted-foreground mt-2">Arahkan kamera ke QR yang ditampilkan sekolah. Pemindaian berjalan langsung di halaman ini, tidak perlu aplikasi kamera lain.</p>
+        <div class="mt-4 max-w-md">
+          <QrScanner onDetected={handleScannedQr} onError={(message) => scanError = message} />
+        </div>
+        {#if scanError}
+          <div class="rounded-md border border-destructive/30 bg-destructive/5 px-4 py-3 flex items-start gap-3 mt-4">
+            <span class="w-2 h-2 rounded-full bg-destructive shrink-0 mt-1.5"></span>
+            <span class="text-sm text-destructive leading-relaxed">{scanError}</span>
+          </div>
+        {/if}
+      </div>
     </div>
   {:else}
     <div class="mb-6 rounded-lg border border-primary/30 bg-primary/5 px-5 py-4" in:fly={{ y: 20, duration: 700, delay: 100 }}>

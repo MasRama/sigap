@@ -20,7 +20,7 @@ AI must not add dependencies without checking this table. If a category is "Bann
 | Styling | `tailwindcss`, `clsx`, `tailwind-merge`, `tailwind-variants` | styled-components, emotion, CSS modules | Utility-first, AI generates Tailwind fluently |
 | Icons | `@lucide/svelte` | heroicons, feather-icons, font-awesome | Tree-shakeable, consistent API |
 | Image processing | `sharp` | jimp, canvas, gm | Native binding, fast |
-| QR code | `qrcode` | qr.js, qrcode-generator, external APIs | Standard npm package, works server-side, TypeScript types available |
+| QR code | `qrcode` (generate, server-side), `jsqr` (scan, in-browser fallback) | qr.js, qrcode-generator, external APIs | Standard npm packages, no external API calls; native `BarcodeDetector` first, `jsqr` fallback for browsers without it |
 | File upload | `multer` | formidable, busboy | Memory storage + sharp pipeline |
 | State (frontend) | Svelte 5 runes (`$state`, `$derived`, `$effect`) | Redux, Zustand, Pinia, Svelte stores | ADR 0003 — server is source of truth |
 | Testing | `vitest` | jest, mocha, jasmine | Vite-native, fast, ESM support |
