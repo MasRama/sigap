@@ -52,3 +52,20 @@ export const deleteSchedule = (id: string): boolean => {
   const result = SQLite.run('DELETE FROM schedules WHERE id = ?', [id]);
   return result.changes > 0;
 };
+
+export interface ScheduleWithDetails extends Schedule {
+  class_name: string;
+  subject_name: string;
+  teacher_name: string | null;
+}
+
+export const findSchedulesByYearWithDetails = (academicYearId: string): ScheduleWithDetails[] =>
+  SQLite.many<ScheduleWithDetails>`
+    SELECT s.*, c.name AS class_name, sub.name AS subject_name, COALESCE(u.name, u.username) AS teacher_name
+    FROM schedules s
+    INNER JOIN classes c ON c.id = s.class_id
+    INNER JOIN subjects sub ON sub.id = s.subject_id
+    LEFT JOIN users u ON u.id = s.teacher_user_id
+    WHERE s.academic_year_id = ${academicYearId}
+    ORDER BY s.day_of_week, s.start_time
+  `;

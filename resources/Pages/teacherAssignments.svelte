@@ -1,14 +1,23 @@
 <script lang="ts">
-  import { router } from '@inertiajs/svelte';
+  import { router, inertia } from '@inertiajs/svelte';
   import axios from 'axios';
   import { api } from '$lib/api';
   import Sidebar from '../Components/Sidebar.svelte';
   import Button from '../Components/Button.svelte';
   import Select from '../Components/Select.svelte';
+  import Input from '../Components/Input.svelte';
   import Label from '../Components/Label.svelte';
-  import type { AcademicYear, Class, Teacher, TeacherClassAssignment } from '../types';
-  import { ArrowRight, Check, Save, UserRound } from '@lucide/svelte';
+  import ConfirmDialog from '../Components/ConfirmDialog.svelte';
+  import type { AcademicYear, Class, Schedule, Subject, Teacher, TeacherClassAssignment } from '../types';
+  import { timestampToTimeInput, timeInputToTimestamp } from '$lib/utils/datetime';
+  import { ArrowRight, CalendarClock, Check, Plus, Save, Trash2, UserRound } from '@lucide/svelte';
   import { fly } from 'svelte/transition';
+
+  interface TeacherScheduleRow extends Schedule {
+    class_name: string;
+    subject_name: string;
+    teacher_name: string | null;
+  }
 
   interface Props {
     permissions: { canEdit?: boolean };
@@ -16,6 +25,8 @@
     classes?: Class[];
     years?: AcademicYear[];
     assignments?: TeacherClassAssignment[];
+    subjects?: Subject[];
+    schedules?: TeacherScheduleRow[];
     selectedYearId?: string;
   }
 
@@ -25,6 +36,8 @@
     classes = [],
     years = [],
     assignments = [],
+    subjects = [],
+    schedules = [],
     selectedYearId = '',
   }: Props = $props();
 
@@ -33,13 +46,26 @@
   let assignedClassIds = $state<string[]>([]);
   let homeroomClassId = $state('');
   let isSaving = $state(false);
+  let scheduleClassId = $state('');
+  let scheduleSubjectId = $state('');
+  let scheduleDay = $state(1);
+  let scheduleStart = $state('07:30');
+  let scheduleEnd = $state('09:00');
+  let isSavingSchedule = $state(false);
+  let scheduleToDelete: TeacherScheduleRow | null = $state(null);
+  let isDeleteScheduleOpen = $state(false);
 
+  const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
   const selectedTeacher = $derived(teachers.find(teacher => teacher.id === selectedTeacherId));
   const selectedAssignments = $derived(assignments.filter(assignment => assignment.teacher_id === selectedTeacherId));
+  const assignedClasses = $derived(classes.filter(classItem => assignedClassIds.includes(classItem.id)));
+  const teacherSchedules = $derived(selectedTeacher ? schedules.filter(schedule => schedule.teacher_user_id === selectedTeacher.user_id) : []);
 
   $effect(() => {
     assignedClassIds = selectedAssignments.map(assignment => assignment.class_id);
     homeroomClassId = selectedAssignments.find(assignment => assignment.is_homeroom === 1)?.class_id ?? '';
+    scheduleClassId = '';
+    scheduleSubjectId = '';
   });
 
   function teacherName(teacher: Teacher): string {
@@ -80,6 +106,40 @@
       router.visit(`/teacher-assignments?academic_year_id=${encodeURIComponent(currentYearId)}`, { preserveScroll: true });
     }
   }
+
+  async function submitSchedule(): Promise<void> {
+    if (!selectedTeacher || !currentYearId || !scheduleClassId || !scheduleSubjectId || isSavingSchedule) return;
+    isSavingSchedule = true;
+    const result = await api(() => axios.post('/schedules', {
+      class_id: scheduleClassId,
+      subject_id: scheduleSubjectId,
+      teacher_user_id: selectedTeacher.user_id,
+      academic_year_id: currentYearId,
+      day_of_week: scheduleDay,
+      start_time: timeInputToTimestamp(scheduleStart, scheduleDay),
+      end_time: timeInputToTimestamp(scheduleEnd, scheduleDay),
+    }));
+    isSavingSchedule = false;
+    if (result.success) {
+      scheduleSubjectId = '';
+      router.visit(`/teacher-assignments?academic_year_id=${encodeURIComponent(currentYearId)}`, { preserveScroll: true });
+    }
+  }
+
+  function confirmDeleteSchedule(item: TeacherScheduleRow): void {
+    scheduleToDelete = item;
+    isDeleteScheduleOpen = true;
+  }
+
+  async function removeSchedule(): Promise<void> {
+    if (!scheduleToDelete) return;
+    const result = await api(() => axios.delete(`/schedules/${scheduleToDelete!.id}`));
+    if (result.success) {
+      isDeleteScheduleOpen = false;
+      scheduleToDelete = null;
+      router.visit(`/teacher-assignments?academic_year_id=${encodeURIComponent(currentYearId)}`, { preserveScroll: true });
+    }
+  }
 </script>
 
 <Sidebar group="teacher-assignments" />
@@ -91,7 +151,7 @@
         Penugasan Guru.
       </h1>
       <p class="mt-4 text-base text-muted-foreground leading-relaxed max-w-[60ch]">
-        Tentukan kelas yang diampu setiap guru. Satu guru dapat ditetapkan sebagai wali kelas untuk satu kelas pada setiap tahun ajaran.
+        Tentukan kelas yang diampu setiap guru, lalu susun jadwal mengajarnya (mapel, kelas, hari, jam) pada bagian bawah. Satu guru dapat ditetapkan sebagai wali kelas untuk satu kelas pada setiap tahun ajaran.
       </p>
     </div>
     <div class="flex items-center gap-3 min-w-56">
@@ -191,9 +251,82 @@
       </section>
     </div>
 
+    {#if selectedTeacher}
+      <section class="mt-6 rounded-lg border border-border bg-card overflow-hidden">
+        <div class="px-5 py-4 border-b border-border flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <p class="font-mono-accent text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Jadwal mengajar · {teacherName(selectedTeacher)}</p>
+            <p class="mt-1 text-sm text-muted-foreground">Kelas yang bisa dijadwalkan mengikuti kelas yang diampu di atas.</p>
+          </div>
+          <a href="/schedules" use:inertia class="inline-flex items-center gap-1.5 text-sm text-primary hover:text-primary/80 transition-colors">
+            Semua jadwal <ArrowRight class="w-4 h-4" />
+          </a>
+        </div>
+
+        {#if assignedClasses.length === 0}
+          <p class="px-5 py-8 text-center text-sm text-muted-foreground">Tetapkan kelas yang diampu di atas terlebih dahulu sebelum menyusun jadwal.</p>
+        {:else}
+          <form class="grid grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_1fr_1fr_auto] gap-3 items-end p-5 border-b border-border" onsubmit={(e) => { e.preventDefault(); void submitSchedule(); }}>
+            <div class="flex flex-col gap-0">
+              <Label for="schedule-class" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Kelas</Label>
+              <Select id="schedule-class" bind:value={scheduleClassId} placeholder="Pilih kelas">
+                {#each assignedClasses as classItem}<option value={classItem.id}>{classItem.name}</option>{/each}
+              </Select>
+            </div>
+            <div class="flex flex-col gap-0">
+              <Label for="schedule-subject" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Mapel</Label>
+              <Select id="schedule-subject" bind:value={scheduleSubjectId} placeholder="Pilih mapel">
+                {#each subjects as subject}<option value={subject.id}>{subject.name}</option>{/each}
+              </Select>
+            </div>
+            <div class="flex flex-col gap-0">
+              <Label for="schedule-day" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Hari</Label>
+              <Select id="schedule-day" bind:value={scheduleDay} placeholder="Pilih hari">
+                {#each days as day, i}<option value={i}>{day}</option>{/each}
+              </Select>
+            </div>
+            <div class="flex flex-col gap-0">
+              <Label for="schedule-start" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Mulai</Label>
+              <Input id="schedule-start" type="time" bind:value={scheduleStart} required />
+            </div>
+            <div class="flex flex-col gap-0">
+              <Label for="schedule-end" class="text-xs uppercase tracking-[0.2em] font-heading text-muted-foreground mb-1.5">Selesai</Label>
+              <Input id="schedule-end" type="time" bind:value={scheduleEnd} required />
+            </div>
+            <Button type="submit" disabled={isSavingSchedule}>
+              <Plus class="h-4 w-4" />
+              {isSavingSchedule ? 'Menyimpan...' : 'Tambah'}
+            </Button>
+          </form>
+
+          <div class="divide-y divide-border">
+            {#each teacherSchedules as schedule (schedule.id)}
+              <div class="flex items-center justify-between gap-4 px-5 py-3.5">
+                <div class="flex items-center gap-3 min-w-0">
+                  <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-primary/40 bg-primary/15">
+                    <CalendarClock class="h-4 w-4 text-primary" />
+                  </span>
+                  <div class="min-w-0">
+                    <p class="truncate font-medium">{schedule.class_name} · {schedule.subject_name}</p>
+                    <p class="font-mono-accent text-xs text-muted-foreground">{days[schedule.day_of_week] ?? '-'} · {timestampToTimeInput(schedule.start_time)}–{timestampToTimeInput(schedule.end_time)}</p>
+                  </div>
+                </div>
+                <Button variant="ghost" size="icon" onclick={() => confirmDeleteSchedule(schedule)}>
+                  <Trash2 class="w-4 h-4 text-destructive" />
+                </Button>
+              </div>
+            {:else}
+              <p class="px-5 py-8 text-center text-sm text-muted-foreground">Belum ada jadwal mengajar untuk guru ini.</p>
+            {/each}
+          </div>
+        {/if}
+      </section>
+    {/if}
+
     <div class="mt-6 flex items-center gap-2 text-sm text-muted-foreground">
       <ArrowRight class="h-4 w-4 text-primary" />
       <span>Guru dapat mengelola nilai hanya pada kelas yang ditugaskan.</span>
     </div>
+    <ConfirmDialog bind:open={isDeleteScheduleOpen} title="Hapus Jadwal" description="Jadwal mengajar ini akan dihapus permanen." onConfirm={removeSchedule} destructive />
   {/if}
 </div>

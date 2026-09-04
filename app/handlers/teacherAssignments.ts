@@ -7,6 +7,8 @@ import {
   syncTeacherClassAssignments,
 } from '@queries/teacherClassAssignments';
 import { findAllTeachersForAssignment, findTeacherById } from '@queries/teachers';
+import { findAllSubjects } from '@queries/subjects';
+import { findSchedulesByYearWithDetails } from '@queries/schedules';
 import { isAdmin } from '@queries/users';
 import { TeacherClassAssignmentsSchema, zodToErrors } from '@validators';
 import Logger from '@services/Logger';
@@ -24,6 +26,8 @@ export const teacherAssignmentsPage = (req: NaraRequest, res: NaraResponse) => {
       classes: [],
       years: [],
       assignments: [],
+      subjects: [],
+      schedules: [],
       selectedYearId: '',
     });
   }
@@ -33,6 +37,7 @@ export const teacherAssignmentsPage = (req: NaraRequest, res: NaraResponse) => {
   const selectedYearId = queryString(req, 'academic_year_id') || activeYear?.id || years[0]?.id || '';
   const classes = selectedYearId ? findClassesByAcademicYear(selectedYearId) : [];
   const assignments = selectedYearId ? findTeacherClassAssignmentsByAcademicYear(selectedYearId) : [];
+  const schedules = selectedYearId ? findSchedulesByYearWithDetails(selectedYearId) : [];
 
   return res.inertia('teacherAssignments', {
     permissions: { canEdit: true },
@@ -40,6 +45,8 @@ export const teacherAssignmentsPage = (req: NaraRequest, res: NaraResponse) => {
     classes,
     years,
     assignments,
+    subjects: findAllSubjects(),
+    schedules,
     selectedYearId,
   });
 };
