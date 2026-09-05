@@ -4,7 +4,7 @@
   import { api } from '$lib/api';
   import { cn } from '$lib/utils';
   import DarkModeToggle from './DarkModeToggle.svelte';
-  import SimpatikIcon from './SimpatikIcon.svelte';
+  import SigapIcon from './SigapIcon.svelte';
   import * as dialog from "@zag-js/dialog";
   import { useMachine, normalizeProps, portal } from "@zag-js/svelte";
   import {
@@ -264,7 +264,7 @@
     <Menu class="h-5 w-5" />
   </button>
   <a href="/" use:inertia class="flex items-center gap-2">
-    <SimpatikIcon size={28} />
+    <SigapIcon size={28} />
   </a>
   <div class="flex items-center gap-2">
     {@render notificationBell('top-full')}
@@ -280,10 +280,10 @@
       <div {...sheetApi.getContentProps()} class="bg-background fixed inset-y-0 left-0 z-50 h-full w-[84%] max-w-[300px] border-r border-border flex flex-col transition ease-in-out duration-300 font-body">
         <div class="flex items-center justify-between px-5 h-[4.5rem] border-b border-border shrink-0">
           <a href="/" use:inertia onclick={() => isMenuOpen = false} class="flex items-center gap-2">
-            <SimpatikIcon size={30} showText={false} />
+            <SigapIcon size={30} showText={false} />
             <div class="min-w-0">
-              <p class="font-heading font-semibold tracking-tight text-lg">SIMPATIK</p>
-              <p class="text-[9px] uppercase tracking-[0.12em] text-muted-foreground truncate">Sistem Monitoring Perkembangan dan Aktivitas Akademik</p>
+              <p class="font-heading font-semibold tracking-tight text-lg">SIGAP</p>
+              <p class="text-[9px] uppercase tracking-[0.12em] text-muted-foreground truncate">Sistem Informasi Guru, Absensi, dan Prestasi</p>
             </div>
           </a>
           <button {...sheetApi.getCloseTriggerProps()} onclick={() => isMenuOpen = false} aria-label="Tutup menu" class="text-muted-foreground hover:text-foreground transition-colors p-1">
@@ -318,10 +318,10 @@
 <!-- ───────────── DESKTOP SIDEBAR ───────────── -->
 <aside data-slot="sidebar" class="hidden lg:flex fixed inset-y-0 left-0 z-30 w-64 bg-background border-r border-border flex-col">
   <div class="h-[4.5rem] shrink-0 flex items-center gap-3 px-5 border-b border-border">
-    <SimpatikIcon size={30} showText={false} />
+    <SigapIcon size={30} showText={false} />
     <div class="min-w-0">
-      <p class="font-heading font-semibold tracking-tight text-lg">SIMPATIK</p>
-      <p class="text-[9px] uppercase tracking-[0.12em] text-muted-foreground truncate">Sistem Monitoring Perkembangan dan Aktivitas Akademik</p>
+      <p class="font-heading font-semibold tracking-tight text-lg">SIGAP</p>
+      <p class="text-[9px] uppercase tracking-[0.12em] text-muted-foreground truncate">Sistem Informasi Guru, Absensi, dan Prestasi</p>
     </div>
   </div>
 

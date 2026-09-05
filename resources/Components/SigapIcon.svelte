@@ -1,9 +1,9 @@
 <script lang="ts">
   import { cn } from "$lib/utils.js";
-  import logoLight from "../assets/simpatik-logo.png";
-  import logoDark from "../assets/simpatik-logo-dark.png";
-  import markLight from "../assets/simpatik-mark.png";
-  import markDark from "../assets/simpatik-mark-dark.png";
+  import logoLight from "../assets/sigap-logo.png";
+  import logoDark from "../assets/sigap-logo-dark.png";
+  import markLight from "../assets/sigap-mark.png";
+  import markDark from "../assets/sigap-mark-dark.png";
 
   interface Props {
     size?: number;
@@ -18,26 +18,26 @@
   {#if showText}
     <img
       src={logoLight}
-      alt="SIMPATIK"
+      alt="SIGAP"
       class="block h-auto w-auto select-none dark:hidden"
       style={`height: ${size}px`}
     />
     <img
       src={logoDark}
-      alt="SIMPATIK"
+      alt="SIGAP"
       class="hidden h-auto w-auto select-none dark:block"
       style={`height: ${size}px`}
     />
   {:else}
     <img
       src={markLight}
-      alt="SIMPATIK"
+      alt="SIGAP"
       class="block h-auto w-auto select-none dark:hidden"
       style={`height: ${size}px`}
     />
     <img
       src={markDark}
-      alt="SIMPATIK"
+      alt="SIGAP"
       class="hidden h-auto w-auto select-none dark:block"
       style={`height: ${size}px`}
     />

@@ -204,7 +204,7 @@
 - `RoleModal.svelte` (153L)
 - `Select.svelte` (40L)
 - `Sidebar.svelte` (352L)
-- `SimpatikIcon.svelte` (46L)
+- `SigapIcon.svelte` (46L)
 - `StatCard.svelte` (39L)
 - `Switch.svelte` (52L)
 - `UserModal.svelte` (168L)
@@ -1724,20 +1724,20 @@
 - `resources/Components/Can.svelte` → `@inertiajs/svelte`
 - `resources/Components/ConfirmDialog.svelte` → `./Button.svelte`, `./Modal.svelte`
 - `resources/Components/DarkModeToggle.svelte` → `./Button.svelte`, `@lucide/svelte`
-- `resources/Components/Header.svelte` → `./DarkModeToggle.svelte`, `./SimpatikIcon.svelte`, `@inertiajs/svelte`, `@lucide/svelte`, `@zag-js/dialog`, `@zag-js/menu`, `@zag-js/svelte`
+- `resources/Components/Header.svelte` → `./DarkModeToggle.svelte`, `./SigapIcon.svelte`, `@inertiajs/svelte`, `@lucide/svelte`, `@zag-js/dialog`, `@zag-js/menu`, `@zag-js/svelte`
 - `resources/Components/Modal.svelte` → `@zag-js/dialog`, `@zag-js/svelte`
 - `resources/Components/Pagination.svelte` → `../types`, `@inertiajs/svelte`, `@lucide/svelte`
 - `resources/Components/RoleModal.svelte` → `../types`, `./Button.svelte`, `./Input.svelte`, `./Label.svelte`, `./Switch.svelte`, `@lucide/svelte`, `@zag-js/dialog`, `@zag-js/svelte`
 - `resources/Components/Select.svelte` → `@lucide/svelte`
-- `resources/Components/Sidebar.svelte` → `../types`, `./DarkModeToggle.svelte`, `./SimpatikIcon.svelte`, `@inertiajs/svelte`, `@zag-js/dialog`, `@zag-js/svelte`
-- `resources/Components/SimpatikIcon.svelte` → `../assets/simpatik-logo-dark.png`, `../assets/simpatik-logo.png`, `../assets/simpatik-mark-dark.png`, `../assets/simpatik-mark.png`
+- `resources/Components/Sidebar.svelte` → `../types`, `./DarkModeToggle.svelte`, `./SigapIcon.svelte`, `@inertiajs/svelte`, `@zag-js/dialog`, `@zag-js/svelte`
+- `resources/Components/SigapIcon.svelte` → `../assets/sigap-logo-dark.png`, `../assets/sigap-logo.png`, `../assets/sigap-mark-dark.png`, `../assets/sigap-mark.png`
 - `resources/Components/Switch.svelte` → `@zag-js/svelte`, `@zag-js/switch`
 - `resources/Components/UserModal.svelte` → `../types`, `./Button.svelte`, `./Input.svelte`, `./Label.svelte`, `./Select.svelte`, `./Switch.svelte`, `@lucide/svelte`, `@zag-js/dialog`, `@zag-js/svelte`
 - `resources/lib/permissions.ts` → `@inertiajs/svelte`
 - `resources/Pages/academicYears.svelte` → `../Components/Button.svelte`, `../Components/ConfirmDialog.svelte`, `../Components/DataTable.svelte`, `../Components/Input.svelte`, `../Components/Label.svelte`, `../Components/Modal.svelte`, `../Components/Select.svelte`, `../Components/Sidebar.svelte`, `../Components/Switch.svelte`, `../types`, `@inertiajs/svelte`, `@lucide/svelte`
 - `resources/Pages/announcements.svelte` → `../Components/Button.svelte`, `../Components/ConfirmDialog.svelte`, `../Components/DataTable.svelte`, `../Components/Input.svelte`, `../Components/Label.svelte`, `../Components/Modal.svelte`, `../Components/Sidebar.svelte`, `../types`, `@inertiajs/svelte`, `@lucide/svelte`
-- `resources/Pages/auth/login.svelte` → `../../Components/Button.svelte`, `../../Components/DarkModeToggle.svelte`, `../../Components/Input.svelte`, `../../Components/Label.svelte`, `../../Components/SimpatikIcon.svelte`, `@inertiajs/svelte`, `@lucide/svelte`
-- `resources/Pages/auth/register.svelte` → `../../Components/Button.svelte`, `../../Components/DarkModeToggle.svelte`, `../../Components/Input.svelte`, `../../Components/Label.svelte`, `../../Components/SimpatikIcon.svelte`, `@inertiajs/svelte`, `@lucide/svelte`
+- `resources/Pages/auth/login.svelte` → `../../Components/Button.svelte`, `../../Components/DarkModeToggle.svelte`, `../../Components/Input.svelte`, `../../Components/Label.svelte`, `../../Components/SigapIcon.svelte`, `@inertiajs/svelte`, `@lucide/svelte`
+- `resources/Pages/auth/register.svelte` → `../../Components/Button.svelte`, `../../Components/DarkModeToggle.svelte`, `../../Components/Input.svelte`, `../../Components/Label.svelte`, `../../Components/SigapIcon.svelte`, `@inertiajs/svelte`, `@lucide/svelte`
 - `resources/Pages/classes.svelte` → `../Components/Button.svelte`, `../Components/ConfirmDialog.svelte`, `../Components/DataTable.svelte`, `../Components/Input.svelte`, `../Components/Label.svelte`, `../Components/Modal.svelte`, `../Components/Select.svelte`, `../Components/Sidebar.svelte`, `../types`, `@inertiajs/svelte`, `@lucide/svelte`
 - `resources/Pages/dashboard.svelte` → `../Components/BentoCard.svelte`, `../Components/Sidebar.svelte`, `../Components/StatCard.svelte`, `../types`, `@inertiajs/svelte`, `@lucide/svelte`
 - `resources/Pages/gradeAudit.svelte` → `../Components/DataTable.svelte`, `../Components/Pagination.svelte`, `../Components/Sidebar.svelte`, `../types`
@@ -1747,7 +1747,7 @@
 - `resources/Pages/headmaster/reports.svelte` → `../../Components/DataTable.svelte`, `../../Components/Sidebar.svelte`, `../../Components/StatCard.svelte`, `../../types`
 - `resources/Pages/headmaster/teacher-attendance.svelte` → `../../Components/DataTable.svelte`, `../../Components/Sidebar.svelte`, `../../Components/StatCard.svelte`, `../../types`, `@inertiajs/svelte`, `@lucide/svelte`
 - `resources/Pages/journals.svelte` → `../Components/Button.svelte`, `../Components/ConfirmDialog.svelte`, `../Components/DataTable.svelte`, `../Components/Input.svelte`, `../Components/Label.svelte`, `../Components/Modal.svelte`, `../Components/Select.svelte`, `../Components/Sidebar.svelte`, `../types`, `@inertiajs/svelte`, `@lucide/svelte`
-- `resources/Pages/landing.svelte` → `../Components/DarkModeToggle.svelte`, `../Components/SimpatikIcon.svelte`, `@inertiajs/svelte`
+- `resources/Pages/landing.svelte` → `../Components/DarkModeToggle.svelte`, `../Components/SigapIcon.svelte`, `@inertiajs/svelte`
 - `resources/Pages/parent/attendance.svelte` → `../../Components/DataTable.svelte`, `../../Components/Sidebar.svelte`, `../../types`
 - `resources/Pages/parent/dashboard.svelte` → `../../Components/Sidebar.svelte`, `../../types`, `@inertiajs/svelte`, `@lucide/svelte`
 - `resources/Pages/parent/grades.svelte` → `../../Components/Sidebar.svelte`, `../../types`, `@lucide/svelte`

@@ -6,7 +6,7 @@ Accepted
 
 ## Context
 
-SIMPATIK must ensure that teacher attendance and journal records are tied to a real person at a real place. Manual attendance is easy to fake: a teacher can mark themselves present from anywhere, or another person can record attendance on their behalf.
+SIGAP must ensure that teacher attendance and journal records are tied to a real person at a real place. Manual attendance is easy to fake: a teacher can mark themselves present from anywhere, or another person can record attendance on their behalf.
 
 We needed a verification mechanism that:
 - Does not require specialized hardware.

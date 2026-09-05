@@ -4,7 +4,7 @@
   import { api } from '$lib/api'
   import { password_generator } from '$lib/utils/password'
   import { Toast } from '$lib/toast'
-  import SimpatikIcon from '../../Components/SimpatikIcon.svelte'
+  import SigapIcon from '../../Components/SigapIcon.svelte'
   import DarkModeToggle from '../../Components/DarkModeToggle.svelte'
   import { fly, fade } from 'svelte/transition'
   import { ArrowRight, Eye, EyeOff, Sparkles } from '@lucide/svelte'
@@ -69,7 +69,7 @@
   <!-- ───────────── NAV (floating, like landing) ───────────── -->
   <nav class="relative z-20 flex items-center justify-between h-16 px-6 sm:px-10 lg:px-16">
     <a href="/" use:inertia class="flex items-center gap-2 group">
-      <SimpatikIcon size={30} />
+      <SigapIcon size={30} />
     </a>
     <div class="flex items-center gap-5 text-sm">
       <a href="/" use:inertia class="text-white/60 hover:text-white transition-colors">Home</a>
@@ -171,7 +171,7 @@
 
   <!-- ───────────── FOOTER (on image) ───────────── -->
   <footer class="absolute bottom-0 inset-x-0 z-10 px-6 sm:px-10 lg:px-16 py-6 flex justify-between items-center text-xs text-white/40">
-    <span>&copy; {new Date().getFullYear()} SIMPATIK</span>
+    <span>&copy; {new Date().getFullYear()} SIGAP</span>
     <span class="font-heading uppercase tracking-[0.2em]">A foundation for building with AI</span>
   </footer>
 </div>

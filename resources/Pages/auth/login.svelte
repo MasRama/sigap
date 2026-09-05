@@ -3,7 +3,7 @@
   import axios from 'axios'
   import { api } from '$lib/api'
   import { Toast } from '$lib/toast'
-  import SimpatikIcon from '../../Components/SimpatikIcon.svelte'
+  import SigapIcon from '../../Components/SigapIcon.svelte'
   import DarkModeToggle from '../../Components/DarkModeToggle.svelte'
   import { fly, fade } from 'svelte/transition'
   import { ArrowRight, Eye, EyeOff } from '@lucide/svelte'
@@ -40,7 +40,7 @@
   <!-- Top bar -->
   <nav class="flex items-center justify-between h-16 px-6 sm:px-10 shrink-0">
     <a href="/" use:inertia class="flex items-center gap-3 group">
-      <SimpatikIcon size={30} />
+      <SigapIcon size={30} />
     </a>
     <div class="flex items-center gap-4">
       <a href="/" use:inertia class="text-sm text-muted-foreground hover:text-foreground transition-colors cursor-pointer">
@@ -63,7 +63,7 @@
             <span class="w-2 h-2 rounded-full bg-primary"></span>
             <span class="font-mono-accent text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Masuk ke akun</span>
           </div>
-          <span class="font-mono-accent text-[10px] text-muted-foreground">SIMPATIK</span>
+          <span class="font-mono-accent text-[10px] text-muted-foreground">SIGAP</span>
         </header>
 
         <!-- Card body -->
@@ -160,14 +160,14 @@
 
       <!-- Below card note -->
       <p class="mt-5 text-center font-mono-accent text-[10px] text-muted-foreground">
-        SIMPATIK tidak menyediakan pendaftaran publik &middot; MIT License
+        SIGAP tidak menyediakan pendaftaran publik &middot; MIT License
       </p>
     </div>
   </div>
 
   <!-- Bottom bar -->
   <footer class="shrink-0 px-6 sm:px-10 py-4 flex items-center justify-between">
-    <span class="font-mono-accent text-[10px] text-muted-foreground">&copy; {new Date().getFullYear()} SIMPATIK</span>
+    <span class="font-mono-accent text-[10px] text-muted-foreground">&copy; {new Date().getFullYear()} SIGAP</span>
     <span class="font-mono-accent text-[10px] text-muted-foreground">Trust-first school management</span>
   </footer>
 </div>

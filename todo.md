@@ -1,4 +1,4 @@
-# SIMPATIK — Transformasi Starter Kit ke Aplikasi Sekolah
+# SIGAP — Transformasi Starter Kit ke Aplikasi Sekolah
 
 > **Brief:** Platform sekolah digital untuk kehadiran siswa, jurnal mengajar guru, dan nilai akademik. Sistem memastikan guru benar-benar hadir di sekolah saat mengisi data (anti-kecurangan via kamera + lokasi).
 
@@ -6,7 +6,7 @@
 
 - `.git` lama sudah dihapus dan repository baru diinisialisasi di branch `main`.
 - Starter kit: Nara (ultimate-express + Svelte 5 + Inertia.js + better-sqlite3 + Tailwind v4).
-- Semua teks user-facing dan identitas visual diubah dari `Nara` menjadi `SIMPATIK`.
+- Semua teks user-facing dan identitas visual diubah dari `Nara` menjadi `SIGAP`.
 - **Warna awal: biru langit (sky blue)**. Warna dijadikan token terpusat agar bisa diubah nanti.
 
 ---
@@ -65,7 +65,7 @@
 - [x] **1.1** Buat file konfigurasi tema terpusat:
   - `resources/config/theme.ts` — source of truth untuk token HSL/RGB.
   - `resources/config/theme.css` — `:root` CSS variables untuk light & `.dark`, primary sky blue, semantik surface/foreground.
-- [x] **1.2** Ganti semua referensi `Nara` → `SIMPATIK` di:
+- [x] **1.2** Ganti semua referensi `Nara` → `SIGAP` di:
   - `package.json` (name, description, author opsional).
   - `resources/inertia.html` (title, meta).
   - `resources/Components/Header.svelte` (logo + nama).
@@ -78,7 +78,7 @@
   - Impor Plus Jakarta Sans & Space Grotesk (self-host via Google Fonts atau local files).
   - Ganti `--primary` ke sky blue (`200 90% 55%` / `#38bdf8` atau `205 80% 55%`).
   - Pastikan dark mode mengikuti theme config.
-- [x] **1.4** Buat logo/icon komponen baru `resources/Components/SimpatikIcon.svelte` (ganti `NaraIcon.svelte`).
+- [x] **1.4** Buat logo/icon komponen baru `resources/Components/SigapIcon.svelte` (ganti `NaraIcon.svelte`).
 - [x] **1.5** Perbarui `resources/Components/Button.svelte`, `Badge.svelte`, `Input.svelte` agar menggunakan `cn` + theme tokens dan `data-slot` convention tetap terjaga.
 
 ---
@@ -104,7 +104,7 @@ Semua id `TEXT PRIMARY KEY` UUID, timestamp `INTEGER`, FK `ON DELETE CASCADE`.
 - [x] **2.15** Update `users` table (via migration baru):
   - Hapus kolom `membership_date` jika tidak dipakai.
   - Tambah `phone`, `is_active` jika diperlukan.
-- [x] **2.16** Roles & permissions baru untuk SIMPATIK:
+- [x] **2.16** Roles & permissions baru untuk SIGAP:
   - `admin`, `headmaster`, `teacher`, `parent`.
   - Permissions: `students.*`, `teachers.*`, `parents.*`, `classes.*`, `subjects.*`, `schedules.*`, `journals.*`, `grades.*`, `attendance.*`, `confirmations.*`, `school_locations.*`, `academic_years.*`.
 
@@ -326,13 +326,13 @@ Semua id `TEXT PRIMARY KEY` UUID, timestamp `INTEGER`, FK `ON DELETE CASCADE`.
 - [x] **8.4** `resources/lib/toast.ts` — tetap gunakan `svelte-sonner`.
 - [x] **8.5** `resources/lib/utils.ts` — `cn()` tetap.
 - [x] **8.6** Buat `resources/lib/permissions.ts` — helper permission checks client-side.
-- [x] **8.7** `resources/types/index.ts` dan `forms.ts` — tambah tipe baru SIMPATIK.
+- [x] **8.7** `resources/types/index.ts` dan `forms.ts` — tambah tipe baru SIGAP.
 
 ---
 
 ## 9. Frontend Components (Complete Rewrite) — `19cd0a8`
 
-- [x] **9.1** `resources/Components/SimpatikIcon.svelte` — transparent horizontal logo lockup + compact mark based on the supplied reference.
+- [x] **9.1** `resources/Components/SigapIcon.svelte` — transparent horizontal logo lockup + compact mark based on the supplied reference.
 - [x] **9.2** `resources/Components/Header.svelte` — nav per role:
   - Teacher: Jadwal, Konfirmasi, Jurnal, Nilai.
   - Parent: Anak, Kehadiran, Nilai.
@@ -356,7 +356,7 @@ Semua id `TEXT PRIMARY KEY` UUID, timestamp `INTEGER`, FK `ON DELETE CASCADE`.
 > Semua file di `resources/Pages/` adalah **Inertia pages**. Setiap page menerima initial props, lalu memuat list/detail lewat `api(() => axios.get('/xxx/data'))` (bukan langsung dari page props). Setelah mutasi, panggil `router.visit('/xxx', { preserveScroll: true })` untuk reload data.
 
 ### Public
-- [x] **10.1** `resources/Pages/landing.svelte` — hero SIMPATIK, fitur: anti-kecurangan kamera+lokasi, jurnal, nilai, pantau ortu, laporan kepala sekolah.
+- [x] **10.1** `resources/Pages/landing.svelte` — hero SIGAP, fitur: anti-kecurangan kamera+lokasi, jurnal, nilai, pantau ortu, laporan kepala sekolah.
 - [x] **10.2** `resources/Pages/auth/login.svelte` — clean sky login, no register link.
 
 ### Dashboard (per role)
@@ -398,9 +398,9 @@ Semua id `TEXT PRIMARY KEY` UUID, timestamp `INTEGER`, FK `ON DELETE CASCADE`.
 
 ## 12. RBAC & Seeds — `29df58d`
 
-- [x] **12.1** Update `seeds/01_permissions.ts` — permission SIMPATIK baru.
+- [x] **12.1** Update `seeds/01_permissions.ts` — permission SIGAP baru.
 - [x] **12.2** Update `seeds/02_roles.ts` — roles: `admin`, `headmaster`, `teacher`, `parent`.
-- [x] **12.3** Update `seeds/03_admin.ts` — admin default `admin@simpatik.id` / `admin123`.
+- [x] **12.3** Update `seeds/03_admin.ts` — admin default `admin@sigap.id` / `admin123`.
 - [x] **12.4** (Opsional) `seeds/04_demo.ts` — data demo: 1 tahun ajaran, 2 kelas, 3 mapel, 10 siswa, 2 guru, 1 orang tua.
 
 ---
@@ -420,12 +420,12 @@ Semua id `TEXT PRIMARY KEY` UUID, timestamp `INTEGER`, FK `ON DELETE CASCADE`.
 
 ## 14. Dokumentasi & Project Health — `29df58d`
 
-- [x] **14.1** Update `README.md` — deskripsi SIMPATIK, cara install, seed demo, role default.
+- [x] **14.1** Update `README.md` — deskripsi SIGAP, cara install, seed demo, role default.
 - [x] **14.2** Update `AGENTS.md` root — brand, warna, fitur domain, routing baru.
 - [x] **14.3** Buat ADR baru di `docs/decisions/` jika ada keputusan arsitektur signifikan (misal: `adr-camera-location-anti-fraud.md`).
 - [x] **14.4** Regenerate `CODEMAP.md` setelah struktur stabil: `npm run codemap`.
-- [x] **14.5** Perbarui `package.json` scripts/description. (description already SIMPATIK-focused; scripts complete)
-- [x] **14.6** Commit pertama ke git baru: `git add . && git commit -m "init: SIMPATIK sky-blue school management platform"`. (N/A — repo already has SIMPATIK history)
+- [x] **14.5** Perbarui `package.json` scripts/description. (description already SIGAP-focused; scripts complete)
+- [x] **14.6** Commit pertama ke git baru: `git add . && git commit -m "init: SIGAP sky-blue school management platform"`. (N/A — repo already has SIGAP history)
 
 ---
 

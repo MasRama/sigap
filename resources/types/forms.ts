@@ -180,7 +180,7 @@ export interface DashboardStats {
 }
 
 // =============================================================================
-// SIMPATIK Form Types
+// SIGAP Form Types
 // =============================================================================
 
 export interface AcademicYearForm {
@@ -286,7 +286,7 @@ export interface StudentAttendanceForm {
 }
 
 // =============================================================================
-// SIMPATIK Form Factories
+// SIGAP Form Factories
 // =============================================================================
 
 export function createEmptyAcademicYearForm(): AcademicYearForm {

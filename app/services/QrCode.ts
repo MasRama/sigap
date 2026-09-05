@@ -8,7 +8,7 @@ interface QrTokenPayload {
   token: string;
 }
 
-const QR_SECRET = process.env.QR_SECRET || 'simpatik-qr-secret-change-in-production';
+const QR_SECRET = process.env.QR_SECRET || 'sigap-qr-secret-change-in-production';
 const APP_URL = (process.env.APP_URL || `http://localhost:${process.env.PORT || '5555'}`).replace(/\/+$/, '');
 
 const formatDate = (date: Date): string => {

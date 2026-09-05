@@ -191,7 +191,7 @@ export function run(SQLite: typeof SQLiteType): void {
   if (announcementCount === 0 && adminUser) {
     SQLite.exec`
       INSERT INTO announcements (id, title, body, author_user_id, created_at, updated_at)
-      VALUES (${randomUUID()}, ${'Selamat Datang di SIMPATIK'}, ${'Sistem informasi sekolah sudah aktif. Guru dapat mengisi jurnal, verifikasi mengajar, dan input nilai. Orang tua dapat memantau nilai dan kehadiran anak.'}, ${adminUser.id}, ${now}, ${now})
+      VALUES (${randomUUID()}, ${'Selamat Datang di SIGAP'}, ${'SIGAP — Sistem Informasi Guru, Absensi, dan Prestasi sudah aktif. Guru dapat mengisi jurnal, verifikasi mengajar, dan input nilai. Orang tua dapat memantau nilai dan kehadiran anak.'}, ${adminUser.id}, ${now}, ${now})
     `;
   }
 

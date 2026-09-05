@@ -18,7 +18,7 @@ Three co-equal audiences; no single primary.
 
 ## Product Purpose
 
-SIMPATIK (Sistem Monitoring Perkembangan dan Aktivitas Akademik) is a school management system built around **trust-first attendance**. Every journal entry is tied to a real teacher at a real place: before class, the teacher captures a selfie and shares their location, which is checked (Haversine distance) against the active school location. The product exists so that attendance, journals, and grades in a school are verifiable evidence of a teacher's presence — not self-reported claims.
+SIGAP (Sistem Informasi Guru, Absensi, dan Prestasi) is a school management system built around **trust-first attendance**. Every journal entry is tied to a real teacher at a real place: before class, the teacher captures a selfie and shares their location, which is checked (Haversine distance) against the active school location. The product exists so that attendance, journals, and grades in a school are verifiable evidence of a teacher's presence — not self-reported claims.
 
 Success means: a headmaster can prove every journal entry came from a teacher inside the school radius, a parent can see their child's attendance and grades without asking the school, and a teacher can run their daily class flow in under a minute from their phone.
 
@@ -26,7 +26,7 @@ Success means: a headmaster can prove every journal entry came from a teacher in
 
 Two claims, both binding:
 
-1. **Trust-first attendance.** The anti-fraud selfie + geolocation confirmation tied to every journal entry is the mechanism no neighboring school management system truthfully copies. Most LMSes record attendance as self-reported data; SIMPATIK records it as verified evidence.
+1. **Trust-first attendance.** The anti-fraud selfie + geolocation confirmation tied to every journal entry is the mechanism no neighboring school management system truthfully copies. Most LMSes record attendance as self-reported data; SIGAP records it as verified evidence.
 2. **Parent transparency.** The parent portal closes the school-home loop: parents see attendance and grades directly, without mediating through the teacher or admin. This is the second wedge — trust extends outward to families, not just upward to administrators.
 
 ## Operating Context
@@ -56,7 +56,7 @@ Two claims, both binding:
 
 ## Brand Commitments
 
-- **Name:** SIMPATIK — Sistem Monitoring Perkembangan dan Aktivitas Akademik. The name reflects the platform's focus on monitoring student development and academic activity.
+- **Name:** SIGAP — Sistem Informasi Guru, Absensi, dan Prestasi. The name reflects the platform's focus on teacher information, attendance, and achievement.
 - **Voice:** factual, calm, trustworthy. Not playful. The product is evidence infrastructure for a school.
 - **Identity constraints:** none pinned yet (no logo, palette, or typography committed). To be established in DESIGN.md via new-work.
 - **UI language:** Bahasa Indonesia for user-facing strings (user-confirmed 2026-07-28, ADR 0010 revised to match). Existing English user-facing strings are technical debt to migrate — see ADR 0010 migration section.

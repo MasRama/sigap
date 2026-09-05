@@ -1,5 +1,5 @@
 ---
-name: SIMPATIK
+name: SIGAP
 description: Trust-first school management — verified attendance, live.
 colors:
   primary: "#1DA85A"
@@ -100,13 +100,13 @@ components:
     rounded: "50%"
 ---
 
-# Design System: SIMPATIK
+# Design System: SIGAP
 
 ## Overview
 
 **Creative North Star: "The Live Ledger"**
 
-SIMPATIK's visual system is a digital attendance ledger that is alive — names appear one by one, status dots light up green or red, timestamps tick. The system rejects the generic SaaS landing page (gradient heroes, feature card grids, "trusted by" logos, pricing tables). Instead, the product demonstrates itself: the hero IS the product working, not a description of it.
+SIGAP's visual system is a digital attendance ledger that is alive — names appear one by one, status dots light up green or red, timestamps tick. The system rejects the generic SaaS landing page (gradient heroes, feature card grids, "trusted by" logos, pricing tables). Instead, the product demonstrates itself: the hero IS the product working, not a description of it.
 
 The palette is operational, not decorative. Green means verified presence. Red means absence or out-of-radius alert. Amber means late. These are not brand colors chosen for mood — they are the semantic colors of attendance status, and the entire interface is built from them. The deep green accent panel in the hero is the institutional voice: calm, authoritative, the school speaking.
 
@@ -201,7 +201,7 @@ Shadows appear only on the live attendance card in the hero — a subtle elevati
 
 Corners are rounded but restrained. The radius scale: `sm` (2px) for small elements like status dots containers, `md` (6px) for buttons and inputs, `lg` (8px) for cards and containers. The default `--radius` is 6px (0.375rem).
 
-Status dots are perfect circles (50% radius, 8px). The logo is a transparent horizontal lockup: a green-and-black connected people-and-device mark followed by the lowercase `simpatik` wordmark. The compact mark is used where space is limited.
+Status dots are perfect circles (50% radius, 8px). The logo is a transparent horizontal lockup: a green-and-black connected people-and-device mark followed by the lowercase `sigap` wordmark. The compact mark is used where space is limited.
 
 Borders are 1px solid, using `--border` color. Dividers within cards use `border-border/60` (60% opacity) for subtle separation.
 
@@ -242,7 +242,7 @@ Borders are 1px solid, using `--border` color. Dividers within cards use `border
 
 ### Navigation
 - **Style:** Fixed top, 64px height, solid `bg-background` with `border-b border-border`. No transparency transition.
-- **Logo:** Transparent horizontal lockup based on the supplied reference — green-and-black connected people-and-device mark + lowercase "simpatik" wordmark; compact mark in the sidebar and favicon.
+- **Logo:** Transparent horizontal lockup based on the supplied reference — green-and-black connected people-and-device mark + lowercase "sigap" wordmark; compact mark in the sidebar and favicon.
 - **Links:** Public Sans, 14px, `text-muted-foreground` → `text-foreground` on hover.
 
 ### Verification Log (Signature Component)

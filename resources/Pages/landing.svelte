@@ -3,7 +3,7 @@
   import { fly, fade, scale } from 'svelte/transition';
   import { cubicOut } from 'svelte/easing';
   import DarkModeToggle from '../Components/DarkModeToggle.svelte';
-  import SimpatikIcon from '../Components/SimpatikIcon.svelte';
+  import SigapIcon from '../Components/SigapIcon.svelte';
 
   interface User {
     id: string;
@@ -75,7 +75,7 @@
 <svelte:window bind:scrollY />
 
 <!--
-  THESIS: Landing page SIMPATIK adalah daftar hadir yang sedang diisi live, bukan
+  THESIS: Landing page SIGAP adalah daftar hadir yang sedang diisi live, bukan
   hero yang dijelaskan. Menolak template LMS landing (gradient hero, feature card,
   "trusted by", pricing table). Mekanisme dibuktikan dengan produk bekerja.
 
@@ -105,8 +105,8 @@
     class="fixed top-0 inset-x-0 z-50 flex items-center justify-between h-16 px-6 sm:px-10 lg:px-16 bg-background border-b border-border"
   >
     <a href="/" use:inertia class="flex items-center gap-3 group">
-      <SimpatikIcon size={31} />
-      <span class="hidden sm:inline text-xs text-muted-foreground font-mono-accent tracking-wide border-l border-border pl-3">Sistem Monitoring Perkembangan dan Aktivitas Akademik</span>
+      <SigapIcon size={31} />
+      <span class="hidden sm:inline text-xs text-muted-foreground font-mono-accent tracking-wide border-l border-border pl-3">Sistem Informasi Guru, Absensi, dan Prestasi</span>
     </a>
 
     <div class="flex items-center gap-5 text-sm">
@@ -141,7 +141,7 @@
         </h1>
 
         <p in:fly={{ y: 20, duration: 900, delay: 280 }} class="mt-7 text-base sm:text-lg text-accent-foreground/75 leading-relaxed max-w-[48ch]">
-          SIMPATIK memverifikasi kehadiran guru dengan geolokasi sebelum jam mulai mengajar. Setiap jurnal terikat ke guru nyata, di tempat nyata.
+          SIGAP memverifikasi kehadiran guru dengan geolokasi sebelum jam mulai mengajar. Setiap jurnal terikat ke guru nyata, di tempat nyata.
         </p>
 
         <div in:fly={{ y: 16, duration: 900, delay: 440 }} class="mt-9 flex flex-col gap-3">
@@ -326,7 +326,7 @@
           Data yang sama, tiga cara lihat.
         </h2>
         <p class="text-muted-foreground leading-relaxed">
-          Guru, admin, dan orang tua — masing-masing melihat SIMPATIK dari sudut yang berbeda. Data verifikasi yang sama, tampilan yang berbeda.
+          Guru, admin, dan orang tua — masing-masing melihat SIGAP dari sudut yang berbeda. Data verifikasi yang sama, tampilan yang berbeda.
         </p>
       </div>
 
@@ -451,12 +451,12 @@
     <div class="max-w-4xl mx-auto px-6 sm:px-10 py-12">
       <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
         <div class="flex items-center gap-3">
-          <SimpatikIcon size={34} />
-          <span class="text-xs text-muted-foreground">Sistem Monitoring Perkembangan dan Aktivitas Akademik</span>
+          <SigapIcon size={34} />
+          <span class="text-xs text-muted-foreground">Sistem Informasi Guru, Absensi, dan Prestasi</span>
         </div>
         <div class="flex flex-col sm:items-end gap-1">
           <p class="text-sm text-muted-foreground">Untuk mendapatkan akses, hubungi admin sekolah Anda.</p>
-          <p class="font-mono-accent text-[10px] text-muted-foreground">&copy; {new Date().getFullYear()} SIMPATIK · MIT License</p>
+          <p class="font-mono-accent text-[10px] text-muted-foreground">&copy; {new Date().getFullYear()} SIGAP · MIT License</p>
           <p class="font-mono-accent text-[10px] text-muted-foreground">Built with <a href="https://github.com/MasRama/nara" target="_blank" rel="noopener noreferrer" class="text-primary hover:text-primary/80 transition-colors">Nara</a></p>
         </div>
       </div>
