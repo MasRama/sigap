@@ -51,6 +51,9 @@ export {
   AddGradeComponentSchema,
   DeleteGradeComponentSchema,
   GradeComponentsSchema,
+  EraporTemplateSchema,
+  EraporColumnMappingsSchema,
+  EraporGradeSaveSchema,
   gradeTypeSlug,
   AnnouncementSchema,
   UpdateAnnouncementSchema,
@@ -92,6 +95,8 @@ export type {
   StudentAttendanceInput,
   GradeInput,
   GradeComponentsInput,
+  EraporTemplateInput,
+  EraporGradeSaveInput,
   AnnouncementInput,
   UpdateAnnouncementInput,
 } from './schemas';

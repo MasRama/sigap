@@ -1,0 +1,388 @@
+<script lang="ts">
+  import { inertia, router } from '@inertiajs/svelte';
+  import axios from 'axios';
+  import { api } from '$lib/api';
+  import { Toast } from '$lib/toast';
+  import { ArrowLeft, Download, FileSpreadsheet, Loader2, Save, Upload } from '@lucide/svelte';
+  import Sidebar from '../Components/Sidebar.svelte';
+  import Button from '../Components/Button.svelte';
+  import Label from '../Components/Label.svelte';
+  import PageHeader from '../Components/PageHeader.svelte';
+  import PageShell from '../Components/PageShell.svelte';
+
+  interface ClassOption {
+    id: string;
+    name: string;
+    grade: string;
+    academic_year_id: string;
+  }
+
+  interface SubjectOption {
+    id: string;
+    name: string;
+    code: string;
+  }
+
+  interface GradeColumn {
+    external_id: string;
+    label: string;
+    source_component_type: string | null;
+    source_component_name: string | null;
+  }
+
+  interface GradeComponentOption {
+    type: string;
+    name: string;
+  }
+
+  interface GradeCell extends GradeColumn {
+    score: number | null;
+  }
+
+  interface StudentRow {
+    student_id: string;
+    name: string;
+    nis: string;
+    external_member_id: string;
+    scores: GradeCell[];
+  }
+
+  interface PagePermissions {
+    canView: boolean;
+    canEdit: boolean;
+    canExport: boolean;
+  }
+
+  let {
+    classes = [],
+    subjects = [],
+    classId = '',
+    subjectId = '',
+    semester = 1,
+    template = null,
+    columns = [],
+    gradeComponents = [],
+    canConfigureMappings = false,
+    canManageStudents = false,
+    matrix = [],
+    rosterReady = false,
+    permissions = { canView: false, canEdit: false, canExport: false },
+    attendanceConfirmed = true,
+  }: {
+    classes?: ClassOption[];
+    subjects?: SubjectOption[];
+    classId?: string;
+    subjectId?: string;
+    semester?: number;
+    template?: { source_file_name: string; mapel_id: string } | null;
+    columns?: GradeColumn[];
+    gradeComponents?: GradeComponentOption[];
+    canConfigureMappings?: boolean;
+    canManageStudents?: boolean;
+    matrix?: StudentRow[];
+    rosterReady?: boolean;
+    permissions?: PagePermissions;
+    attendanceConfirmed?: boolean;
+  } = $props();
+
+  let selectedClassId = $state('');
+  let selectedSubjectId = $state('');
+  let selectedSemester = $state('1');
+  let selectedFile = $state<File | null>(null);
+  let fileInput = $state<HTMLInputElement | null>(null);
+  let scoreDrafts = $state<Record<string, string>>({});
+  let mappingDrafts = $state<Record<string, string>>({});
+  let isImporting = $state(false);
+  let isSaving = $state(false);
+  let isSavingMappings = $state(false);
+
+  $effect(() => {
+    selectedClassId = classId;
+    selectedSubjectId = subjectId;
+    selectedSemester = String(semester);
+    scoreDrafts = {};
+    mappingDrafts = Object.fromEntries(columns.map(column => [column.external_id, column.source_component_type ?? '']));
+  });
+
+  const selectedClass = $derived(classes.find(item => item.id === selectedClassId));
+  const selectedSubject = $derived(subjects.find(item => item.id === selectedSubjectId));
+  const semesterLabel = $derived(selectedSemester === '1' ? 'Semester I' : 'Semester II');
+  const hasTemplate = $derived(!!template && columns.length > 0);
+
+  function selectionUrl(): string {
+    const query = new URLSearchParams({ class_id: selectedClassId, subject_id: selectedSubjectId, semester: selectedSemester });
+    return `/grades/erapor?${query.toString()}`;
+  }
+
+  function exportUrl(format: 'xls' | 'xlsx'): string {
+    const query = new URLSearchParams({ class_id: selectedClassId, subject_id: selectedSubjectId, semester: selectedSemester, format });
+    return `/grades/erapor/export?${query.toString()}`;
+  }
+
+  function showSelection(): void {
+    if (!selectedClassId || !selectedSubjectId) return;
+    scoreDrafts = {};
+    router.visit(selectionUrl(), { preserveScroll: true });
+  }
+
+  function draftKey(studentId: string, externalId: string): string {
+    return `${studentId}:${externalId}`;
+  }
+
+  function currentScore(row: StudentRow, column: GradeColumn): string {
+    const key = draftKey(row.student_id, column.external_id);
+    if (key in scoreDrafts) return scoreDrafts[key] ?? '';
+    const score = row.scores.find(item => item.external_id === column.external_id)?.score;
+    return score === null || score === undefined ? '' : String(score);
+  }
+
+  function setScore(row: StudentRow, column: GradeColumn, value: string): void {
+    scoreDrafts = { ...scoreDrafts, [draftKey(row.student_id, column.external_id)]: value };
+  }
+
+  async function importWorkbook(): Promise<void> {
+    if (!selectedFile || !selectedClassId || !selectedSubjectId || isImporting) return;
+    const form = new FormData();
+    form.append('file', selectedFile);
+    form.append('class_id', selectedClassId);
+    form.append('subject_id', selectedSubjectId);
+    form.append('semester', selectedSemester);
+    isImporting = true;
+    const result = await api<{ scores_saved: number }>(() => axios.post('/grades/erapor/import', form), { showSuccessToast: false });
+    isImporting = false;
+    if (!result.success) return;
+    selectedFile = null;
+    if (fileInput) fileInput.value = '';
+    Toast(`Template tersimpan; ${result.data?.scores_saved ?? 0} perubahan nilai diimpor`, 'success');
+    router.visit(selectionUrl(), { preserveScroll: true });
+  }
+
+  async function saveScores(): Promise<void> {
+    if (!hasTemplate || !permissions.canEdit || !rosterReady || isSaving || matrix.length === 0) return;
+    const entries = matrix.map(row => ({
+      student_id: row.student_id,
+      scores: columns.map(column => {
+        const raw = currentScore(row, column).trim();
+        return { external_id: column.external_id, score: raw === '' ? null : Number(raw) };
+      }),
+    }));
+    const values = entries.flatMap(entry => entry.scores.map(item => item.score).filter((value): value is number => value !== null));
+    if (values.some(value => !Number.isFinite(value) || value < 0 || value > 100)) {
+      Toast('Nilai harus berupa angka antara 0 dan 100', 'error');
+      return;
+    }
+    isSaving = true;
+    const result = await api<{ saved: number }>(() => axios.post('/grades/erapor/scores', {
+      class_id: selectedClassId,
+      subject_id: selectedSubjectId,
+      semester: Number(selectedSemester),
+      entries,
+    }), { showSuccessToast: false });
+    isSaving = false;
+    if (!result.success) return;
+    scoreDrafts = {};
+    Toast(`${result.data?.saved ?? 0} perubahan nilai tersimpan`, 'success');
+    router.visit(selectionUrl(), { preserveScroll: true });
+  }
+
+  async function saveMappings(): Promise<void> {
+    if (!canConfigureMappings || !hasTemplate || isSavingMappings) return;
+    const mappings = columns.map(column => ({
+      external_id: column.external_id,
+      source_component_type: mappingDrafts[column.external_id] || null,
+    }));
+    isSavingMappings = true;
+    const result = await api<{ mapped: number; direct: number }>(() => axios.post('/grades/erapor/mappings', {
+      class_id: selectedClassId,
+      subject_id: selectedSubjectId,
+      semester: Number(selectedSemester),
+      mappings,
+    }), { showSuccessToast: false });
+    isSavingMappings = false;
+    if (!result.success) return;
+    Toast('Pemetaan nilai e-Rapor tersimpan', 'success');
+    router.visit(selectionUrl(), { preserveScroll: true });
+  }
+</script>
+
+<Sidebar group="grades" />
+<PageShell>
+  <PageHeader eyebrow="Penilaian" title="e-Rapor SMP." description="Simpan format e-Rapor sekali, lalu siapkan nilai SIGAP untuk diekspor." />
+
+  <div class="mb-6 flex flex-wrap items-center justify-between gap-3">
+    <a href="/grades" use:inertia class="inline-flex h-9 items-center justify-center gap-2 whitespace-nowrap rounded-xl border border-border bg-card px-3 font-heading text-sm font-semibold text-foreground transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring cursor-pointer">
+      <ArrowLeft class="h-4 w-4" /> Kembali ke Nilai
+    </a>
+    {#if permissions.canExport && hasTemplate && rosterReady}
+      <div class="flex flex-wrap gap-2">
+        <Button href={exportUrl('xls')} download variant="outline">
+          <Download class="h-4 w-4" /> Unduh .xls (format sekolah)
+        </Button>
+        <Button href={exportUrl('xlsx')} download>
+          <Download class="h-4 w-4" /> Unduh .xlsx
+        </Button>
+      </div>
+    {/if}
+  </div>
+
+  {#if !attendanceConfirmed}
+    <div class="mb-6 rounded-xl border border-primary/30 bg-card p-4 text-sm text-foreground">
+      Konfirmasi kehadiran hari ini diperlukan sebelum mengakses nilai. <a href="/teacher/confirm" use:inertia class="font-semibold text-primary underline">Buka halaman konfirmasi</a>.
+    </div>
+  {/if}
+
+  <section class="mb-6 rounded-2xl border border-border bg-card p-5 shadow-sm">
+    <div class="mb-4">
+      <h2 class="font-heading font-semibold">Langkah 1 · Pilih kelas, mapel, dan semester</h2>
+      <p class="mt-1 text-sm text-muted-foreground">Pilih kelas, mapel, dan semester yang sama dengan file dari e-Rapor.</p>
+    </div>
+    <div class="grid gap-4 md:grid-cols-[1fr_1fr_180px_auto] md:items-end">
+      <div class="flex flex-col gap-2">
+        <Label for="erapor-class">Kelas</Label>
+        <select id="erapor-class" bind:value={selectedClassId} class="h-10 rounded-lg border border-border bg-background px-3 text-sm text-foreground">
+          <option value="">Pilih kelas</option>
+          {#each classes as item (item.id)}<option value={item.id}>{item.grade} · {item.name}</option>{/each}
+        </select>
+      </div>
+      <div class="flex flex-col gap-2">
+        <Label for="erapor-subject">Mata pelajaran</Label>
+        <select id="erapor-subject" bind:value={selectedSubjectId} class="h-10 rounded-lg border border-border bg-background px-3 text-sm text-foreground">
+          <option value="">Pilih mata pelajaran</option>
+          {#each subjects as item (item.id)}<option value={item.id}>{item.name}</option>{/each}
+        </select>
+      </div>
+      <div class="flex flex-col gap-2">
+        <Label for="erapor-semester">Semester</Label>
+        <select id="erapor-semester" bind:value={selectedSemester} class="h-10 rounded-lg border border-border bg-background px-3 text-sm text-foreground">
+          <option value="1">Semester I</option>
+          <option value="2">Semester II</option>
+        </select>
+      </div>
+      <Button variant="outline" onclick={showSelection} disabled={!selectedClassId || !selectedSubjectId}>Tampilkan nilai</Button>
+    </div>
+    {#if selectedClass && selectedSubject}
+      <p class="mt-4 text-xs text-muted-foreground">{selectedSubject.name} · {selectedClass.name} · {semesterLabel}</p>
+    {/if}
+  </section>
+
+  {#if selectedClassId && selectedSubjectId}
+    <section class="mb-6 rounded-2xl border border-border bg-card p-5 shadow-sm">
+      <div class="mb-3 flex items-start gap-3">
+        <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/10"><Upload class="h-4 w-4 text-primary" /></span>
+        <div>
+          <h2 class="font-heading font-semibold">Langkah 2 · Unggah file dari e-Rapor</h2>
+          <p class="mt-1 max-w-3xl text-sm text-muted-foreground">Pilih file .xls yang diunduh dari e-Rapor SMP 2025.2. File kosong bisa dipakai untuk menyimpan format; nilai yang sudah terisi di file juga akan masuk ke SIGAP.</p>
+        </div>
+      </div>
+      <div class="mb-4 rounded-xl border border-primary/20 bg-primary/5 p-4 text-sm">
+        <p class="font-medium text-foreground">Sebelum mengunggah</p>
+        {#if canManageStudents}
+          <p class="mt-1 text-muted-foreground">Pastikan daftar siswa di kelas SIGAP sama dengan daftar siswa pada file e-Rapor. Jika berbeda, perbarui roster SIGAP terlebih dahulu.</p>
+          <a href={`/classes/${selectedClassId}/students`} use:inertia class="mt-2 inline-flex font-medium text-primary underline">Periksa atau impor siswa kelas ini</a>
+        {:else}
+          <p class="mt-1 text-muted-foreground">Pastikan daftar siswa sama dengan kelas pada file. Jika berbeda, minta admin SIGAP memperbarui daftar siswa sebelum mengunggah.</p>
+        {/if}
+      </div>
+      <div class="flex flex-col gap-3 sm:flex-row sm:items-end">
+        <div class="flex-1">
+          <Label for="erapor-file">File e-Rapor (.xls, maksimal 2 MB)</Label>
+          <input bind:this={fileInput} id="erapor-file" type="file" accept=".xls,application/vnd.ms-excel" onchange={(event) => { selectedFile = (event.currentTarget as HTMLInputElement).files?.[0] ?? null; }} class="mt-2 block w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground file:mr-3 file:rounded-md file:border-0 file:bg-secondary file:px-3 file:py-1.5 file:text-xs file:font-semibold" />
+        </div>
+        <Button onclick={importWorkbook} disabled={!permissions.canEdit || !selectedFile || isImporting}>
+          {#if isImporting}<Loader2 class="mr-2 h-4 w-4 animate-spin" />{:else}<Upload class="mr-2 h-4 w-4" />{/if}
+          Unggah ke SIGAP
+        </Button>
+      </div>
+      {#if template}
+        <p class="mt-3 text-xs text-muted-foreground">Template tersimpan: {template.source_file_name}. Unggah file lain untuk memperbarui template atau memasukkan nilai.</p>
+      {/if}
+    </section>
+  {/if}
+
+  {#if hasTemplate && permissions.canView}
+    {#if !rosterReady}
+      <div class="mb-5 rounded-xl border border-destructive/30 bg-destructive/5 p-4 text-sm text-foreground">Pemetaan siswa belum cocok dengan roster SIGAP. Unggah ulang template terbaru untuk kelas ini.</div>
+    {/if}
+    {#if canConfigureMappings}
+      <section class="mb-6 rounded-2xl border border-border bg-card p-5 shadow-sm">
+        <div class="mb-4">
+          <h2 class="font-heading font-semibold">Sumber setiap kolom e-Rapor</h2>
+          <p class="mt-1 max-w-3xl text-sm text-muted-foreground">Admin dapat menghubungkan kolom template ke jenis nilai SIGAP. Nilai yang dipetakan cukup diisi satu kali; kolom tanpa sumber akan diisi langsung di tabel e-Rapor. Gunakan jenis nilai yang berbeda untuk data yang berbeda antarsemester. Pilihan jenis nilai dikelola pada menu <a href="/academic-years" use:inertia class="font-medium text-primary underline">Tahun Ajaran</a>.</p>
+          <p class="mt-2 max-w-3xl text-xs text-muted-foreground">Nilai langsung yang sudah ada akan disalin ke sumber baru jika sumber itu masih kosong. Jika mengganti dari satu jenis nilai ke jenis lain, nilai lama tetap tersimpan pada jenis sebelumnya dan perlu diperiksa.</p>
+        </div>
+        <div class="space-y-3">
+          {#each columns as column (column.external_id)}
+            <label class="grid gap-2 text-sm sm:grid-cols-[minmax(140px,1fr)_minmax(220px,2fr)] sm:items-center">
+              <span class="font-medium text-foreground">{column.label}</span>
+              <select
+                value={mappingDrafts[column.external_id] ?? ''}
+                onchange={(event) => { mappingDrafts = { ...mappingDrafts, [column.external_id]: event.currentTarget.value }; }}
+                class="h-10 rounded-lg border border-border bg-background px-3 text-sm text-foreground"
+              >
+                <option value="">Isi langsung di halaman e-Rapor</option>
+                {#each gradeComponents as component (component.type)}
+                  <option value={component.type}>{component.name}</option>
+                {/each}
+              </select>
+            </label>
+          {/each}
+        </div>
+        <div class="mt-4 flex justify-end">
+          <Button onclick={saveMappings} disabled={isSavingMappings}>
+            {#if isSavingMappings}<Loader2 class="mr-2 h-4 w-4 animate-spin" />{:else}<Save class="mr-2 h-4 w-4" />{/if}
+            Simpan pemetaan
+          </Button>
+        </div>
+      </section>
+    {/if}
+    <section class="rounded-2xl border border-border bg-card shadow-sm">
+      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-border p-5">
+        <div>
+          <h2 class="font-heading font-semibold">Nilai {semesterLabel}</h2>
+          <p class="mt-1 text-xs text-muted-foreground">{#if permissions.canEdit}Isi atau kosongkan sel, lalu simpan. Nilai kosong menghapus nilai tersimpan.{:else}Mode lihat saja.{/if}</p>
+        </div>
+        {#if permissions.canEdit}
+          <Button onclick={saveScores} disabled={!rosterReady || isSaving || matrix.length === 0}>
+            {#if isSaving}<Loader2 class="mr-2 h-4 w-4 animate-spin" />{:else}<Save class="mr-2 h-4 w-4" />{/if}
+            Simpan nilai
+          </Button>
+        {/if}
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full min-w-max text-sm">
+          <thead class="bg-secondary/50 text-xs uppercase tracking-wide text-muted-foreground">
+            <tr>
+              <th class="sticky left-0 bg-secondary/50 px-4 py-3 text-left">Siswa</th>
+              {#each columns as column (column.external_id)}<th class="px-3 py-3 text-center">{column.label}</th>{/each}
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-border">
+            {#each matrix as row (row.student_id)}
+              <tr class="odd:bg-secondary/[0.12]">
+                <td class="sticky left-0 bg-card px-4 py-3">
+                  <p class="whitespace-nowrap font-medium">{row.name}</p>
+                  <p class="text-xs text-muted-foreground">NIS {row.nis} · ID rombel {row.external_member_id || 'belum dipetakan'}</p>
+                </td>
+                {#each columns as column (column.external_id)}
+                  <td class="px-2 py-2">
+                    <input type="number" min="0" max="100" step="0.01" value={currentScore(row, column)} oninput={(event) => setScore(row, column, (event.currentTarget as HTMLInputElement).value)} disabled={!permissions.canEdit || !rosterReady || !!column.source_component_type} title={column.source_component_name ? `Sumber nilai: ${column.source_component_name}` : 'Nilai diisi langsung di sini'} aria-label={`${column.label} ${row.name}`} class="h-9 w-24 rounded-md border border-border bg-background px-2 text-right text-sm text-foreground disabled:opacity-60" />
+                    {#if column.source_component_name}<span class="mt-1 block max-w-24 truncate text-[10px] text-muted-foreground" title={column.source_component_name}>{column.source_component_name}</span>{/if}
+                  </td>
+                {/each}
+              </tr>
+            {/each}
+            {#if matrix.length === 0}
+              <tr><td colspan={columns.length + 1} class="px-4 py-10 text-center text-muted-foreground">Belum ada data siswa untuk ditampilkan.</td></tr>
+            {/if}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  {:else if selectedClassId && selectedSubjectId}
+    <section class="rounded-2xl border border-dashed border-border bg-card p-8 text-center">
+      <FileSpreadsheet class="mx-auto h-8 w-8 text-muted-foreground" />
+      <h2 class="mt-3 font-heading font-semibold">Unggah file e-Rapor untuk mulai</h2>
+      <p class="mx-auto mt-2 max-w-xl text-sm text-muted-foreground">Pilih file .xls dari e-Rapor pada bagian di atas. SIGAP akan membaca daftar siswa dan kolom nilai dari file tersebut agar ekspor mengikuti format sekolah.</p>
+    </section>
+  {/if}
+</PageShell>
